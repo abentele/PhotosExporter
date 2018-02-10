@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VariablesViewState
+   version = "1.0">
+   <ContextStates>
+      <ContextState
+         contextName = "FotosExporter.getFotoName(mediaObject:sourceUrl:):FotosExporter.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "mediaObject.attributes">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "FotosExporter.exportFolderFlat(flatPath:latestFlatPath:exportOriginals:):FotosExporter.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "latestUrl.path">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "FotosExporter.observeValue(forKeyPath:of:change:context:):main.swift">
+      </ContextState>
+      <ContextState
+         contextName = "FotosExporter.exportData():main.swift">
+      </ContextState>
+   </ContextStates>
+</VariablesViewState>
