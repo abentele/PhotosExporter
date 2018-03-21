@@ -229,15 +229,28 @@ class PhotosExporter: NSObject {
                                 throw error
                             }
                         } else {
-                            logger.debug("\(index): copy image: \(sourceUrl) to \(targetUrl.lastPathComponent)")
-                            do {
-                                let stopWatch = StopWatch("fileManager.copyItem")
-                                try fileManager.copyItem(at: sourceUrl, to: targetUrl)
-                                stopWatch.stop()
-                            }
-                            catch let error as NSError {
-                                logger.error("\(index): Unable to copy file: \(error)")
-                                throw error
+                            if try filesAreOnSameDevice(path1: sourceUrl.path, path2: flatPath) {
+                                logger.debug("\(index): link image: \(sourceUrl) to \(targetUrl.lastPathComponent)")
+                                do {
+                                    let stopWatch = StopWatch("fileManager.linkItem")
+                                    try fileManager.linkItem(at: sourceUrl, to: targetUrl)
+                                    stopWatch.stop()
+                                }
+                                catch let error as NSError {
+                                    logger.error("\(index): Unable to link file: \(error)")
+                                    throw error
+                                }
+                            } else {
+                                logger.debug("\(index): copy image: \(sourceUrl) to \(targetUrl.lastPathComponent)")
+                                do {
+                                    let stopWatch = StopWatch("fileManager.copyItem")
+                                    try fileManager.copyItem(at: sourceUrl, to: targetUrl)
+                                    stopWatch.stop()
+                                }
+                                catch let error as NSError {
+                                    logger.error("\(index): Unable to copy file: \(error)")
+                                    throw error
+                                }
                             }
                             
                             let fotoDateAsTimerInterval = mediaObject.attributes["DateAsTimerInterval"] as! TimeInterval
@@ -262,6 +275,19 @@ class PhotosExporter: NSObject {
 
             index = index + 1
         }
+    }
+    
+    private func filesAreOnSameDevice(path1: String, path2: String) throws -> Bool {
+        let attributes1 = try fileManager.attributesOfItem(atPath: path1)
+        let attributes2 = try fileManager.attributesOfItem(atPath: path2)
+        let deviceIdentifier1 = attributes1[FileAttributeKey.systemNumber]
+        let deviceIdentifier2 = attributes2[FileAttributeKey.systemNumber]
+        if deviceIdentifier1 != nil && deviceIdentifier2 != nil {
+            if (deviceIdentifier1 as! NSNumber) == (deviceIdentifier2 as! NSNumber) {
+                return true
+            }
+        }
+        return false
     }
     
     private func exportFoldersRecursive(mediaGroup: MLMediaGroup, flatPath: String, targetPath: String, exportOriginals: Bool) throws {
