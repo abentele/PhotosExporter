@@ -13,7 +13,18 @@ enum PhotosExporterError: Error {
     case noMediaObjects
 }
 
-class PhotosExporter: NSObject {
+class Statistics {
+    private let logger = Logger(loggerName: "PhotosExporter", logLevel: .info)
+
+    var countCopiedFiles = 0
+    var countLinkedFiles = 0
+    
+    func print() {
+        logger.info("Statistics: copied files: \(countCopiedFiles); linked files: \(countLinkedFiles)")
+    }
+}
+
+class PhotosExporter {
     
     private let logger = Logger(loggerName: "PhotosExporter", logLevel: .info)
 
@@ -38,6 +49,8 @@ class PhotosExporter: NSObject {
     private var originalsRelativePath = "Originals"
     private var calculatedRelativePath = "Calculated"
     private var flatRelativePath = "_flat"
+    
+    private var statistics = Statistics()
 
     init(targetPath: String) {
         self.targetPath = targetPath
@@ -98,6 +111,8 @@ class PhotosExporter: NSObject {
             exportOriginals: false)
 
         try finishExport()
+        
+        statistics.print()
     }
     
     private func recreateInProgressFolder() throws {
@@ -222,6 +237,7 @@ class PhotosExporter: NSObject {
                             do {
                                 let stopWatch = StopWatch("fileManager.linkItem")
                                 try fileManager.linkItem(at: linkToUrl, to: targetUrl)
+                                statistics.countLinkedFiles += 1
                                 stopWatch.stop()
                             }
                             catch let error as NSError {
@@ -234,6 +250,7 @@ class PhotosExporter: NSObject {
                                 do {
                                     let stopWatch = StopWatch("fileManager.linkItem")
                                     try fileManager.linkItem(at: sourceUrl, to: targetUrl)
+                                    statistics.countLinkedFiles += 1
                                     stopWatch.stop()
                                 }
                                 catch let error as NSError {
@@ -241,10 +258,11 @@ class PhotosExporter: NSObject {
                                     throw error
                                 }
                             } else {
-                                logger.debug("\(index): copy image: \(sourceUrl) to \(targetUrl.lastPathComponent)")
+                                logger.info("\(index): copy image: \(sourceUrl) to \(targetUrl.lastPathComponent)")
                                 do {
                                     let stopWatch = StopWatch("fileManager.copyItem")
                                     try fileManager.copyItem(at: sourceUrl, to: targetUrl)
+                                    statistics.countCopiedFiles += 1
                                     stopWatch.stop()
                                 }
                                 catch let error as NSError {
@@ -273,7 +291,7 @@ class PhotosExporter: NSObject {
                 }
             }
 
-            index = index + 1
+            index += 1
         }
     }
     
@@ -331,12 +349,13 @@ class PhotosExporter: NSObject {
             var i = 1
             while fileManager.fileExists(atPath: targetUrl.path) {
                 targetUrl = URL.init(fileURLWithPath: "\(targetPath)/\(fotoName) (\(i)).\(sourceUrl.pathExtension)")
-                i = i + 1
+                i += 1
             }
             
             logger.debug("link image: \(targetUrl.lastPathComponent)")
             let stopWatch = StopWatch("fileManager.linkItem")
             try fileManager.linkItem(at: linkTargetUrl, to: targetUrl)
+            statistics.countLinkedFiles += 1
             stopWatch.stop()
         } else {
             logger.warn("Source URL of mediaObject unknown: \(mediaObject.name!)")
