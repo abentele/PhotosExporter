@@ -73,9 +73,9 @@
 			isa = PBXGroup;
 			children = (
 				E1B1ADA1204C0C4000F1EA84 /* PhotosExporter.swift */,
-				E12FD45120533F41008B9774 /* MetadataLoader.swift */,
 				E1061DCA2062FB7D00728DCD /* SnapshotPhotosExporter.swift */,
 				E1061DCC2062FB9C00728DCD /* IncrementalPhotosExporter.swift */,
+				E12FD45120533F41008B9774 /* MetadataLoader.swift */,
 			);
 			path = exporter;
 			sourceTree = "<group>";
