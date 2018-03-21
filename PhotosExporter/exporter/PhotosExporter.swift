@@ -9,6 +9,7 @@
 import Foundation
 import MediaLibrary
 
+
 enum PhotosExporterError: Error {
     case noMediaObjects
 }
@@ -26,9 +27,9 @@ class Statistics {
 
 class PhotosExporter {
     
-    private let logger = Logger(loggerName: "PhotosExporter", logLevel: .info)
+    let logger = Logger(loggerName: "PhotosExporter", logLevel: .info)
 
-    var rootMediaGroup: MLMediaGroup!
+    private static var rootMediaGroup: MLMediaGroup?
     var exportMediaGroupFilter: ((MLMediaGroup) -> Bool) = { (MLMediaGroup) -> Bool in
         return true
     }
@@ -36,21 +37,20 @@ class PhotosExporter {
         return true
     }
     
-    private let fileManager = FileManager.default
+    let fileManager = FileManager.default
 
     // paths
-    private var targetPath: String
-    private var inProgressPath: String {
+    var targetPath: String
+    var inProgressPath: String {
         return "\(targetPath)/InProgress"
     }
-    private var latestPath: String {
-        return "\(targetPath)/Latest"
-    }
-    private var originalsRelativePath = "Originals"
-    private var calculatedRelativePath = "Calculated"
-    private var flatRelativePath = "_flat"
+    var originalsRelativePath = "Originals"
+    var calculatedRelativePath = "Calculated"
+    var flatRelativePath = "_flat"
     
-    private var statistics = Statistics()
+    private static var metadataReader: MetadataLoader?
+    
+    var statistics = Statistics()
 
     init(targetPath: String) {
         self.targetPath = targetPath
@@ -63,56 +63,56 @@ class PhotosExporter {
         }
         
         do {
-            let metadataReader = MetadataLoader()
-            self.rootMediaGroup = metadataReader.loadMetadata()
+            // initialize metadata only once to static member, to be able to use multiple instances of PhotosExporter without loading the metadata multiple times
+            if PhotosExporter.rootMediaGroup == nil {
+                PhotosExporter.rootMediaGroup = MetadataLoader().loadMetadata()
+            }
             
-            let mediaObjects = self.rootMediaGroup.mediaObjects
+            let mediaObjects = PhotosExporter.rootMediaGroup!.mediaObjects
             if (mediaObjects == nil || mediaObjects!.count == 0) {
                 throw PhotosExporterError.noMediaObjects
             }
             
-            logger.info("Start export")
+            logger.info("Start export to \(targetPath)")
 
             try doExport()
 
-            logger.info("Finished export")
+            logger.info("Finished export to \(targetPath)")
         } catch {
             logger.error("Error occured: \(error) => abort export")
         }
     }
     
     private func doExport() throws {
-        try recreateInProgressFolder()
+        try initExport()
 
-        logger.info("export originals photos to _flat folder")
-        try exportFolderFlat(
-            flatPath: "\(inProgressPath)/\(originalsRelativePath)/\(flatRelativePath)",
-            candidatesToLinkTo: ["\(latestPath)/\(originalsRelativePath)/\(flatRelativePath)"],
-            exportOriginals: true)
+        try exportFoldersFlat()
         
-        logger.info("export calculated photos to _flat folder")
-        try exportFolderFlat(
-            flatPath: "\(inProgressPath)/\(calculatedRelativePath)/\(flatRelativePath)",
-            candidatesToLinkTo: ["\(latestPath)/\(calculatedRelativePath)/\(flatRelativePath)", "\(inProgressPath)/\(originalsRelativePath)/\(flatRelativePath)"],
-            exportOriginals: false)
-
         logger.info("export originals albums folders")
         try exportFoldersRecursive(
-            mediaGroup: self.rootMediaGroup,
+            mediaGroup: PhotosExporter.rootMediaGroup!,
             flatPath: "\(inProgressPath)/\(originalsRelativePath)/\(flatRelativePath)",
-            targetPath: "\(inProgressPath)/\(originalsRelativePath)/\(self.rootMediaGroup.name!)",
+            targetPath: "\(inProgressPath)/\(originalsRelativePath)/\(PhotosExporter.rootMediaGroup!.name!)",
             exportOriginals: true)
         
         logger.info("export calculated albums folders")
         try exportFoldersRecursive(
-            mediaGroup: self.rootMediaGroup,
+            mediaGroup: PhotosExporter.rootMediaGroup!,
             flatPath: "\(inProgressPath)/\(calculatedRelativePath)/\(flatRelativePath)",
-            targetPath: "\(inProgressPath)/\(calculatedRelativePath)/\(self.rootMediaGroup.name!)",
+            targetPath: "\(inProgressPath)/\(calculatedRelativePath)/\(PhotosExporter.rootMediaGroup!.name!)",
             exportOriginals: false)
 
         try finishExport()
         
         statistics.print()
+    }
+    
+    func initExport() throws {
+        try recreateInProgressFolder()
+    }
+    
+    func exportFoldersFlat() throws {
+        // override function
     }
     
     private func recreateInProgressFolder() throws {
@@ -140,38 +140,8 @@ class PhotosExporter {
      * Finish the filesystem structures; invariant:
      * if no folder "InProgress" but folders with date exist, and there is a symbolic link "Latest", there was no error.
      */
-    private func finishExport() throws {
+    func finishExport() throws {
         logger.info("Finish export")
-        
-        // remove the "Latest" symbolic link
-        do {
-            if fileManager.fileExists(atPath: latestPath) {
-                try fileManager.removeItem(atPath: latestPath)
-            }
-        } catch {
-            logger.error("Error removing link 'Latest': \(error) => abort export")
-            throw error
-        }
-
-        // rename "InProgress" folder to export date
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd HH-mm-ss"
-        let formattedDate = dateFormatter.string(from: Date())
-        let newBackupPath = "\(targetPath)/\(formattedDate)"
-        do {
-            try fileManager.moveItem(atPath: inProgressPath, toPath: newBackupPath)
-        } catch {
-            logger.error("Error renaming InProgress folder: \(error) => abort export")
-            throw error
-        }
-        
-        // create new "Latest" symbolic link
-        do {
-            try fileManager.createSymbolicLink(atPath: latestPath, withDestinationPath: newBackupPath)
-        } catch {
-            logger.error("Error recreating link 'Latest': \(error) => abort export")
-            throw error
-        }
     }
     
     private func sourceUrlOfMediaObject(mediaObject: MLMediaObject, exportOriginals: Bool) -> URL? {
@@ -211,7 +181,7 @@ class PhotosExporter {
         return nil
     }
     
-    private func exportFolderFlat(flatPath: String, candidatesToLinkTo: [String], exportOriginals: Bool) throws {
+    func exportFolderFlat(flatPath: String, candidatesToLinkTo: [String], exportOriginals: Bool) throws {
         do {
             try fileManager.createDirectory(atPath: flatPath, withIntermediateDirectories: true)
         }
@@ -221,7 +191,7 @@ class PhotosExporter {
         }
         
         var index = 1
-        let mediaObjects = self.rootMediaGroup.mediaObjects!
+        let mediaObjects = PhotosExporter.rootMediaGroup!.mediaObjects!
         for mediaObject in mediaObjects {
             // autorelease periodically
             try autoreleasepool {
@@ -245,31 +215,7 @@ class PhotosExporter {
                                 throw error
                             }
                         } else {
-                            if try filesAreOnSameDevice(path1: sourceUrl.path, path2: flatPath) {
-                                logger.debug("\(index): link image: \(sourceUrl) to \(targetUrl.lastPathComponent)")
-                                do {
-                                    let stopWatch = StopWatch("fileManager.linkItem")
-                                    try fileManager.linkItem(at: sourceUrl, to: targetUrl)
-                                    statistics.countLinkedFiles += 1
-                                    stopWatch.stop()
-                                }
-                                catch let error as NSError {
-                                    logger.error("\(index): Unable to link file: \(error)")
-                                    throw error
-                                }
-                            } else {
-                                logger.info("\(index): copy image: \(sourceUrl) to \(targetUrl.lastPathComponent)")
-                                do {
-                                    let stopWatch = StopWatch("fileManager.copyItem")
-                                    try fileManager.copyItem(at: sourceUrl, to: targetUrl)
-                                    statistics.countCopiedFiles += 1
-                                    stopWatch.stop()
-                                }
-                                catch let error as NSError {
-                                    logger.error("\(index): Unable to copy file: \(error)")
-                                    throw error
-                                }
-                            }
+                            try copyOrLinkFileInPhotosLibrary(sourceUrl: sourceUrl, targetUrl: targetUrl)
                             
                             let fotoDateAsTimerInterval = mediaObject.attributes["DateAsTimerInterval"] as! TimeInterval
                             let fotoDate = Date(timeIntervalSinceReferenceDate: fotoDateAsTimerInterval)
@@ -295,17 +241,19 @@ class PhotosExporter {
         }
     }
     
-    private func filesAreOnSameDevice(path1: String, path2: String) throws -> Bool {
-        let attributes1 = try fileManager.attributesOfItem(atPath: path1)
-        let attributes2 = try fileManager.attributesOfItem(atPath: path2)
-        let deviceIdentifier1 = attributes1[FileAttributeKey.systemNumber]
-        let deviceIdentifier2 = attributes2[FileAttributeKey.systemNumber]
-        if deviceIdentifier1 != nil && deviceIdentifier2 != nil {
-            if (deviceIdentifier1 as! NSNumber) == (deviceIdentifier2 as! NSNumber) {
-                return true
-            }
+    func copyOrLinkFileInPhotosLibrary(sourceUrl: URL, targetUrl: URL) throws {
+        // default operation: copy
+        logger.info("\(index): copy image: \(sourceUrl) to \(targetUrl.lastPathComponent)")
+        do {
+            let stopWatch = StopWatch("fileManager.copyItem")
+            try fileManager.copyItem(at: sourceUrl, to: targetUrl)
+            statistics.countCopiedFiles += 1
+            stopWatch.stop()
         }
-        return false
+        catch let error as NSError {
+            logger.error("\(index): Unable to copy file: \(error)")
+            throw error
+        }
     }
     
     private func exportFoldersRecursive(mediaGroup: MLMediaGroup, flatPath: String, targetPath: String, exportOriginals: Bool) throws {
@@ -415,4 +363,7 @@ class PhotosExporter {
     }
     
 }
+
+
+
 

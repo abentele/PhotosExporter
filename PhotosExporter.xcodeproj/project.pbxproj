@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E1061DCB2062FB7D00728DCD /* SnapshotPhotosExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1061DCA2062FB7D00728DCD /* SnapshotPhotosExporter.swift */; };
+		E1061DCD2062FB9C00728DCD /* IncrementalPhotosExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1061DCC2062FB9C00728DCD /* IncrementalPhotosExporter.swift */; };
 		E12FD45220533F41008B9774 /* MetadataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E12FD45120533F41008B9774 /* MetadataLoader.swift */; };
 		E12FD45820547304008B9774 /* StopWatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = E12FD45720547304008B9774 /* StopWatch.swift */; };
 		E12FD45C205481DB008B9774 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = E12FD45B205481DB008B9774 /* Logger.swift */; };
@@ -27,6 +29,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		E1061DCA2062FB7D00728DCD /* SnapshotPhotosExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapshotPhotosExporter.swift; sourceTree = "<group>"; };
+		E1061DCC2062FB9C00728DCD /* IncrementalPhotosExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncrementalPhotosExporter.swift; sourceTree = "<group>"; };
 		E12FD45120533F41008B9774 /* MetadataLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetadataLoader.swift; sourceTree = "<group>"; };
 		E12FD45720547304008B9774 /* StopWatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopWatch.swift; sourceTree = "<group>"; };
 		E12FD45B205481DB008B9774 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
@@ -70,6 +74,8 @@
 			children = (
 				E1B1ADA1204C0C4000F1EA84 /* PhotosExporter.swift */,
 				E12FD45120533F41008B9774 /* MetadataLoader.swift */,
+				E1061DCA2062FB7D00728DCD /* SnapshotPhotosExporter.swift */,
+				E1061DCC2062FB9C00728DCD /* IncrementalPhotosExporter.swift */,
 			);
 			path = exporter;
 			sourceTree = "<group>";
@@ -169,6 +175,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				E12FD45220533F41008B9774 /* MetadataLoader.swift in Sources */,
+				E1061DCB2062FB7D00728DCD /* SnapshotPhotosExporter.swift in Sources */,
+				E1061DCD2062FB9C00728DCD /* IncrementalPhotosExporter.swift in Sources */,
 				E1EDC83F202F64EE00E325AA /* main.swift in Sources */,
 				E12FD45820547304008B9774 /* StopWatch.swift in Sources */,
 				E1B1ADA2204C0C4000F1EA84 /* PhotosExporter.swift in Sources */,
