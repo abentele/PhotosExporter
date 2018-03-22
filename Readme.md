@@ -19,8 +19,8 @@ Using Time Machine to backup my photos is what I've done for many years till I l
 * provide two export modes: 1. Time Machine like backup, 2. snapshot export with no extra disk usage if export is on same file system
 
 There are two possible general use cases:
-* [SnapshotPhotosExporter.swift](PhotosExporter/exporter/SnapshotPhotosExporter.swift): export all your photos, e.g. to share them with other programs or devices like your TV or other non-Apple devices, share them in the cloud etc.; if the export folder is on the same file system as the Photos Library, there is no extra disk usage
-* [IncrementalPhotosExporter.swift](PhotosExporter/exporter/IncrementalPhotosExporter.swift): backup all your photos while keeping the previous backups, like with Time Machine (I would suggest to add a cron job to trigger it daily or weekly)
+* **SnapshotPhotosExporter**: export all your photos, e.g. to share them with other programs or devices like your TV or other non-Apple devices, share them in the cloud etc.; if the export folder is on the same file system as the Photos Library, there is no extra disk usage
+* **IncrementalPhotosExporter**: backup all your photos while keeping the previous backups, like with Time Machine (I would suggest to add a cron job to trigger it daily or weekly)
 
 I believe some other people who think backups are very important could make use of it as well, so I've decided to make the code open source. Any feedback is appreciated, especially pull requests with improvements.
 
@@ -54,8 +54,8 @@ The program starts with reading all metadata of the [System Photos Library](http
 The rest is implemented in [PhotosExporter.swift](PhotosExporter/exporter/PhotosExporter.swift) and inherited classes [SnapshotPhotosExporter.swift](PhotosExporter/exporter/SnapshotPhotosExporter.swift) and [IncrementalPhotosExporter.swift](PhotosExporter/exporter/IncrementalPhotosExporter.swift).
 
 The two implementations are different:
-* **IncrementalPhotosExporter**: After loading the metadata, a folder `InProgress` is created. This is a temporary folder where the program copies all exported folders and files to; . After the export of all files has been succeeded, the folder is renamed to the current date formatted with the date pattern `yyyy-MM-dd HH-mm-ss`. Also a symbolic link (alias) to this folder named `Latest` is created to know which files to link on the next export. If an error occurs during the backup, the `InProgress` folder will be left, until the next run of the program finally deletes it.
-* **SnapshotPhotosExporter**: it uses an `InProgress` folder, too. If the files of the Photos Library and the target folder are on the same file system, the files are not copied to the `InProgress` folder. Instead, hard links are created, to minimize disk usage. After the export of all files has been succeeded, the folder is renamed to `Current`, while the old `Current` folder is removed before.
+* [IncrementalPhotosExporter.swift](PhotosExporter/exporter/IncrementalPhotosExporter.swift): After loading the metadata, a folder `InProgress` is created. This is a temporary folder where the program copies all exported folders and files to; . After the export of all files has been succeeded, the folder is renamed to the current date formatted with the date pattern `yyyy-MM-dd HH-mm-ss`. Also a symbolic link (alias) to this folder named `Latest` is created to know which files to link on the next export. If an error occurs during the backup, the `InProgress` folder will be left, until the next run of the program finally deletes it.
+* [SnapshotPhotosExporter.swift](PhotosExporter/exporter/SnapshotPhotosExporter.swift): it uses an `InProgress` folder, too. If the files of the Photos Library and the target folder are on the same file system, the files are not copied to the `InProgress` folder. Instead, hard links are created, to minimize disk usage. After the export of all files has been succeeded, the folder is renamed to `Current`, while the old `Current` folder is removed before.
 
 The main part - exporting the albums and photos - is done in two phases: the first phase is to export all original and modified photos to a folder named `_flat`. The second phase creates all sub-folders based on the albums, smart albums etc. in the Photos Library.
 
