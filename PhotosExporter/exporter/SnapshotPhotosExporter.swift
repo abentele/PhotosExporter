@@ -33,7 +33,7 @@ class SnapshotPhotosExporter : PhotosExporter {
     
     override func copyOrLinkFileInPhotosLibrary(sourceUrl: URL, targetUrl: URL) throws {
         if try filesAreOnSameDevice(path1: sourceUrl.path, path2: targetUrl.deletingLastPathComponent().path) {
-            logger.debug("\(index): link image: \(sourceUrl) to \(targetUrl.lastPathComponent)")
+            logger.debug("link image: \(sourceUrl) to \(targetUrl.lastPathComponent)")
             do {
                 let stopWatch = StopWatch("fileManager.linkItem")
                 try fileManager.linkItem(at: sourceUrl, to: targetUrl)

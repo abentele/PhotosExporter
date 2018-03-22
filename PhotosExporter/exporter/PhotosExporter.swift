@@ -243,7 +243,7 @@ class PhotosExporter {
     
     func copyOrLinkFileInPhotosLibrary(sourceUrl: URL, targetUrl: URL) throws {
         // default operation: copy
-        logger.info("\(index): copy image: \(sourceUrl) to \(targetUrl.lastPathComponent)")
+        logger.info("copy image: \(sourceUrl) to \(targetUrl.lastPathComponent)")
         do {
             let stopWatch = StopWatch("fileManager.copyItem")
             try fileManager.copyItem(at: sourceUrl, to: targetUrl)
