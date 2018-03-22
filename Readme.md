@@ -45,6 +45,8 @@ Then run the program with Xcode, or compile the project and use the executable t
 
 Normally, the exporter adds the timestamp of a photo to the exported photo's filename. Use the keyword "export-no-date" in Photos to omit the timestamp in the filename.
 
+If you move the exported folder, be sure to recreate the `Latest` link, because it would be broken after moving the folders.
+
 # Implementation
 
 The program starts with reading all metadata of the [System Photos Library](https://support.apple.com/en-us/HT204414). This is implemented in [MetadataLoader.swift](PhotosExporter/exporter/MetadataLoader.swift) using the [MediaLibrary Framework](https://developer.apple.com/documentation/medialibrary). While the MediaLibrary Framework would allow to read the iPhoto Library, the current sourcecode focuses on the Photos Library.
