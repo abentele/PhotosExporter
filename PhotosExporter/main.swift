@@ -40,7 +40,7 @@ localPhotosExporter.exportPhotos()
 //////////////////////////////////////////////////////////////////////////////////////
 
 // define the target path (this is the root path for your backups)
-let externalDiskPhotosExporter = IncrementalPhotosExporter.init(targetPath: "/Volumes/WD-4TB-EXT/Backup/Bilder/Fotos Library export")
+let externalDiskPhotosExporter = IncrementalPhotosExporter.init(targetPath: "/Volumes/WD-4TB/Fotos Library export")
 externalDiskPhotosExporter.exportMediaGroupFilter = exportMediaGroupFilter
 externalDiskPhotosExporter.exportPhotosOfMediaGroupFilter = exportPhotosOfMediaGroupFilter
 externalDiskPhotosExporter.exportPhotos()
