@@ -60,7 +60,7 @@ class MetadataLoader : NSObject {
         // wait until all metadata is loaded
         let runLoop = RunLoop.current
         while (!shouldExit
-            && runLoop.run(mode:   .defaultRunLoopMode,
+            && runLoop.run(mode:   RunLoop.Mode.default,
                            before: .distantFuture ) ) {}
         
         return self.rootMediaGroup
