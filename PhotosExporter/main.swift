@@ -36,6 +36,30 @@ localPhotosExporter.exportPhotos()
 
 
 //////////////////////////////////////////////////////////////////////////////////////
+// Export freigabe-franz
+//////////////////////////////////////////////////////////////////////////////////////
+
+// define the target path (this is the root path for your backups)
+var franzExportMediaObjectFilter: ((MLMediaObject) -> Bool) = { (mediaObject) -> Bool in
+    return hasKeyword(mediaObject: mediaObject, keyword: "freigabe-franz")
+}
+let franzExportPhotosOfMediaGroupFilter = { (mediaGroup: MLMediaGroup) -> Bool in
+    return ["com.apple.Photos.Album", "com.apple.Photos.FacesAlbum", "com.apple.Photos.VideosGroup", "com.apple.Photos.FrontCameraGroup", "com.apple.Photos.PanoramasGroup", "com.apple.Photos.BurstGroup"].contains(mediaGroup.typeIdentifier) &&
+        !("com.apple.Photos.FacesAlbum" == mediaGroup.typeIdentifier && mediaGroup.parent?.typeIdentifier == "com.apple.Photos.AlbumsGroup") &&
+        !("com.apple.Photos.PlacesAlbum" == mediaGroup.typeIdentifier && mediaGroup.parent?.typeIdentifier == "com.apple.Photos.RootGroup")
+}
+//let franzPhotosExporter = SnapshotPhotosExporter.init(targetPath: "/Users/andreas/Franz-Andi/Fotos")
+let franzPhotosExporter = SnapshotPhotosExporter.init(targetPath: "/Users/andreas/Dropbox/Franz-Andi/Fotos")
+franzPhotosExporter.exportMediaGroupFilter = exportMediaGroupFilter
+franzPhotosExporter.exportPhotosOfMediaGroupFilter = franzExportPhotosOfMediaGroupFilter
+franzPhotosExporter.exportMediaObjectFilter = franzExportMediaObjectFilter
+franzPhotosExporter.exportOriginals = false
+franzPhotosExporter.exportPhotos()
+
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////
 // Export to external disk in "time machine" mode (one folder for each export date)
 //////////////////////////////////////////////////////////////////////////////////////
 
