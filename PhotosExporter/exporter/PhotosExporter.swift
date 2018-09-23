@@ -54,7 +54,7 @@ class PhotosExporter {
     }
     var originalsRelativePath = "Originals"
     var calculatedRelativePath = "Calculated"
-    var flatRelativePath = "_flat"
+    var flatRelativePath = ".flat"
     
     private static var metadataReader: MetadataLoader?
     

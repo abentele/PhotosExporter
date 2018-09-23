@@ -99,7 +99,7 @@ class SnapshotPhotosExporter : PhotosExporter {
         // remove the "Current" folder
         try deleteFolderIfExists(atPath: subTargetPath)
         
-        // remove the "_flat" folders
+        // remove the ".flat" folders
         try deleteFolderIfExists(atPath: "\(inProgressPath)/\(originalsRelativePath)/\(flatRelativePath)")
         try deleteFolderIfExists(atPath: "\(inProgressPath)/\(calculatedRelativePath)/\(flatRelativePath)")
         
