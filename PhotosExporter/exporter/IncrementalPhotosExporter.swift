@@ -18,17 +18,21 @@ class IncrementalPhotosExporter : PhotosExporter {
     }
     
     override func exportFoldersFlat() throws {
-        logger.info("export originals photos to \(inProgressPath)/\(originalsRelativePath)/\(flatRelativePath) folder")
-        try exportFolderFlat(
-            flatPath: "\(inProgressPath)/\(originalsRelativePath)/\(flatRelativePath)",
-            candidatesToLinkTo: ["\(latestPath)/\(originalsRelativePath)/\(flatRelativePath)"],
-            exportOriginals: true)
+        if exportOriginals {
+            logger.info("export originals photos to \(inProgressPath)/\(originalsRelativePath)/\(flatRelativePath) folder")
+            try exportFolderFlat(
+                flatPath: "\(inProgressPath)/\(originalsRelativePath)/\(flatRelativePath)",
+                candidatesToLinkTo: ["\(latestPath)/\(originalsRelativePath)/\(flatRelativePath)"],
+                exportOriginals: true)
+        }
         
-        logger.info("export calculated photos to \(inProgressPath)/\(calculatedRelativePath)/\(flatRelativePath) folder")
-        try exportFolderFlat(
-            flatPath: "\(inProgressPath)/\(calculatedRelativePath)/\(flatRelativePath)",
-            candidatesToLinkTo: ["\(latestPath)/\(calculatedRelativePath)/\(flatRelativePath)", "\(inProgressPath)/\(originalsRelativePath)/\(flatRelativePath)"],
-            exportOriginals: false)
+        if exportCalculated {
+            logger.info("export calculated photos to \(inProgressPath)/\(calculatedRelativePath)/\(flatRelativePath) folder")
+            try exportFolderFlat(
+                flatPath: "\(inProgressPath)/\(calculatedRelativePath)/\(flatRelativePath)",
+                candidatesToLinkTo: ["\(latestPath)/\(calculatedRelativePath)/\(flatRelativePath)", "\(inProgressPath)/\(originalsRelativePath)/\(flatRelativePath)"],
+                exportOriginals: false)
+        }
     }
     
     

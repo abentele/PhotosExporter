@@ -36,7 +36,15 @@ class PhotosExporter {
     var exportPhotosOfMediaGroupFilter: ((MLMediaGroup) -> Bool) = { (MLMediaGroup) -> Bool in
         return true
     }
+    var exportMediaObjectFilter: ((MLMediaObject) -> Bool) = { (MLMediaObject) -> Bool in
+        return true
+    }
     
+    // set to true if calculated photos should be exported
+    var exportCalculated = true
+    // set to true if original photos should be exported
+    var exportOriginals = true
+
     let fileManager = FileManager.default
 
     // paths
@@ -88,20 +96,24 @@ class PhotosExporter {
 
         try exportFoldersFlat()
         
-        logger.info("export originals albums folders")
-        try exportFoldersRecursive(
-            mediaGroup: PhotosExporter.rootMediaGroup!,
-            flatPath: "\(inProgressPath)/\(originalsRelativePath)/\(flatRelativePath)",
-            targetPath: "\(inProgressPath)/\(originalsRelativePath)/\(PhotosExporter.rootMediaGroup!.name!)",
-            exportOriginals: true)
+        if exportOriginals {
+            logger.info("export originals albums folders")
+            try exportFoldersRecursive(
+                mediaGroup: PhotosExporter.rootMediaGroup!,
+                flatPath: "\(inProgressPath)/\(originalsRelativePath)/\(flatRelativePath)",
+                targetPath: "\(inProgressPath)/\(originalsRelativePath)/\(PhotosExporter.rootMediaGroup!.name!)",
+                exportOriginals: true)
+            
+        }
+        if exportCalculated {
+            logger.info("export calculated albums folders")
+            try exportFoldersRecursive(
+                mediaGroup: PhotosExporter.rootMediaGroup!,
+                flatPath: "\(inProgressPath)/\(calculatedRelativePath)/\(flatRelativePath)",
+                targetPath: "\(inProgressPath)/\(calculatedRelativePath)/\(PhotosExporter.rootMediaGroup!.name!)",
+                exportOriginals: false)
+        }
         
-        logger.info("export calculated albums folders")
-        try exportFoldersRecursive(
-            mediaGroup: PhotosExporter.rootMediaGroup!,
-            flatPath: "\(inProgressPath)/\(calculatedRelativePath)/\(flatRelativePath)",
-            targetPath: "\(inProgressPath)/\(calculatedRelativePath)/\(PhotosExporter.rootMediaGroup!.name!)",
-            exportOriginals: false)
-
         try finishExport()
         
         statistics.print()
@@ -182,62 +194,74 @@ class PhotosExporter {
     }
     
     func exportFolderFlat(flatPath: String, candidatesToLinkTo: [String], exportOriginals: Bool) throws {
-        do {
-            try fileManager.createDirectory(atPath: flatPath, withIntermediateDirectories: true)
-        }
-        catch let error as NSError {
-            logger.error("Unable to create directory \(flatPath): \(error)")
-            throw error
-        }
-        
-        var index = 1
+        var containsFotosToExport = false;
         let mediaObjects = PhotosExporter.rootMediaGroup!.mediaObjects!
         for mediaObject in mediaObjects {
-            // autorelease periodically
-            try autoreleasepool {
-                let sourceUrl = sourceUrlOfMediaObject(mediaObject: mediaObject, exportOriginals: exportOriginals)
-                
-                if let sourceUrl = sourceUrl {
-                    let targetUrl = URL.init(fileURLWithPath: "\(flatPath)/\(mediaObject.identifier).\(sourceUrl.pathExtension)")
-                    if !fileManager.fileExists(atPath: targetUrl.path) {
-                        let linkToUrl = try getLinkToUrl(candidatesToLinkTo: candidatesToLinkTo, mediaObject: mediaObject, sourceUrl: sourceUrl)
+            if exportMediaObjectFilter(mediaObject) {
+                containsFotosToExport = true
+                break
+            }
+        }
+        
+        if containsFotosToExport {
+            do {
+                try fileManager.createDirectory(atPath: flatPath, withIntermediateDirectories: true)
+            }
+            catch let error as NSError {
+                logger.error("Unable to create directory \(flatPath): \(error)")
+                throw error
+            }
+            
+            var index = 1
+            for mediaObject in mediaObjects {
+                if exportMediaObjectFilter(mediaObject) {
+                    // autorelease periodically
+                    try autoreleasepool {
+                        let sourceUrl = sourceUrlOfMediaObject(mediaObject: mediaObject, exportOriginals: exportOriginals)
                         
-                        if let linkToUrl = linkToUrl {
-                            logger.debug("\(index): link unchanged image: \(sourceUrl); link to: \(linkToUrl)")
-                            do {
-                                let stopWatch = StopWatch("fileManager.linkItem")
-                                try fileManager.linkItem(at: linkToUrl, to: targetUrl)
-                                statistics.countLinkedFiles += 1
-                                stopWatch.stop()
+                        if let sourceUrl = sourceUrl {
+                            let targetUrl = URL.init(fileURLWithPath: "\(flatPath)/\(mediaObject.identifier).\(sourceUrl.pathExtension)")
+                            if !fileManager.fileExists(atPath: targetUrl.path) {
+                                let linkToUrl = try getLinkToUrl(candidatesToLinkTo: candidatesToLinkTo, mediaObject: mediaObject, sourceUrl: sourceUrl)
+                                
+                                if let linkToUrl = linkToUrl {
+                                    logger.debug("\(index): link unchanged image: \(sourceUrl); link to: \(linkToUrl)")
+                                    do {
+                                        let stopWatch = StopWatch("fileManager.linkItem")
+                                        try fileManager.linkItem(at: linkToUrl, to: targetUrl)
+                                        statistics.countLinkedFiles += 1
+                                        stopWatch.stop()
+                                    }
+                                    catch let error as NSError {
+                                        logger.error("\(index): Unable to link file: \(error)")
+                                        throw error
+                                    }
+                                } else {
+                                    try copyOrLinkFileInPhotosLibrary(sourceUrl: sourceUrl, targetUrl: targetUrl)
+                                    
+                                    let fotoDateAsTimerInterval = mediaObject.attributes["DateAsTimerInterval"] as! TimeInterval
+                                    let fotoDate = Date(timeIntervalSinceReferenceDate: fotoDateAsTimerInterval)
+                                    let attributes = [FileAttributeKey.modificationDate : fotoDate]
+                                    let stopWatch = StopWatch("fileManager.setAttributes")
+                                    do {
+                                        try fileManager.setAttributes(attributes, ofItemAtPath: targetUrl.path)
+                                    }
+                                    catch let error as NSError {
+                                        logger.error("\(index): Unable to set attributes on file: \(error)")
+                                        throw error
+                                    }
+                                    stopWatch.stop()
+                                }
                             }
-                            catch let error as NSError {
-                                logger.error("\(index): Unable to link file: \(error)")
-                                throw error
-                            }
-                        } else {
-                            try copyOrLinkFileInPhotosLibrary(sourceUrl: sourceUrl, targetUrl: targetUrl)
-                            
-                            let fotoDateAsTimerInterval = mediaObject.attributes["DateAsTimerInterval"] as! TimeInterval
-                            let fotoDate = Date(timeIntervalSinceReferenceDate: fotoDateAsTimerInterval)
-                            let attributes = [FileAttributeKey.modificationDate : fotoDate]
-                            let stopWatch = StopWatch("fileManager.setAttributes")
-                            do {
-                                try fileManager.setAttributes(attributes, ofItemAtPath: targetUrl.path)
-                            }
-                            catch let error as NSError {
-                                logger.error("\(index): Unable to set attributes on file: \(error)")
-                                throw error
-                            }
-                            stopWatch.stop()
+                        }
+                        else {
+                            logger.warn("mediaObject has no url")
                         }
                     }
                 }
-                else {
-                    logger.warn("mediaObject has no url")
-                }
-            }
 
-            index += 1
+                index += 1
+            }
         }
     }
     
@@ -260,13 +284,33 @@ class PhotosExporter {
         // autorelease periodically
         try autoreleasepool {
             if exportMediaGroupFilter(mediaGroup) {
-                // create folder at targetPath
-                do {
-                    logger.debug("Create folder: \(targetPath)")
-                    try fileManager.createDirectory(atPath: targetPath, withIntermediateDirectories: true)
-                } catch {
-                    logger.error("Error recreating folder \(targetPath)")
-                    throw error
+                var containsFotosToExport = false;
+                if exportPhotosOfMediaGroupFilter(mediaGroup) {
+                    for mediaObject in mediaGroup.mediaObjects! {
+                        if exportMediaObjectFilter(mediaObject) {
+                            containsFotosToExport = true
+                            break
+                        }
+                    }
+                }
+
+                if containsFotosToExport {
+                    // create folder at targetPath
+                    do {
+                        logger.debug("Create folder: \(targetPath)")
+                        try fileManager.createDirectory(atPath: targetPath, withIntermediateDirectories: true)
+                    } catch {
+                        logger.error("Error recreating folder \(targetPath)")
+                        throw error
+                    }
+                    
+                    if exportPhotosOfMediaGroupFilter(mediaGroup) {
+                        for mediaObject in mediaGroup.mediaObjects! {
+                            if exportMediaObjectFilter(mediaObject) {
+                                try exportFoto(mediaObject: mediaObject, flatPath: flatPath, targetPath: targetPath, exportOriginals: exportOriginals)
+                            }
+                        }
+                    }
                 }
                 
                 for childMediaGroup in mediaGroup.childGroups! {
@@ -277,11 +321,7 @@ class PhotosExporter {
                     try exportFoldersRecursive(mediaGroup: childMediaGroup, flatPath: flatPath, targetPath: childTargetPath, exportOriginals: exportOriginals)
                 }
                 
-                if exportPhotosOfMediaGroupFilter(mediaGroup) {
-                    for mediaObject in mediaGroup.mediaObjects! {
-                        try exportFoto(mediaObject: mediaObject, flatPath: flatPath, targetPath: targetPath, exportOriginals: exportOriginals)
-                    }
-                }
+                
             }
         }
     }
@@ -294,6 +334,7 @@ class PhotosExporter {
             // get unique target name
             let fotoName = getFotoName(mediaObject: mediaObject, sourceUrl: sourceUrl)
             var targetUrl = URL.init(fileURLWithPath: "\(targetPath)/\(fotoName).\(sourceUrl.pathExtension)")
+            logger.debug("Export foto: \(fotoName) to \(targetUrl)")
             var i = 1
             while fileManager.fileExists(atPath: targetUrl.path) {
                 targetUrl = URL.init(fileURLWithPath: "\(targetPath)/\(fotoName) (\(i)).\(sourceUrl.pathExtension)")
@@ -328,13 +369,7 @@ class PhotosExporter {
             fotoName = ""
         }
 
-        // get keywords
-        var keywords: [String.SubSequence] = []
-        if let keywordAttribute = mediaObject.attributes["keywordNamesAsString"] {
-            let keywordsStr = keywordAttribute as! String
-            keywords = keywordsStr.split(separator: ",")
-        }
-        if !keywords.contains("export-no-date") {
+        if !hasKeyword(mediaObject: mediaObject, keyword: "export-no-date") {
             
             // get date of foto
             let fotoDateAsTimerInterval = mediaObject.attributes["DateAsTimerInterval"] as! TimeInterval

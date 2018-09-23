@@ -18,17 +18,21 @@ class SnapshotPhotosExporter : PhotosExporter {
     }
     
     override func exportFoldersFlat() throws {
-        logger.info("export originals photos to \(inProgressPath)/\(originalsRelativePath)/\(flatRelativePath) folder")
-        try exportFolderFlat(
-            flatPath: "\(inProgressPath)/\(originalsRelativePath)/\(flatRelativePath)",
-            candidatesToLinkTo: [],
-            exportOriginals: true)
-        
-        logger.info("export calculated photos to \(inProgressPath)/\(calculatedRelativePath)/\(flatRelativePath) folder")
-        try exportFolderFlat(
-            flatPath: "\(inProgressPath)/\(calculatedRelativePath)/\(flatRelativePath)",
-            candidatesToLinkTo: ["\(inProgressPath)/\(originalsRelativePath)/\(flatRelativePath)"],
-            exportOriginals: false)
+        if exportOriginals {
+            logger.info("export originals photos to \(inProgressPath)/\(originalsRelativePath)/\(flatRelativePath) folder")
+            try exportFolderFlat(
+                flatPath: "\(inProgressPath)/\(originalsRelativePath)/\(flatRelativePath)",
+                candidatesToLinkTo: [],
+                exportOriginals: true)
+            
+        }
+        if exportCalculated {
+            logger.info("export calculated photos to \(inProgressPath)/\(calculatedRelativePath)/\(flatRelativePath) folder")
+            try exportFolderFlat(
+                flatPath: "\(inProgressPath)/\(calculatedRelativePath)/\(flatRelativePath)",
+                candidatesToLinkTo: ["\(inProgressPath)/\(originalsRelativePath)/\(flatRelativePath)"],
+                exportOriginals: false)
+        }
     }
     
     override func copyOrLinkFileInPhotosLibrary(sourceUrl: URL, targetUrl: URL) throws {
@@ -93,12 +97,28 @@ class SnapshotPhotosExporter : PhotosExporter {
         try super.finishExport()
         
         // remove the "Current" folder
+        try deleteFolderIfExists(atPath: subTargetPath)
+        
+        // remove the "_flat" folders
+        try deleteFolderIfExists(atPath: "\(inProgressPath)/\(originalsRelativePath)/\(flatRelativePath)")
+        try deleteFolderIfExists(atPath: "\(inProgressPath)/\(calculatedRelativePath)/\(flatRelativePath)")
+        
+        // rename "InProgress" folder to "Current"
         do {
-            if fileManager.fileExists(atPath: subTargetPath) {
-                logger.info("Delete folder: \(subTargetPath)")
+            try fileManager.moveItem(atPath: inProgressPath, toPath: subTargetPath)
+        } catch {
+            logger.error("Error renaming InProgress folder: \(error) => abort export")
+            throw error
+        }
+    }
+    
+    func deleteFolderIfExists(atPath path: String) throws {
+        do {
+            if fileManager.fileExists(atPath: path) {
+                logger.info("Delete folder: \(path)")
                 for (retryCounter, _) in [0...2].enumerated() {
                     do {
-                        try fileManager.removeItem(atPath: subTargetPath)
+                        try fileManager.removeItem(atPath: path)
                     } catch {
                         if retryCounter == 2 {
                             throw error
@@ -107,15 +127,7 @@ class SnapshotPhotosExporter : PhotosExporter {
                 }
             }
         } catch {
-            logger.error("Error deleting folder \(subTargetPath)")
-            throw error
-        }
-        
-        // rename "InProgress" folder to "Current"
-        do {
-            try fileManager.moveItem(atPath: inProgressPath, toPath: subTargetPath)
-        } catch {
-            logger.error("Error renaming InProgress folder: \(error) => abort export")
+            logger.error("Error deleting folder \(path)")
             throw error
         }
     }
