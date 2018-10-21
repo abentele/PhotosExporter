@@ -39,7 +39,7 @@ The final step was to re-implement everything using Apple's latest programming l
 # Usage
 
 Currently the program doesn't have any arguments and no user interface.
-You have checkout the project, open it in Xcode, open `main.swift` and modify the parameters, most important `targetPath`. Be sure the target path is on a file system which supports hard links. You are free to customize the code to your needs, but it's not required.
+You have checkout the project, open it in Xcode, open `MainExporter.swift` and modify the parameters, most important `targetPath`. Be sure the target path is on a file system which supports hard links. You are free to customize the code to your needs, but it's not required.
 
 Then run the program with Xcode, or compile the project and use the executable to export your photos.
 

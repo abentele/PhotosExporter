@@ -3,48 +3,43 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 48;
+	objectVersion = 50;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E1061DCB2062FB7D00728DCD /* SnapshotPhotosExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1061DCA2062FB7D00728DCD /* SnapshotPhotosExporter.swift */; };
-		E1061DCD2062FB9C00728DCD /* IncrementalPhotosExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1061DCC2062FB9C00728DCD /* IncrementalPhotosExporter.swift */; };
-		E12FD45220533F41008B9774 /* MetadataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E12FD45120533F41008B9774 /* MetadataLoader.swift */; };
-		E12FD45820547304008B9774 /* StopWatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = E12FD45720547304008B9774 /* StopWatch.swift */; };
-		E12FD45C205481DB008B9774 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = E12FD45B205481DB008B9774 /* Logger.swift */; };
-		E1B1ADA2204C0C4000F1EA84 /* PhotosExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1B1ADA1204C0C4000F1EA84 /* PhotosExporter.swift */; };
-		E1B42DBF2157AC76000E23A3 /* MediaLibUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1B42DBE2157AC76000E23A3 /* MediaLibUtil.swift */; };
-		E1EDC83F202F64EE00E325AA /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1EDC83E202F64EE00E325AA /* main.swift */; };
+		E1E43AF6217CDABA000E76DF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E43AF5217CDABA000E76DF /* AppDelegate.swift */; };
+		E1E43B10217CDB54000E76DF /* MetadataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E43B08217CDB53000E76DF /* MetadataLoader.swift */; };
+		E1E43B11217CDB54000E76DF /* IncrementalPhotosExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E43B09217CDB53000E76DF /* IncrementalPhotosExporter.swift */; };
+		E1E43B13217CDB54000E76DF /* MediaLibUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E43B0B217CDB53000E76DF /* MediaLibUtil.swift */; };
+		E1E43B1C217CDBE9000E76DF /* PhotosExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E43B17217CDB6A000E76DF /* PhotosExporter.swift */; };
+		E1E43B1D217CDBE9000E76DF /* SnapshotPhotosExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E43B18217CDB6E000E76DF /* SnapshotPhotosExporter.swift */; };
+		E1E43B43217CE0A9000E76DF /* MainExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E43B42217CE0A9000E76DF /* MainExporter.swift */; };
+		E1E43B46217CE0C8000E76DF /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E43B44217CE0C8000E76DF /* Logger.swift */; };
+		E1E43B47217CE0C8000E76DF /* StopWatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E43B45217CE0C8000E76DF /* StopWatch.swift */; };
+		E1E43B63217CE16D000E76DF /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = E1E43B62217CE16D000E76DF /* MainMenu.xib */; };
+		E1E43B65217CE1A0000E76DF /* filesystem-structure.png in Resources */ = {isa = PBXBuildFile; fileRef = E1E43B64217CE1A0000E76DF /* filesystem-structure.png */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXCopyFilesBuildPhase section */
-		E1EDC839202F64EE00E325AA /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = /usr/share/man/man1;
-			dstSubfolderSpec = 0;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 1;
-		};
-/* End PBXCopyFilesBuildPhase section */
-
 /* Begin PBXFileReference section */
-		E1061DCA2062FB7D00728DCD /* SnapshotPhotosExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapshotPhotosExporter.swift; sourceTree = "<group>"; };
-		E1061DCC2062FB9C00728DCD /* IncrementalPhotosExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncrementalPhotosExporter.swift; sourceTree = "<group>"; };
-		E12FD45120533F41008B9774 /* MetadataLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetadataLoader.swift; sourceTree = "<group>"; };
-		E12FD45720547304008B9774 /* StopWatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopWatch.swift; sourceTree = "<group>"; };
-		E12FD45B205481DB008B9774 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
-		E12FD45D2055B930008B9774 /* Readme.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Readme.md; sourceTree = "<group>"; };
-		E12FD45F205DAEB4008B9774 /* filesystem-structure.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "filesystem-structure.png"; sourceTree = "<group>"; };
-		E1B1ADA1204C0C4000F1EA84 /* PhotosExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosExporter.swift; sourceTree = "<group>"; };
-		E1B42DBE2157AC76000E23A3 /* MediaLibUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaLibUtil.swift; sourceTree = "<group>"; };
-		E1EDC83B202F64EE00E325AA /* PhotosExporter */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = PhotosExporter; sourceTree = BUILT_PRODUCTS_DIR; };
-		E1EDC83E202F64EE00E325AA /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		E1E43AF2217CDABA000E76DF /* PhotosExporter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PhotosExporter.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E1E43AF5217CDABA000E76DF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		E1E43AFC217CDABA000E76DF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E1E43B05217CDB29000E76DF /* Readme.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Readme.md; sourceTree = "<group>"; };
+		E1E43B08217CDB53000E76DF /* MetadataLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetadataLoader.swift; sourceTree = "<group>"; };
+		E1E43B09217CDB53000E76DF /* IncrementalPhotosExporter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IncrementalPhotosExporter.swift; sourceTree = "<group>"; };
+		E1E43B0B217CDB53000E76DF /* MediaLibUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaLibUtil.swift; sourceTree = "<group>"; };
+		E1E43B17217CDB6A000E76DF /* PhotosExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosExporter.swift; sourceTree = "<group>"; };
+		E1E43B18217CDB6E000E76DF /* SnapshotPhotosExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapshotPhotosExporter.swift; sourceTree = "<group>"; };
+		E1E43B39217CDC73000E76DF /* PhotosExporter.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = PhotosExporter.entitlements; sourceTree = "<group>"; };
+		E1E43B42217CE0A9000E76DF /* MainExporter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainExporter.swift; sourceTree = "<group>"; };
+		E1E43B44217CE0C8000E76DF /* Logger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
+		E1E43B45217CE0C8000E76DF /* StopWatch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StopWatch.swift; sourceTree = "<group>"; };
+		E1E43B62217CE16D000E76DF /* MainMenu.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MainMenu.xib; sourceTree = "<group>"; };
+		E1E43B64217CE1A0000E76DF /* filesystem-structure.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "filesystem-structure.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		E1EDC838202F64EE00E325AA /* Frameworks */ = {
+		E1E43AEF217CDABA000E76DF /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -54,81 +49,77 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		E12FD45E205DAE94008B9774 /* doc */ = {
+		E1E43AE9217CDABA000E76DF = {
 			isa = PBXGroup;
 			children = (
-				E12FD45F205DAEB4008B9774 /* filesystem-structure.png */,
-			);
-			path = doc;
-			sourceTree = "<group>";
-		};
-		E12FD460205DB14E008B9774 /* util */ = {
-			isa = PBXGroup;
-			children = (
-				E12FD45720547304008B9774 /* StopWatch.swift */,
-				E12FD45B205481DB008B9774 /* Logger.swift */,
-			);
-			path = util;
-			sourceTree = "<group>";
-		};
-		E12FD461205DB15E008B9774 /* exporter */ = {
-			isa = PBXGroup;
-			children = (
-				E1B1ADA1204C0C4000F1EA84 /* PhotosExporter.swift */,
-				E1061DCA2062FB7D00728DCD /* SnapshotPhotosExporter.swift */,
-				E1061DCC2062FB9C00728DCD /* IncrementalPhotosExporter.swift */,
-				E12FD45120533F41008B9774 /* MetadataLoader.swift */,
-				E1B42DBE2157AC76000E23A3 /* MediaLibUtil.swift */,
-			);
-			path = exporter;
-			sourceTree = "<group>";
-		};
-		E1EDC832202F64EE00E325AA = {
-			isa = PBXGroup;
-			children = (
-				E12FD45D2055B930008B9774 /* Readme.md */,
-				E1EDC845202F664A00E325AA /* Frameworks */,
-				E1EDC83D202F64EE00E325AA /* PhotosExporter */,
-				E12FD45E205DAE94008B9774 /* doc */,
-				E1EDC83C202F64EE00E325AA /* Products */,
+				E1E43B05217CDB29000E76DF /* Readme.md */,
+				E1E43AF4217CDABA000E76DF /* PhotosExporter */,
+				E1E43B3D217CDFED000E76DF /* doc */,
+				E1E43AF3217CDABA000E76DF /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		E1EDC83C202F64EE00E325AA /* Products */ = {
+		E1E43AF3217CDABA000E76DF /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				E1EDC83B202F64EE00E325AA /* PhotosExporter */,
+				E1E43AF2217CDABA000E76DF /* PhotosExporter.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		E1EDC83D202F64EE00E325AA /* PhotosExporter */ = {
+		E1E43AF4217CDABA000E76DF /* PhotosExporter */ = {
 			isa = PBXGroup;
 			children = (
-				E1EDC83E202F64EE00E325AA /* main.swift */,
-				E12FD461205DB15E008B9774 /* exporter */,
-				E12FD460205DB14E008B9774 /* util */,
+				E1E43B42217CE0A9000E76DF /* MainExporter.swift */,
+				E1E43AF5217CDABA000E76DF /* AppDelegate.swift */,
+				E1E43B16217CDB62000E76DF /* exporter */,
+				E1E43B19217CDB8C000E76DF /* util */,
+				E1E43AFC217CDABA000E76DF /* Info.plist */,
+				E1E43B62217CE16D000E76DF /* MainMenu.xib */,
+				E1E43B39217CDC73000E76DF /* PhotosExporter.entitlements */,
 			);
 			path = PhotosExporter;
 			sourceTree = "<group>";
 		};
-		E1EDC845202F664A00E325AA /* Frameworks */ = {
+		E1E43B16217CDB62000E76DF /* exporter */ = {
 			isa = PBXGroup;
 			children = (
+				E1E43B17217CDB6A000E76DF /* PhotosExporter.swift */,
+				E1E43B18217CDB6E000E76DF /* SnapshotPhotosExporter.swift */,
+				E1E43B09217CDB53000E76DF /* IncrementalPhotosExporter.swift */,
+				E1E43B0B217CDB53000E76DF /* MediaLibUtil.swift */,
+				E1E43B08217CDB53000E76DF /* MetadataLoader.swift */,
 			);
-			path = Frameworks;
+			path = exporter;
+			sourceTree = "<group>";
+		};
+		E1E43B19217CDB8C000E76DF /* util */ = {
+			isa = PBXGroup;
+			children = (
+				E1E43B44217CE0C8000E76DF /* Logger.swift */,
+				E1E43B45217CE0C8000E76DF /* StopWatch.swift */,
+			);
+			path = util;
+			sourceTree = "<group>";
+		};
+		E1E43B3D217CDFED000E76DF /* doc */ = {
+			isa = PBXGroup;
+			children = (
+				E1E43B64217CE1A0000E76DF /* filesystem-structure.png */,
+			);
+			path = doc;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		E1EDC83A202F64EE00E325AA /* PhotosExporter */ = {
+		E1E43AF1217CDABA000E76DF /* PhotosExporter */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = E1EDC842202F64EE00E325AA /* Build configuration list for PBXNativeTarget "PhotosExporter" */;
+			buildConfigurationList = E1E43B00217CDABA000E76DF /* Build configuration list for PBXNativeTarget "PhotosExporter" */;
 			buildPhases = (
-				E1EDC837202F64EE00E325AA /* Sources */,
-				E1EDC838202F64EE00E325AA /* Frameworks */,
-				E1EDC839202F64EE00E325AA /* CopyFiles */,
+				E1E43AEE217CDABA000E76DF /* Sources */,
+				E1E43AEF217CDABA000E76DF /* Frameworks */,
+				E1E43AF0217CDABA000E76DF /* Resources */,
 			);
 			buildRules = (
 			);
@@ -136,63 +127,80 @@
 			);
 			name = PhotosExporter;
 			productName = PhotosExporter;
-			productReference = E1EDC83B202F64EE00E325AA /* PhotosExporter */;
-			productType = "com.apple.product-type.tool";
+			productReference = E1E43AF2217CDABA000E76DF /* PhotosExporter.app */;
+			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		E1EDC833202F64EE00E325AA /* Project object */ = {
+		E1E43AEA217CDABA000E76DF /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0920;
-				LastUpgradeCheck = 0930;
+				LastSwiftUpdateCheck = 1000;
+				LastUpgradeCheck = 1000;
 				ORGANIZATIONNAME = "Andreas Bentele";
 				TargetAttributes = {
-					E1EDC83A202F64EE00E325AA = {
-						CreatedOnToolsVersion = 9.2;
-						LastSwiftMigration = 1000;
-						ProvisioningStyle = Automatic;
+					E1E43AF1217CDABA000E76DF = {
+						CreatedOnToolsVersion = 10.0;
+						SystemCapabilities = {
+							com.apple.Sandbox = {
+								enabled = 0;
+							};
+						};
 					};
 				};
 			};
-			buildConfigurationList = E1EDC836202F64EE00E325AA /* Build configuration list for PBXProject "PhotosExporter" */;
-			compatibilityVersion = "Xcode 8.0";
+			buildConfigurationList = E1E43AED217CDABA000E76DF /* Build configuration list for PBXProject "PhotosExporter" */;
+			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
-			mainGroup = E1EDC832202F64EE00E325AA;
-			productRefGroup = E1EDC83C202F64EE00E325AA /* Products */;
+			mainGroup = E1E43AE9217CDABA000E76DF;
+			productRefGroup = E1E43AF3217CDABA000E76DF /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				E1EDC83A202F64EE00E325AA /* PhotosExporter */,
+				E1E43AF1217CDABA000E76DF /* PhotosExporter */,
 			);
 		};
 /* End PBXProject section */
 
+/* Begin PBXResourcesBuildPhase section */
+		E1E43AF0217CDABA000E76DF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E1E43B65217CE1A0000E76DF /* filesystem-structure.png in Resources */,
+				E1E43B63217CE16D000E76DF /* MainMenu.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
-		E1EDC837202F64EE00E325AA /* Sources */ = {
+		E1E43AEE217CDABA000E76DF /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E12FD45220533F41008B9774 /* MetadataLoader.swift in Sources */,
-				E1061DCB2062FB7D00728DCD /* SnapshotPhotosExporter.swift in Sources */,
-				E1B42DBF2157AC76000E23A3 /* MediaLibUtil.swift in Sources */,
-				E1061DCD2062FB9C00728DCD /* IncrementalPhotosExporter.swift in Sources */,
-				E1EDC83F202F64EE00E325AA /* main.swift in Sources */,
-				E12FD45820547304008B9774 /* StopWatch.swift in Sources */,
-				E1B1ADA2204C0C4000F1EA84 /* PhotosExporter.swift in Sources */,
-				E12FD45C205481DB008B9774 /* Logger.swift in Sources */,
+				E1E43B43217CE0A9000E76DF /* MainExporter.swift in Sources */,
+				E1E43B1C217CDBE9000E76DF /* PhotosExporter.swift in Sources */,
+				E1E43B1D217CDBE9000E76DF /* SnapshotPhotosExporter.swift in Sources */,
+				E1E43AF6217CDABA000E76DF /* AppDelegate.swift in Sources */,
+				E1E43B13217CDB54000E76DF /* MediaLibUtil.swift in Sources */,
+				E1E43B11217CDB54000E76DF /* IncrementalPhotosExporter.swift in Sources */,
+				E1E43B47217CE0C8000E76DF /* StopWatch.swift in Sources */,
+				E1E43B10217CDB54000E76DF /* MetadataLoader.swift in Sources */,
+				E1E43B46217CE0C8000E76DF /* Logger.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		E1EDC840202F64EE00E325AA /* Debug */ = {
+		E1E43AFE217CDABA000E76DF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -202,6 +210,7 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
@@ -243,7 +252,8 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
-				MTL_ENABLE_DEBUG_INFO = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
@@ -251,7 +261,7 @@
 			};
 			name = Debug;
 		};
-		E1EDC841202F64EE00E325AA /* Release */ = {
+		E1E43AFF217CDABA000E76DF /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -261,6 +271,7 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
@@ -297,24 +308,42 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
 			};
 			name = Release;
 		};
-		E1EDC843202F64EE00E325AA /* Debug */ = {
+		E1E43B01217CDABA000E76DF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = PhotosExporter/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.bentele.PhotosExporter;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
 		};
-		E1EDC844202F64EE00E325AA /* Release */ = {
+		E1E43B02217CDABA000E76DF /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = PhotosExporter/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.bentele.PhotosExporter;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 			};
@@ -323,25 +352,25 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		E1EDC836202F64EE00E325AA /* Build configuration list for PBXProject "PhotosExporter" */ = {
+		E1E43AED217CDABA000E76DF /* Build configuration list for PBXProject "PhotosExporter" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				E1EDC840202F64EE00E325AA /* Debug */,
-				E1EDC841202F64EE00E325AA /* Release */,
+				E1E43AFE217CDABA000E76DF /* Debug */,
+				E1E43AFF217CDABA000E76DF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		E1EDC842202F64EE00E325AA /* Build configuration list for PBXNativeTarget "PhotosExporter" */ = {
+		E1E43B00217CDABA000E76DF /* Build configuration list for PBXNativeTarget "PhotosExporter" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				E1EDC843202F64EE00E325AA /* Debug */,
-				E1EDC844202F64EE00E325AA /* Release */,
+				E1E43B01217CDABA000E76DF /* Debug */,
+				E1E43B02217CDABA000E76DF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = E1EDC833202F64EE00E325AA /* Project object */;
+	rootObject = E1E43AEA217CDABA000E76DF /* Project object */;
 }
