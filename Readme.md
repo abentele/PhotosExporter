@@ -47,6 +47,11 @@ Normally, the exporter adds the timestamp of a photo to the exported photo's fil
 
 If you move the exported folder, be sure to recreate the `Latest` link, because it would be broken after moving the folders.
 
+# Supported platforms
+
+* macOS 10.14 "Mojave" (tested by the maintainer)
+* macOS 10.13 "High Sierra" (should work, but untested, unsupported)
+
 # Implementation
 
 The program starts with reading all metadata of the [System Photos Library](https://support.apple.com/en-us/HT204414). This is implemented in [MetadataLoader.swift](PhotosExporter/exporter/MetadataLoader.swift) using the [MediaLibrary Framework](https://developer.apple.com/documentation/medialibrary). While the MediaLibrary Framework would allow to read the iPhoto Library, the current sourcecode focuses on the Photos Library.
