@@ -67,28 +67,6 @@ class SnapshotPhotosExporter : PhotosExporter {
         return false
     }
     
-    override func initExport() throws {
-        try super.initExport()
-        do {
-            if fileManager.fileExists(atPath: inProgressPath) {
-                logger.info("Delete folder: \(inProgressPath)")
-                for (retryCounter, _) in [0...2].enumerated() {
-                    do {
-                        try fileManager.removeItem(atPath: inProgressPath)
-                    } catch {
-                        if retryCounter == 2 {
-                            throw error
-                        }
-                    }
-                }
-            }
-            try fileManager.createDirectory(atPath: inProgressPath, withIntermediateDirectories: true)
-        } catch {
-            logger.error("Error recreating folder \(inProgressPath)")
-            throw error
-        }
-    }
-    
     /**
      * Finish the filesystem structures; invariant:
      * if no folder "InProgress" but folders with date exist, and there is a symbolic link "Latest", there was no error.
