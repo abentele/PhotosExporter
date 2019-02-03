@@ -352,10 +352,12 @@ class PhotosExporter {
     }
     
     private func getFotoName(mediaObject: MLMediaObject, sourceUrl: URL) -> String {
+        let exportNoDate = hasKeyword(mediaObject: mediaObject, keyword: "export-no-date")
+        
         var fotoName = ""
         if let name = mediaObject.name {
             fotoName = name
-        } else {
+        } else if (exportNoDate) {
             fotoName = sourceUrl.lastPathComponent
         }
         
@@ -369,7 +371,7 @@ class PhotosExporter {
             fotoName = ""
         }
 
-        if !hasKeyword(mediaObject: mediaObject, keyword: "export-no-date") {
+        if !exportNoDate {
             
             // get date of foto
             let fotoDateAsTimerInterval = mediaObject.attributes["DateAsTimerInterval"] as! TimeInterval
