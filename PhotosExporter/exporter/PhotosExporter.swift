@@ -101,7 +101,7 @@ class PhotosExporter {
             try exportFoldersRecursive(
                 mediaGroup: PhotosExporter.rootMediaGroup!,
                 flatPath: "\(inProgressPath)/\(originalsRelativePath)/\(flatRelativePath)",
-                targetPath: "\(inProgressPath)/\(originalsRelativePath)/\(PhotosExporter.rootMediaGroup!.name!)",
+                targetPath: "\(inProgressPath)/\(originalsRelativePath)/\(escapeFileName(PhotosExporter.rootMediaGroup!.name!))",
                 exportOriginals: true)
             
         }
@@ -110,7 +110,7 @@ class PhotosExporter {
             try exportFoldersRecursive(
                 mediaGroup: PhotosExporter.rootMediaGroup!,
                 flatPath: "\(inProgressPath)/\(calculatedRelativePath)/\(flatRelativePath)",
-                targetPath: "\(inProgressPath)/\(calculatedRelativePath)/\(PhotosExporter.rootMediaGroup!.name!)",
+                targetPath: "\(inProgressPath)/\(calculatedRelativePath)/\(escapeFileName(PhotosExporter.rootMediaGroup!.name!))",
                 exportOriginals: false)
         }
         
@@ -314,7 +314,7 @@ class PhotosExporter {
                 }
                 
                 for childMediaGroup in mediaGroup.childGroups! {
-                    var childTargetPath: String = "\(targetPath)/\(childMediaGroup.name!)"
+                    var childTargetPath: String = "\(targetPath)/\(escapeFileName(childMediaGroup.name!))"
                     if childMediaGroup.typeIdentifier == "com.apple.Photos.SmartAlbum" {
                         childTargetPath = "\(childTargetPath) (Smart album)"
                     }
@@ -370,6 +370,8 @@ class PhotosExporter {
         if fotoName.hasPrefix("fullsizeoutput_") {
             fotoName = ""
         }
+        
+        fotoName = escapeFileName(fotoName)
 
         if !exportNoDate {
             
@@ -398,6 +400,11 @@ class PhotosExporter {
         
         return fotoName
     }
+    
+    private func escapeFileName(_ fileName: String) -> String {
+        return fileName.replacingOccurrences(of: "/", with: ", ")
+    }
+
     
 }
 
