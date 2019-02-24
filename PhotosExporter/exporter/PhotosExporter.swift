@@ -16,9 +16,32 @@ enum PhotosExporterError: Error {
 
 class Statistics {
     private let logger = Logger(loggerName: "PhotosExporter", logLevel: .info)
+    
+    private var _countCopiedFiles: UInt64 = 0
+    private var _countLinkedFiles: UInt64 = 0
 
-    var countCopiedFiles = 0
-    var countLinkedFiles = 0
+    var countCopiedFiles: UInt64 {
+        get {
+            return _countCopiedFiles
+        }
+        set(newValue) {
+            _countCopiedFiles = newValue
+            if _countCopiedFiles % 100 == 0 {
+                print()
+            }
+        }
+    }
+    var countLinkedFiles: UInt64 {
+        get {
+            return _countLinkedFiles
+        }
+        set(newValue) {
+            _countLinkedFiles = newValue
+            if _countLinkedFiles % 100 == 0 {
+                print()
+            }
+        }
+    }
     
     func print() {
         logger.info("Statistics: copied files: \(countCopiedFiles); linked files: \(countLinkedFiles)")
@@ -80,6 +103,11 @@ class PhotosExporter {
             if (mediaObjects == nil || mediaObjects!.count == 0) {
                 throw PhotosExporterError.noMediaObjects
             }
+            
+            // separator for multiple export jobs
+            logger.info("")
+            logger.info("==================================================")
+            logger.info("")
             
             logger.info("Start export to \(targetPath)")
 
