@@ -13,16 +13,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     @IBOutlet weak var window: NSWindow!
 
-
     func applicationDidFinishLaunching(_ aNotification: Notification) {
-        NSApp.windows.last!.close()
+        window.close()
         export()
         NSApp.terminate(self)
     }
-
-    func applicationWillTerminate(_ aNotification: Notification) {
-    }
-
 
 }
 
