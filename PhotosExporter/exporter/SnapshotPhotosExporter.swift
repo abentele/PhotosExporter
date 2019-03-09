@@ -76,12 +76,12 @@ class SnapshotPhotosExporter : PhotosExporter {
     override func finishExport() throws {
         try super.finishExport()
         
-        // remove the "Current" folder
-        try deleteFolderIfExists(atPath: subTargetPath)
-        
         // remove the ".flat" folders
         try deleteFolderIfExists(atPath: "\(inProgressPath)/\(originalsRelativePath)/\(flatRelativePath)")
         try deleteFolderIfExists(atPath: "\(inProgressPath)/\(calculatedRelativePath)/\(flatRelativePath)")
+        
+        // remove the "Current" folder
+        try deleteFolderIfExists(atPath: subTargetPath)
         
         // rename "InProgress" folder to "Current"
         do {
