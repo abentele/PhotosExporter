@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E1321E502229A71600046C00 /* StopWatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1321E4F2229A71600046C00 /* StopWatch.swift */; };
 		E1E43AF6217CDABA000E76DF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E43AF5217CDABA000E76DF /* AppDelegate.swift */; };
 		E1E43B10217CDB54000E76DF /* MetadataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E43B08217CDB53000E76DF /* MetadataLoader.swift */; };
 		E1E43B11217CDB54000E76DF /* IncrementalPhotosExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E43B09217CDB53000E76DF /* IncrementalPhotosExporter.swift */; };
@@ -15,12 +16,12 @@
 		E1E43B1D217CDBE9000E76DF /* SnapshotPhotosExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E43B18217CDB6E000E76DF /* SnapshotPhotosExporter.swift */; };
 		E1E43B43217CE0A9000E76DF /* MainExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E43B42217CE0A9000E76DF /* MainExporter.swift */; };
 		E1E43B46217CE0C8000E76DF /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E43B44217CE0C8000E76DF /* Logger.swift */; };
-		E1E43B47217CE0C8000E76DF /* StopWatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E43B45217CE0C8000E76DF /* StopWatch.swift */; };
 		E1E43B63217CE16D000E76DF /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = E1E43B62217CE16D000E76DF /* MainMenu.xib */; };
 		E1E43B65217CE1A0000E76DF /* filesystem-structure.png in Resources */ = {isa = PBXBuildFile; fileRef = E1E43B64217CE1A0000E76DF /* filesystem-structure.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		E1321E4F2229A71600046C00 /* StopWatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopWatch.swift; sourceTree = "<group>"; };
 		E1E43AF2217CDABA000E76DF /* PhotosExporter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PhotosExporter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E1E43AF5217CDABA000E76DF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E1E43AFC217CDABA000E76DF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -33,7 +34,6 @@
 		E1E43B39217CDC73000E76DF /* PhotosExporter.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = PhotosExporter.entitlements; sourceTree = "<group>"; };
 		E1E43B42217CE0A9000E76DF /* MainExporter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainExporter.swift; sourceTree = "<group>"; };
 		E1E43B44217CE0C8000E76DF /* Logger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
-		E1E43B45217CE0C8000E76DF /* StopWatch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StopWatch.swift; sourceTree = "<group>"; };
 		E1E43B62217CE16D000E76DF /* MainMenu.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MainMenu.xib; sourceTree = "<group>"; };
 		E1E43B64217CE1A0000E76DF /* filesystem-structure.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "filesystem-structure.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -97,7 +97,7 @@
 			isa = PBXGroup;
 			children = (
 				E1E43B44217CE0C8000E76DF /* Logger.swift */,
-				E1E43B45217CE0C8000E76DF /* StopWatch.swift */,
+				E1321E4F2229A71600046C00 /* StopWatch.swift */,
 			);
 			path = util;
 			sourceTree = "<group>";
@@ -187,11 +187,11 @@
 			files = (
 				E1E43B43217CE0A9000E76DF /* MainExporter.swift in Sources */,
 				E1E43B1C217CDBE9000E76DF /* PhotosExporter.swift in Sources */,
+				E1321E502229A71600046C00 /* StopWatch.swift in Sources */,
 				E1E43B1D217CDBE9000E76DF /* SnapshotPhotosExporter.swift in Sources */,
 				E1E43AF6217CDABA000E76DF /* AppDelegate.swift in Sources */,
 				E1E43B13217CDB54000E76DF /* MediaLibUtil.swift in Sources */,
 				E1E43B11217CDB54000E76DF /* IncrementalPhotosExporter.swift in Sources */,
-				E1E43B47217CE0C8000E76DF /* StopWatch.swift in Sources */,
 				E1E43B10217CDB54000E76DF /* MetadataLoader.swift in Sources */,
 				E1E43B46217CE0C8000E76DF /* Logger.swift in Sources */,
 			);

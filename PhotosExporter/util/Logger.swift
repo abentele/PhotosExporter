@@ -22,7 +22,7 @@ class Logger {
     
     var dateFormatter = DateFormatter()
     var loggerName: String = ""
-    var logLevel = LogLevel.info
+    public var logLevel = LogLevel.info
     
     init() {
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss.SSS"

@@ -34,15 +34,17 @@ class SnapshotPhotosExporter : PhotosExporter {
                 exportOriginals: false)
         }
     }
-    
+
+    let stopWatchLinkFile = StopWatch("fileManager.linkItem", LogLevel.info, addFileSizes: false)
+
     override func copyOrLinkFileInPhotosLibrary(sourceUrl: URL, targetUrl: URL) throws {
         if try filesAreOnSameDevice(path1: sourceUrl.path, path2: targetUrl.deletingLastPathComponent().path) {
             logger.debug("link image: \(sourceUrl) to \(targetUrl.lastPathComponent)")
             do {
-                let stopWatch = StopWatch("fileManager.linkItem")
+                stopWatchLinkFile.start()
                 try fileManager.linkItem(at: sourceUrl, to: targetUrl)
+                stopWatchLinkFile.stop()
                 statistics.countLinkedFiles += 1
-                stopWatch.stop()
             }
             catch let error as NSError {
                 logger.error("\(index): Unable to link file: \(error)")

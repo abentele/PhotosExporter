@@ -37,7 +37,7 @@ class Statistics {
         }
         set(newValue) {
             _countLinkedFiles = newValue
-            if _countLinkedFiles % 100 == 0 {
+            if _countLinkedFiles % 1000 == 0 {
                 print()
             }
         }
@@ -50,7 +50,7 @@ class Statistics {
 
 class PhotosExporter {
     
-    let logger = Logger(loggerName: "PhotosExporter", logLevel: .info)
+    public let logger = Logger(loggerName: "PhotosExporter", logLevel: .info)
 
     private static var rootMediaGroup: MLMediaGroup?
     var exportMediaGroupFilter: ((MLMediaGroup) -> Bool) = { (MLMediaGroup) -> Bool in
@@ -109,10 +109,13 @@ class PhotosExporter {
             logger.info("==================================================")
             logger.info("")
             
+            let stopWatch = StopWatch("Export to \(targetPath)", LogLevel.debug, addFileSizes: false)
             logger.info("Start export to \(targetPath)")
+            stopWatch.start()
 
             try doExport()
 
+            stopWatch.stop()
             logger.info("Finished export to \(targetPath)")
         } catch {
             logger.error("Error occured: \(error) => abort export")
@@ -200,17 +203,19 @@ class PhotosExporter {
         return sourceUrl
     }
     
+    let stopWatchCheckFileSize = StopWatch("check file size", LogLevel.info, addFileSizes: false)
+
     private func getLinkToUrl(candidatesToLinkTo: [String], mediaObject: MLMediaObject, sourceUrl: URL) throws -> URL? {
         for candidateToLinkTo in candidatesToLinkTo {
             let candidateToLinkToUrl = URL.init(fileURLWithPath: "\(candidateToLinkTo)/\(mediaObject.identifier).\(sourceUrl.pathExtension)")
             if fileManager.fileExists(atPath: candidateToLinkToUrl.path) {
                 // only minimal file comparison by file size for performance reasons! (this is sufficient for originals, and for important changes of calculated images; may not be sufficient for changes of image and video headers, which can have static sizes)
-                let stopWatch = StopWatch("check file size")
+                stopWatchCheckFileSize.start()
                 let candidateToLinkToAttributes = try fileManager.attributesOfItem(atPath: candidateToLinkToUrl.path)
                 let sourceAttributes = try fileManager.attributesOfItem(atPath: sourceUrl.path)
                 let candidateToLinkToFileSize = candidateToLinkToAttributes[FileAttributeKey.size] as! UInt64
                 let sourceFileSize = sourceAttributes[FileAttributeKey.size] as! UInt64
-                stopWatch.stop()
+                stopWatchCheckFileSize.stop()
                 if (candidateToLinkToFileSize == sourceFileSize) {
                     return candidateToLinkToUrl
                 } else {
@@ -221,15 +226,23 @@ class PhotosExporter {
         return nil
     }
     
+    let stopWatchCopyMediaObject = StopWatch("copy mediaObject", LogLevel.info, addFileSizes: false)
+    let stopWatchExportFolderFlatScanMediaObjects = StopWatch("scan mediaObjects", LogLevel.info, addFileSizes: false)
+    let stopWatchFileManagerLinkItem = StopWatch("fileManager.linkItem", LogLevel.info, addFileSizes: false)
+    let stopWatchFileManagerSetAttributes = StopWatch("fileManager.setAttributes", LogLevel.info, addFileSizes: false)
+    let stopWatchMediaObjectIteration = StopWatch("for mediaObject in mediaObjects", LogLevel.info, addFileSizes: false)
+
     func exportFolderFlat(flatPath: String, candidatesToLinkTo: [String], exportOriginals: Bool) throws {
         var containsFotosToExport = false;
         let mediaObjects = PhotosExporter.rootMediaGroup!.mediaObjects!
+        stopWatchExportFolderFlatScanMediaObjects.start()
         for mediaObject in mediaObjects {
             if exportMediaObjectFilter(mediaObject) {
                 containsFotosToExport = true
                 break
             }
         }
+        stopWatchExportFolderFlatScanMediaObjects.stop()
         
         if containsFotosToExport {
             do {
@@ -241,8 +254,13 @@ class PhotosExporter {
             }
             
             var index = 1
+            stopWatchMediaObjectIteration.start()
             for mediaObject in mediaObjects {
+                stopWatchMediaObjectIteration.stop()
+
                 if exportMediaObjectFilter(mediaObject) {
+                    stopWatchCopyMediaObject.start()
+
                     // autorelease periodically
                     try autoreleasepool {
                         let sourceUrl = sourceUrlOfMediaObject(mediaObject: mediaObject, exportOriginals: exportOriginals)
@@ -255,10 +273,10 @@ class PhotosExporter {
                                 if let linkToUrl = linkToUrl {
                                     logger.debug("\(index): link unchanged image: \(sourceUrl); link to: \(linkToUrl)")
                                     do {
-                                        let stopWatch = StopWatch("fileManager.linkItem")
+                                        stopWatchFileManagerLinkItem.start()
                                         try fileManager.linkItem(at: linkToUrl, to: targetUrl)
                                         statistics.countLinkedFiles += 1
-                                        stopWatch.stop()
+                                        stopWatchFileManagerLinkItem.stop()
                                     }
                                     catch let error as NSError {
                                         logger.error("\(index): Unable to link file: \(error)")
@@ -270,7 +288,7 @@ class PhotosExporter {
                                     let fotoDateAsTimerInterval = mediaObject.attributes["DateAsTimerInterval"] as! TimeInterval
                                     let fotoDate = Date(timeIntervalSinceReferenceDate: fotoDateAsTimerInterval)
                                     let attributes = [FileAttributeKey.modificationDate : fotoDate]
-                                    let stopWatch = StopWatch("fileManager.setAttributes")
+                                    stopWatchFileManagerSetAttributes.start()
                                     do {
                                         try fileManager.setAttributes(attributes, ofItemAtPath: targetUrl.path)
                                     }
@@ -278,7 +296,7 @@ class PhotosExporter {
                                         logger.error("\(index): Unable to set attributes on file: \(error)")
                                         throw error
                                     }
-                                    stopWatch.stop()
+                                    stopWatchFileManagerSetAttributes.stop()
                                 }
                             }
                         }
@@ -286,21 +304,31 @@ class PhotosExporter {
                             logger.warn("mediaObject has no url")
                         }
                     }
+                    
+                    stopWatchCopyMediaObject.stop()
                 }
 
                 index += 1
             }
+            
+            stopWatchCopyMediaObject.stop()
         }
     }
     
+    let stopWatchCopyOrLinkFileInPhotosLibrary = StopWatch("fileManager.copyItem", LogLevel.info, addFileSizes: true)
+
     func copyOrLinkFileInPhotosLibrary(sourceUrl: URL, targetUrl: URL) throws {
         // default operation: copy
-        logger.info("copy image: \(sourceUrl) to \(targetUrl.lastPathComponent)")
+        logger.debug("copy image: \(sourceUrl) to \(targetUrl.lastPathComponent)")
         do {
-            let stopWatch = StopWatch("fileManager.copyItem")
+            stopWatchCopyOrLinkFileInPhotosLibrary.start(fileSizeFn: {() throws -> UInt64 in
+                let attributes = try fileManager.attributesOfItem(atPath: sourceUrl.path)
+                let fileSize = attributes[FileAttributeKey.size] as! UInt64
+                return fileSize
+            })
             try fileManager.copyItem(at: sourceUrl, to: targetUrl)
             statistics.countCopiedFiles += 1
-            stopWatch.stop()
+            stopWatchCopyOrLinkFileInPhotosLibrary.stop()
         }
         catch let error as NSError {
             logger.error("\(index): Unable to copy file: \(error)")
@@ -370,10 +398,10 @@ class PhotosExporter {
             }
             
             logger.debug("link image: \(targetUrl.lastPathComponent)")
-            let stopWatch = StopWatch("fileManager.linkItem")
+            stopWatchFileManagerLinkItem.start()
             try fileManager.linkItem(at: linkTargetUrl, to: targetUrl)
             statistics.countLinkedFiles += 1
-            stopWatch.stop()
+            stopWatchFileManagerLinkItem.stop()
         } else {
             logger.warn("Source URL of mediaObject unknown: \(mediaObject.name!)")
         }
