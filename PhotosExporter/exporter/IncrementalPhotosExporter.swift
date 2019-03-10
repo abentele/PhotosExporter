@@ -17,12 +17,46 @@ class IncrementalPhotosExporter : PhotosExporter {
         return "\(targetPath)/Latest"
     }
     
+    private var lastCountSubFolders = 0
+    
+    override func initExport() throws {
+        try super.initExport()
+        
+        try initLastCountSubFolders()
+    }
+    
+    private func initLastCountSubFolders() throws {
+        var lastFlatPath: String?
+        if exportOriginals {
+            lastFlatPath = "\(latestPath)/\(originalsRelativePath)/\(flatRelativePath)"
+        } else if exportCalculated {
+            lastFlatPath = "\(latestPath)/\(calculatedRelativePath)/\(flatRelativePath)"
+        }
+        if let lastFlatPath = lastFlatPath {
+            if fileManager.fileExists(atPath: lastFlatPath) {
+                let urls = try fileManager.contentsOfDirectory(
+                    at: URL(fileURLWithPath: lastFlatPath),
+                    includingPropertiesForKeys: [.isDirectoryKey],
+                    options: [.skipsHiddenFiles]
+                )
+                for url in urls {
+                    if let folderNumber = Int(url.lastPathComponent) {
+                        if (folderNumber >= lastCountSubFolders) {
+                            lastCountSubFolders = folderNumber+1
+                        }
+                    }
+                }
+                logger.debug("lastCountSubFolders: \(lastCountSubFolders)")
+            }
+        }
+    }
+    
     override func exportFoldersFlat() throws {
         if exportOriginals {
             logger.info("export originals photos to \(inProgressPath)/\(originalsRelativePath)/\(flatRelativePath) folder")
             try exportFolderFlat(
                 flatPath: "\(inProgressPath)/\(originalsRelativePath)/\(flatRelativePath)",
-                candidatesToLinkTo: ["\(latestPath)/\(originalsRelativePath)/\(flatRelativePath)"],
+                candidatesToLinkTo: [FlatFolderDescriptor(folderName: "\(latestPath)/\(originalsRelativePath)/\(flatRelativePath)", countSubFolders: lastCountSubFolders)],
                 exportOriginals: true)
         }
         
@@ -30,7 +64,8 @@ class IncrementalPhotosExporter : PhotosExporter {
             logger.info("export calculated photos to \(inProgressPath)/\(calculatedRelativePath)/\(flatRelativePath) folder")
             try exportFolderFlat(
                 flatPath: "\(inProgressPath)/\(calculatedRelativePath)/\(flatRelativePath)",
-                candidatesToLinkTo: ["\(latestPath)/\(calculatedRelativePath)/\(flatRelativePath)", "\(inProgressPath)/\(originalsRelativePath)/\(flatRelativePath)"],
+                candidatesToLinkTo: [FlatFolderDescriptor(folderName: "\(latestPath)/\(calculatedRelativePath)/\(flatRelativePath)", countSubFolders: lastCountSubFolders),
+                                     FlatFolderDescriptor(folderName: "\(inProgressPath)/\(originalsRelativePath)/\(flatRelativePath)", countSubFolders: countSubFolders)],
                 exportOriginals: false)
         }
     }

@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		E1321E502229A71600046C00 /* StopWatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1321E4F2229A71600046C00 /* StopWatch.swift */; };
+		E186D26022354098000BFCED /* FlatFolderDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E186D25F22354098000BFCED /* FlatFolderDescriptor.swift */; };
+		E1A55240222AB2EF00F72499 /* String+extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1A5523F222AB2EF00F72499 /* String+extensions.swift */; };
 		E1E43AF6217CDABA000E76DF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E43AF5217CDABA000E76DF /* AppDelegate.swift */; };
 		E1E43B10217CDB54000E76DF /* MetadataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E43B08217CDB53000E76DF /* MetadataLoader.swift */; };
 		E1E43B11217CDB54000E76DF /* IncrementalPhotosExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E43B09217CDB53000E76DF /* IncrementalPhotosExporter.swift */; };
@@ -22,6 +24,8 @@
 
 /* Begin PBXFileReference section */
 		E1321E4F2229A71600046C00 /* StopWatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopWatch.swift; sourceTree = "<group>"; };
+		E186D25F22354098000BFCED /* FlatFolderDescriptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlatFolderDescriptor.swift; sourceTree = "<group>"; };
+		E1A5523F222AB2EF00F72499 /* String+extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+extensions.swift"; sourceTree = "<group>"; };
 		E1E43AF2217CDABA000E76DF /* PhotosExporter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PhotosExporter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E1E43AF5217CDABA000E76DF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E1E43AFC217CDABA000E76DF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -89,6 +93,7 @@
 				E1E43B09217CDB53000E76DF /* IncrementalPhotosExporter.swift */,
 				E1E43B0B217CDB53000E76DF /* MediaLibUtil.swift */,
 				E1E43B08217CDB53000E76DF /* MetadataLoader.swift */,
+				E186D25F22354098000BFCED /* FlatFolderDescriptor.swift */,
 			);
 			path = exporter;
 			sourceTree = "<group>";
@@ -98,6 +103,7 @@
 			children = (
 				E1E43B44217CE0C8000E76DF /* Logger.swift */,
 				E1321E4F2229A71600046C00 /* StopWatch.swift */,
+				E1A5523F222AB2EF00F72499 /* String+extensions.swift */,
 			);
 			path = util;
 			sourceTree = "<group>";
@@ -189,8 +195,10 @@
 				E1E43B1C217CDBE9000E76DF /* PhotosExporter.swift in Sources */,
 				E1321E502229A71600046C00 /* StopWatch.swift in Sources */,
 				E1E43B1D217CDBE9000E76DF /* SnapshotPhotosExporter.swift in Sources */,
+				E1A55240222AB2EF00F72499 /* String+extensions.swift in Sources */,
 				E1E43AF6217CDABA000E76DF /* AppDelegate.swift in Sources */,
 				E1E43B13217CDB54000E76DF /* MediaLibUtil.swift in Sources */,
+				E186D26022354098000BFCED /* FlatFolderDescriptor.swift in Sources */,
 				E1E43B11217CDB54000E76DF /* IncrementalPhotosExporter.swift in Sources */,
 				E1E43B10217CDB54000E76DF /* MetadataLoader.swift in Sources */,
 				E1E43B46217CE0C8000E76DF /* Logger.swift in Sources */,

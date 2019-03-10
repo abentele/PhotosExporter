@@ -30,7 +30,7 @@ class SnapshotPhotosExporter : PhotosExporter {
             logger.info("export calculated photos to \(inProgressPath)/\(calculatedRelativePath)/\(flatRelativePath) folder")
             try exportFolderFlat(
                 flatPath: "\(inProgressPath)/\(calculatedRelativePath)/\(flatRelativePath)",
-                candidatesToLinkTo: ["\(inProgressPath)/\(originalsRelativePath)/\(flatRelativePath)"],
+                candidatesToLinkTo: [FlatFolderDescriptor(folderName: "\(inProgressPath)/\(originalsRelativePath)/\(flatRelativePath)", countSubFolders: countSubFolders)],
                 exportOriginals: false)
         }
     }

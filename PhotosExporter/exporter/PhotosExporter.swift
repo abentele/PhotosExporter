@@ -63,6 +63,14 @@ class PhotosExporter {
         return true
     }
     
+    /**
+     * Count of subfolders in the .flat folder; if > 0, subfolders .flat/0, .flat/1, .flat/2, ..., .flat/{countSubFolders-1} are created, and files are equally distributed to those folders, instead of saving them directly to the .flat folder.
+     * This feature is to reduce the amount of files in a single folder which could decrease the performance.
+     * If set to 0, no subfolders are used.
+     * The value can be simply changed for subsequent incremental backups.
+     */
+    var countSubFolders: Int = 0
+    
     // set to true if calculated photos should be exported
     var exportCalculated = true
     // set to true if original photos should be exported
@@ -103,6 +111,10 @@ class PhotosExporter {
             if (mediaObjects == nil || mediaObjects!.count == 0) {
                 throw PhotosExporterError.noMediaObjects
             }
+            
+            // use a subfolder for max. ~6000 files
+            self.countSubFolders = Int(mediaObjects!.count / 6000)
+            logger.debug("countSubFolders: \(countSubFolders)")
             
             // separator for multiple export jobs
             logger.info("")
@@ -205,9 +217,9 @@ class PhotosExporter {
     
     let stopWatchCheckFileSize = StopWatch("check file size", LogLevel.info, addFileSizes: false)
 
-    private func getLinkToUrl(candidatesToLinkTo: [String], mediaObject: MLMediaObject, sourceUrl: URL) throws -> URL? {
+    private func getLinkToUrl(candidatesToLinkTo: [FlatFolderDescriptor], mediaObject: MLMediaObject, sourceUrl: URL) throws -> URL? {
         for candidateToLinkTo in candidatesToLinkTo {
-            let candidateToLinkToUrl = URL.init(fileURLWithPath: "\(candidateToLinkTo)/\(mediaObject.identifier).\(sourceUrl.pathExtension)")
+            let candidateToLinkToUrl = URL.init(fileURLWithPath: getFlatPath(candidateToLinkTo, mediaObject, pathExtension: sourceUrl.pathExtension))
             if fileManager.fileExists(atPath: candidateToLinkToUrl.path) {
                 // only minimal file comparison by file size for performance reasons! (this is sufficient for originals, and for important changes of calculated images; may not be sufficient for changes of image and video headers, which can have static sizes)
                 stopWatchCheckFileSize.start()
@@ -232,7 +244,7 @@ class PhotosExporter {
     let stopWatchFileManagerSetAttributes = StopWatch("fileManager.setAttributes", LogLevel.info, addFileSizes: false)
     let stopWatchMediaObjectIteration = StopWatch("for mediaObject in mediaObjects", LogLevel.info, addFileSizes: false)
 
-    func exportFolderFlat(flatPath: String, candidatesToLinkTo: [String], exportOriginals: Bool) throws {
+    func exportFolderFlat(flatPath: String, candidatesToLinkTo: [FlatFolderDescriptor], exportOriginals: Bool) throws {
         var containsFotosToExport = false;
         let mediaObjects = PhotosExporter.rootMediaGroup!.mediaObjects!
         stopWatchExportFolderFlatScanMediaObjects.start()
@@ -247,6 +259,11 @@ class PhotosExporter {
         if containsFotosToExport {
             do {
                 try fileManager.createDirectory(atPath: flatPath, withIntermediateDirectories: true)
+                if countSubFolders > 0 {
+                    for i in 0...countSubFolders-1 {
+                        try fileManager.createDirectory(atPath: "\(flatPath)/\(i)", withIntermediateDirectories: true)
+                    }
+                }
             }
             catch let error as NSError {
                 logger.error("Unable to create directory \(flatPath): \(error)")
@@ -266,7 +283,7 @@ class PhotosExporter {
                         let sourceUrl = sourceUrlOfMediaObject(mediaObject: mediaObject, exportOriginals: exportOriginals)
                         
                         if let sourceUrl = sourceUrl {
-                            let targetUrl = URL.init(fileURLWithPath: "\(flatPath)/\(mediaObject.identifier).\(sourceUrl.pathExtension)")
+                            let targetUrl = URL.init(fileURLWithPath: getFlatPath(FlatFolderDescriptor(folderName: flatPath, countSubFolders: countSubFolders), mediaObject, pathExtension: sourceUrl.pathExtension))
                             if !fileManager.fileExists(atPath: targetUrl.path) {
                                 let linkToUrl = try getLinkToUrl(candidatesToLinkTo: candidatesToLinkTo, mediaObject: mediaObject, sourceUrl: sourceUrl)
                                 
@@ -337,6 +354,8 @@ class PhotosExporter {
     }
     
     private func exportFoldersRecursive(mediaGroup: MLMediaGroup, flatPath: String, targetPath: String, exportOriginals: Bool) throws {
+        let flatFolder = FlatFolderDescriptor(folderName: flatPath, countSubFolders: countSubFolders)
+        
         // autorelease periodically
         try autoreleasepool {
             if exportMediaGroupFilter(mediaGroup) {
@@ -363,7 +382,7 @@ class PhotosExporter {
                     if exportPhotosOfMediaGroupFilter(mediaGroup) {
                         for mediaObject in mediaGroup.mediaObjects! {
                             if exportMediaObjectFilter(mediaObject) {
-                                try exportFoto(mediaObject: mediaObject, flatPath: flatPath, targetPath: targetPath, exportOriginals: exportOriginals)
+                                try exportFoto(mediaObject: mediaObject, flatFolder: flatFolder, targetPath: targetPath, exportOriginals: exportOriginals)
                             }
                         }
                     }
@@ -382,10 +401,10 @@ class PhotosExporter {
         }
     }
     
-    private func exportFoto(mediaObject: MLMediaObject, flatPath: String, targetPath: String, exportOriginals: Bool) throws {
+    private func exportFoto(mediaObject: MLMediaObject, flatFolder: FlatFolderDescriptor, targetPath: String, exportOriginals: Bool) throws {
         let sourceUrl = sourceUrlOfMediaObject(mediaObject: mediaObject, exportOriginals: exportOriginals)
         if let sourceUrl = sourceUrl {
-            let linkTargetUrl = URL.init(fileURLWithPath: "\(flatPath)/\(mediaObject.identifier).\(sourceUrl.pathExtension)")
+            let linkTargetUrl = URL.init(fileURLWithPath: getFlatPath(flatFolder, mediaObject, pathExtension: sourceUrl.pathExtension))
             
             // get unique target name
             let fotoName = getFotoName(mediaObject: mediaObject, sourceUrl: sourceUrl)
@@ -404,6 +423,14 @@ class PhotosExporter {
             stopWatchFileManagerLinkItem.stop()
         } else {
             logger.warn("Source URL of mediaObject unknown: \(mediaObject.name!)")
+        }
+    }
+    
+    private func getFlatPath(_ flatPath: FlatFolderDescriptor, _ mediaObject: MLMediaObject, pathExtension: String) -> String {
+        if flatPath.countSubFolders > 0 {
+            return "\(flatPath.folderName)/\(abs(mediaObject.identifier.djb2hash) % flatPath.countSubFolders)/\(mediaObject.identifier).\(pathExtension)"
+        } else {
+            return "\(flatPath.folderName)/\(mediaObject.identifier).\(pathExtension)"
         }
     }
     

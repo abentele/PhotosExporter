@@ -7,3 +7,16 @@
 //
 
 import Foundation
+
+extension String {
+    
+    // hash(0) = 5381
+    // hash(i) = hash(i - 1) * 33 ^ str[i];
+    var djb2hash: Int {
+        let unicodeScalars = self.unicodeScalars.map { $0.value }
+        return unicodeScalars.reduce(5381) {
+            ($0 << 5) &+ $0 &+ Int($1)
+        }
+    }
+
+}
