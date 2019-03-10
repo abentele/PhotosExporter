@@ -47,6 +47,16 @@ Normally, the exporter adds the timestamp of a photo to the exported photo's fil
 
 If you move the exported folder, be sure to recreate the `Latest` link, because it would be broken after moving the folders.
 
+## Parameters of the exporter
+
+All parameters can be applied both to the SnapshotPhotosExporter and to IncrementalPhotosExporter.
+
+* exportMediaGroupFilter: filter for the media groups (default: all media groups are exported)
+* exportPhotosOfMediaGroupFilter: filter for photos in a media group (default: all media groups are exported)
+* exportMediaObjectFilter: filter for media objects (default: all media objects are exported)
+* exportCalculated: set to false if calculated photos should not be exported (default: true)
+* exportOriginals: set to false if calculated photos should not be exported (default: true)
+
 # Supported platforms
 
 * macOS 10.14 "Mojave" (tested by the maintainer)
