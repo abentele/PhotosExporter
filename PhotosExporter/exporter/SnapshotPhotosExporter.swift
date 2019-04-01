@@ -47,7 +47,7 @@ class SnapshotPhotosExporter : PhotosExporter {
                 statistics.countLinkedFiles += 1
             }
             catch let error as NSError {
-                logger.error("\(index): Unable to link file: \(error)")
+                logger.error("\(String(describing: index)): Unable to link file: \(error)")
                 throw error
             }
         } else {

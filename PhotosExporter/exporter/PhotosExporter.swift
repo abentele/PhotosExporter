@@ -348,7 +348,7 @@ class PhotosExporter {
             stopWatchCopyOrLinkFileInPhotosLibrary.stop()
         }
         catch let error as NSError {
-            logger.error("\(index): Unable to copy file: \(error)")
+            logger.error("\(String(describing: index)): Unable to copy file: \(error)")
             throw error
         }
     }
