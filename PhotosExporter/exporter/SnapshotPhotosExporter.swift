@@ -17,6 +17,8 @@ class SnapshotPhotosExporter : PhotosExporter {
         return "\(targetPath)/Current"
     }
     
+    public var deleteFlatPath = true
+    
     override func exportFoldersFlat() throws {
         if exportOriginals {
             logger.info("export originals photos to \(inProgressPath)/\(originalsRelativePath)/\(flatRelativePath) folder")
@@ -77,8 +79,10 @@ class SnapshotPhotosExporter : PhotosExporter {
         try super.finishExport()
         
         // remove the ".flat" folders
-        try deleteFolderIfExists(atPath: "\(inProgressPath)/\(originalsRelativePath)/\(flatRelativePath)")
-        try deleteFolderIfExists(atPath: "\(inProgressPath)/\(calculatedRelativePath)/\(flatRelativePath)")
+        if (deleteFlatPath) {
+            try deleteFolderIfExists(atPath: "\(inProgressPath)/\(originalsRelativePath)/\(flatRelativePath)")
+            try deleteFolderIfExists(atPath: "\(inProgressPath)/\(calculatedRelativePath)/\(flatRelativePath)")
+        }
         
         // remove the "Current" folder
         try deleteFolderIfExists(atPath: subTargetPath)
