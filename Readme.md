@@ -59,6 +59,7 @@ All parameters can be applied both to the SnapshotPhotosExporter and to Incremen
 * exportCalculated: set to false if calculated photos should not be exported (default: true)
 * exportOriginals: set to false if calculated photos should not be exported (default: true)
 * baseExportPath (only IncrementalPhotosExporter, optional parameter): the path to an already existing export folder on the same device; example: export all photos using SnapshotPhotosExporter to your local disk or SSD; create a backup using Time Machine; additionally export the photos using IncrementalPhotosExporter to the same device as your Time Machine backup. Then you would set the baseExportPath to the export folder within your Time Machine backup, to link the exported photos with the photos of your Time Machine backup to save disk space.
+* deleteFlatPath (only SnapshotPhotosExporter, optional parameter): true if the .flat folders should be deleted after the export (default:true; disable deleting if you want to use the export folder as base for an incremental export, see parameter baseExportPath)
 
 # Supported platforms
 
