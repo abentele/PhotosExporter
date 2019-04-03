@@ -17,59 +17,84 @@ class IncrementalPhotosExporter : PhotosExporter {
         return "\(targetPath)/Latest"
     }
     
-    private var lastCountSubFolders = 0
-    
     override func initExport() throws {
         try super.initExport()
-        
-        try initLastCountSubFolders()
     }
     
-    private func initLastCountSubFolders() throws {
-        var lastFlatPath: String?
-        if exportOriginals {
-            lastFlatPath = "\(latestPath)/\(originalsRelativePath)/\(flatRelativePath)"
-        } else if exportCalculated {
-            lastFlatPath = "\(latestPath)/\(calculatedRelativePath)/\(flatRelativePath)"
-        }
-        if let lastFlatPath = lastFlatPath {
-            if fileManager.fileExists(atPath: lastFlatPath) {
-                let urls = try fileManager.contentsOfDirectory(
-                    at: URL(fileURLWithPath: lastFlatPath),
-                    includingPropertiesForKeys: [.isDirectoryKey],
-                    options: [.skipsHiddenFiles]
-                )
-                for url in urls {
-                    if let folderNumber = Int(url.lastPathComponent) {
-                        if (folderNumber >= lastCountSubFolders) {
-                            lastCountSubFolders = folderNumber+1
-                        }
+    public var baseExportPath:String?
+    
+    public func initFlatFolderDescriptor(flatFolderPath: String) throws -> FlatFolderDescriptor {
+        var lastCountSubFolders = 0
+        
+        if fileManager.fileExists(atPath: flatFolderPath) {
+            let urls = try fileManager.contentsOfDirectory(
+                at: URL(fileURLWithPath: flatFolderPath),
+                includingPropertiesForKeys: [.isDirectoryKey],
+                options: [.skipsHiddenFiles]
+            )
+            for url in urls {
+                if let folderNumber = Int(url.lastPathComponent) {
+                    if (folderNumber >= lastCountSubFolders) {
+                        lastCountSubFolders = folderNumber+1
                     }
                 }
-                logger.debug("lastCountSubFolders: \(lastCountSubFolders)")
             }
+            logger.debug("lastCountSubFolders: \(lastCountSubFolders)")
+
+            return FlatFolderDescriptor(folderName: flatFolderPath, countSubFolders: lastCountSubFolders)
         }
+        
+        throw FileNotFoundException.fileNotFound
     }
     
     override func exportFoldersFlat() throws {
         if exportOriginals {
             logger.info("export originals photos to \(inProgressPath)/\(originalsRelativePath)/\(flatRelativePath) folder")
+            
+            var candidatesToLinkTo: [FlatFolderDescriptor] = []
+
+            if let baseExportPath = baseExportPath {
+                candidatesToLinkTo = try candidatesToLinkTo + flatFolderIfExists("\(baseExportPath)/\(originalsRelativePath)/\(flatRelativePath)")
+            }
+
+            candidatesToLinkTo = try candidatesToLinkTo + flatFolderIfExists("\(latestPath)/\(originalsRelativePath)/\(flatRelativePath)")
+
             try exportFolderFlat(
                 flatPath: "\(inProgressPath)/\(originalsRelativePath)/\(flatRelativePath)",
-                candidatesToLinkTo: [FlatFolderDescriptor(folderName: "\(latestPath)/\(originalsRelativePath)/\(flatRelativePath)", countSubFolders: lastCountSubFolders)],
+                candidatesToLinkTo: candidatesToLinkTo,
                 exportOriginals: true)
         }
         
         if exportCalculated {
             logger.info("export calculated photos to \(inProgressPath)/\(calculatedRelativePath)/\(flatRelativePath) folder")
+
+            var candidatesToLinkTo: [FlatFolderDescriptor] = []
+
+            if let baseExportPath = baseExportPath {
+                candidatesToLinkTo = try candidatesToLinkTo + flatFolderIfExists("\(baseExportPath)/\(calculatedRelativePath)/\(flatRelativePath)")
+            }
+            
+            candidatesToLinkTo = try candidatesToLinkTo + flatFolderIfExists("\(latestPath)/\(calculatedRelativePath)/\(flatRelativePath)")
+
+            if exportOriginals {
+                candidatesToLinkTo = try candidatesToLinkTo + flatFolderIfExists("\(inProgressPath)/\(originalsRelativePath)/\(flatRelativePath)")
+            }
+            
             try exportFolderFlat(
                 flatPath: "\(inProgressPath)/\(calculatedRelativePath)/\(flatRelativePath)",
-                candidatesToLinkTo: [FlatFolderDescriptor(folderName: "\(latestPath)/\(calculatedRelativePath)/\(flatRelativePath)", countSubFolders: lastCountSubFolders),
-                                     FlatFolderDescriptor(folderName: "\(inProgressPath)/\(originalsRelativePath)/\(flatRelativePath)", countSubFolders: countSubFolders)],
+                candidatesToLinkTo: candidatesToLinkTo,
                 exportOriginals: false)
         }
     }
     
+    func flatFolderIfExists(_ flatFolderPath: String) throws -> [FlatFolderDescriptor] {
+        if fileManager.fileExists(atPath: flatFolderPath) {
+            return [try initFlatFolderDescriptor(flatFolderPath: flatFolderPath)]
+        }
+
+        return []
+    }
+
     
     /**
      * Finish the filesystem structures; invariant:

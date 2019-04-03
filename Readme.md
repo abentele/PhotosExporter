@@ -22,6 +22,8 @@ There are two possible general use cases:
 * **SnapshotPhotosExporter**: export all your photos, e.g. to share them with other programs or devices like your TV or other non-Apple devices, share them in the cloud etc.; if the export folder is on the same file system as the Photos Library, there is no extra disk usage
 * **IncrementalPhotosExporter**: backup all your photos while keeping the previous backups, like with Time Machine (I would suggest to add a cron job to trigger it daily or weekly)
 
+You also can combine both: export to local disk using SnapshotPhotosExporter. Make a backup using Time Machine to an external disk. Then use the IncrementalPhotosExporter to export the photos to the same external disk while using hard links to the already exported photos in the Time Machine backup instead of copying all photos again (see parameter baseExportPath for more details). 
+
 I believe some other people who think backups are very important could make use of it as well, so I've decided to make the code open source. Any feedback is appreciated, especially pull requests with improvements.
 
 
@@ -56,6 +58,7 @@ All parameters can be applied both to the SnapshotPhotosExporter and to Incremen
 * exportMediaObjectFilter: filter for media objects (default: all media objects are exported)
 * exportCalculated: set to false if calculated photos should not be exported (default: true)
 * exportOriginals: set to false if calculated photos should not be exported (default: true)
+* baseExportPath (only IncrementalPhotosExporter, optional parameter): the path to an already existing export folder on the same device; example: export all photos using SnapshotPhotosExporter to your local disk or SSD; create a backup using Time Machine; additionally export the photos using IncrementalPhotosExporter to the same device as your Time Machine backup. Then you would set the baseExportPath to the export folder within your Time Machine backup, to link the exported photos with the photos of your Time Machine backup to save disk space.
 
 # Supported platforms
 
