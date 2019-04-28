@@ -25,6 +25,7 @@
 
 /* Begin PBXFileReference section */
 		E1321E4F2229A71600046C00 /* StopWatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopWatch.swift; sourceTree = "<group>"; };
+		E1682B2E22760283000DC1D2 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		E186D25F22354098000BFCED /* FlatFolderDescriptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlatFolderDescriptor.swift; sourceTree = "<group>"; };
 		E1A5523F222AB2EF00F72499 /* String+extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+extensions.swift"; sourceTree = "<group>"; };
 		E1B119252251DC8100B53693 /* Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
@@ -58,6 +59,7 @@
 		E1E43AE9217CDABA000E76DF = {
 			isa = PBXGroup;
 			children = (
+				E1682B2E22760283000DC1D2 /* LICENSE */,
 				E1E43B05217CDB29000E76DF /* Readme.md */,
 				E1E43AF4217CDABA000E76DF /* PhotosSync */,
 				E1E43B3D217CDFED000E76DF /* doc */,
