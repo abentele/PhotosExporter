@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "E1E43AF1217CDABA000E76DF"
-               BuildableName = "PhotosExporter.app"
-               BlueprintName = "PhotosExporter"
-               ReferencedContainer = "container:PhotosExporter.xcodeproj">
+               BuildableName = "PhotosSync.app"
+               BlueprintName = "PhotosSync"
+               ReferencedContainer = "container:PhotosSync.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E1E43AF1217CDABA000E76DF"
-            BuildableName = "PhotosExporter.app"
-            BlueprintName = "PhotosExporter"
-            ReferencedContainer = "container:PhotosExporter.xcodeproj">
+            BuildableName = "PhotosSync.app"
+            BlueprintName = "PhotosSync"
+            ReferencedContainer = "container:PhotosSync.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -56,9 +56,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E1E43AF1217CDABA000E76DF"
-            BuildableName = "PhotosExporter.app"
-            BlueprintName = "PhotosExporter"
-            ReferencedContainer = "container:PhotosExporter.xcodeproj">
+            BuildableName = "PhotosSync.app"
+            BlueprintName = "PhotosSync"
+            ReferencedContainer = "container:PhotosSync.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -75,9 +75,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E1E43AF1217CDABA000E76DF"
-            BuildableName = "PhotosExporter.app"
-            BlueprintName = "PhotosExporter"
-            ReferencedContainer = "container:PhotosExporter.xcodeproj">
+            BuildableName = "PhotosSync.app"
+            BlueprintName = "PhotosSync"
+            ReferencedContainer = "container:PhotosSync.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

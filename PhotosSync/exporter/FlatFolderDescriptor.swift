@@ -1,6 +1,6 @@
 //
 //  FlatFolderDescriptor.swift
-//  PhotosExporter
+//  PhotosSync
 //
 //  Created by Andreas Bentele on 10.03.19.
 //  Copyright © 2019 Andreas Bentele. All rights reserved.

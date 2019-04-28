@@ -1,6 +1,6 @@
 //
 //  Main.swift
-//  PhotosExporter
+//  PhotosSync
 //
 //  Created by Andreas Bentele on 10.02.18.
 //  Copyright © 2018 Andreas Bentele. All rights reserved.

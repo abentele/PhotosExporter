@@ -28,7 +28,7 @@
 		E186D25F22354098000BFCED /* FlatFolderDescriptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlatFolderDescriptor.swift; sourceTree = "<group>"; };
 		E1A5523F222AB2EF00F72499 /* String+extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+extensions.swift"; sourceTree = "<group>"; };
 		E1B119252251DC8100B53693 /* Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
-		E1E43AF2217CDABA000E76DF /* PhotosExporter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PhotosExporter.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E1E43AF2217CDABA000E76DF /* PhotosSync.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PhotosSync.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E1E43AF5217CDABA000E76DF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E1E43AFC217CDABA000E76DF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E1E43B05217CDB29000E76DF /* Readme.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Readme.md; sourceTree = "<group>"; };
@@ -37,7 +37,7 @@
 		E1E43B0B217CDB53000E76DF /* MediaLibUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaLibUtil.swift; sourceTree = "<group>"; };
 		E1E43B17217CDB6A000E76DF /* PhotosExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosExporter.swift; sourceTree = "<group>"; };
 		E1E43B18217CDB6E000E76DF /* SnapshotPhotosExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapshotPhotosExporter.swift; sourceTree = "<group>"; };
-		E1E43B39217CDC73000E76DF /* PhotosExporter.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = PhotosExporter.entitlements; sourceTree = "<group>"; };
+		E1E43B39217CDC73000E76DF /* PhotosSync.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = PhotosSync.entitlements; sourceTree = "<group>"; };
 		E1E43B42217CE0A9000E76DF /* MainExporter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainExporter.swift; sourceTree = "<group>"; };
 		E1E43B44217CE0C8000E76DF /* Logger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		E1E43B62217CE16D000E76DF /* MainMenu.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MainMenu.xib; sourceTree = "<group>"; };
@@ -59,7 +59,7 @@
 			isa = PBXGroup;
 			children = (
 				E1E43B05217CDB29000E76DF /* Readme.md */,
-				E1E43AF4217CDABA000E76DF /* PhotosExporter */,
+				E1E43AF4217CDABA000E76DF /* PhotosSync */,
 				E1E43B3D217CDFED000E76DF /* doc */,
 				E1E43AF3217CDABA000E76DF /* Products */,
 			);
@@ -68,12 +68,12 @@
 		E1E43AF3217CDABA000E76DF /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				E1E43AF2217CDABA000E76DF /* PhotosExporter.app */,
+				E1E43AF2217CDABA000E76DF /* PhotosSync.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		E1E43AF4217CDABA000E76DF /* PhotosExporter */ = {
+		E1E43AF4217CDABA000E76DF /* PhotosSync */ = {
 			isa = PBXGroup;
 			children = (
 				E1E43B42217CE0A9000E76DF /* MainExporter.swift */,
@@ -82,9 +82,9 @@
 				E1E43B19217CDB8C000E76DF /* util */,
 				E1E43AFC217CDABA000E76DF /* Info.plist */,
 				E1E43B62217CE16D000E76DF /* MainMenu.xib */,
-				E1E43B39217CDC73000E76DF /* PhotosExporter.entitlements */,
+				E1E43B39217CDC73000E76DF /* PhotosSync.entitlements */,
 			);
-			path = PhotosExporter;
+			path = PhotosSync;
 			sourceTree = "<group>";
 		};
 		E1E43B16217CDB62000E76DF /* exporter */ = {
@@ -122,9 +122,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		E1E43AF1217CDABA000E76DF /* PhotosExporter */ = {
+		E1E43AF1217CDABA000E76DF /* PhotosSync */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = E1E43B00217CDABA000E76DF /* Build configuration list for PBXNativeTarget "PhotosExporter" */;
+			buildConfigurationList = E1E43B00217CDABA000E76DF /* Build configuration list for PBXNativeTarget "PhotosSync" */;
 			buildPhases = (
 				E1E43AEE217CDABA000E76DF /* Sources */,
 				E1E43AEF217CDABA000E76DF /* Frameworks */,
@@ -134,9 +134,9 @@
 			);
 			dependencies = (
 			);
-			name = PhotosExporter;
+			name = PhotosSync;
 			productName = PhotosExporter;
-			productReference = E1E43AF2217CDABA000E76DF /* PhotosExporter.app */;
+			productReference = E1E43AF2217CDABA000E76DF /* PhotosSync.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -160,7 +160,7 @@
 					};
 				};
 			};
-			buildConfigurationList = E1E43AED217CDABA000E76DF /* Build configuration list for PBXProject "PhotosExporter" */;
+			buildConfigurationList = E1E43AED217CDABA000E76DF /* Build configuration list for PBXProject "PhotosSync" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -173,7 +173,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				E1E43AF1217CDABA000E76DF /* PhotosExporter */,
+				E1E43AF1217CDABA000E76DF /* PhotosSync */,
 			);
 		};
 /* End PBXProject section */
@@ -334,12 +334,12 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = PhotosExporter/Info.plist;
+				INFOPLIST_FILE = PhotosSync/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.bentele.PhotosExporter;
+				PRODUCT_BUNDLE_IDENTIFIER = photossync.PhotosSync;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 			};
@@ -351,12 +351,12 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = PhotosExporter/Info.plist;
+				INFOPLIST_FILE = PhotosSync/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.bentele.PhotosExporter;
+				PRODUCT_BUNDLE_IDENTIFIER = photossync.PhotosSync;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 			};
@@ -365,7 +365,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		E1E43AED217CDABA000E76DF /* Build configuration list for PBXProject "PhotosExporter" */ = {
+		E1E43AED217CDABA000E76DF /* Build configuration list for PBXProject "PhotosSync" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E1E43AFE217CDABA000E76DF /* Debug */,
@@ -374,7 +374,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		E1E43B00217CDABA000E76DF /* Build configuration list for PBXNativeTarget "PhotosExporter" */ = {
+		E1E43B00217CDABA000E76DF /* Build configuration list for PBXNativeTarget "PhotosSync" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E1E43B01217CDABA000E76DF /* Debug */,
