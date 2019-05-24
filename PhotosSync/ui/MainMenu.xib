@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.70"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="NSApplication">
+            <connections>
+                <outlet property="delegate" destination="Voe-Tx-rLC" id="GzC-gU-4Uq"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="PhotosSync" customModuleProvider="target"/>
+        <customObject id="YLy-65-1bz" customClass="NSFontManager"/>
+        <window title="PhotosSync" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="QvC-M9-y7g">
+            <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
+            <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
+            <rect key="contentRect" x="335" y="390" width="480" height="360"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1417"/>
+            <view key="contentView" wantsLayer="YES" id="EiT-Mj-1SZ">
+                <rect key="frame" x="0.0" y="0.0" width="480" height="360"/>
+                <autoresizingMask key="autoresizingMask"/>
+            </view>
+        </window>
+        <menu id="BPe-uX-XBF">
+            <items>
+                <menuItem title="Quit" id="Bn2-sw-ukb">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="quitClicked:" target="CVW-nZ-F6o" id="oTg-LJ-PQm"/>
+                    </connections>
+                </menuItem>
+            </items>
+        </menu>
+        <customObject id="CVW-nZ-F6o" customClass="StatusMenuController" customModule="PhotosSync" customModuleProvider="target">
+            <connections>
+                <outlet property="statusMenu" destination="BPe-uX-XBF" id="Gmj-20-4bl"/>
+            </connections>
+        </customObject>
+    </objects>
+</document>

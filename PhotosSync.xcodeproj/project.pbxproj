@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		E1321E502229A71600046C00 /* StopWatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1321E4F2229A71600046C00 /* StopWatch.swift */; };
+		E141B26F2297C42700577B70 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E141B26E2297C42700577B70 /* Assets.xcassets */; };
+		E141B2712297C56900577B70 /* StatusMenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E141B2702297C56900577B70 /* StatusMenuController.swift */; };
 		E186D26022354098000BFCED /* FlatFolderDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E186D25F22354098000BFCED /* FlatFolderDescriptor.swift */; };
 		E1A55240222AB2EF00F72499 /* String+extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1A5523F222AB2EF00F72499 /* String+extensions.swift */; };
 		E1B119262251DC8100B53693 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1B119252251DC8100B53693 /* Errors.swift */; };
@@ -25,6 +27,8 @@
 
 /* Begin PBXFileReference section */
 		E1321E4F2229A71600046C00 /* StopWatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopWatch.swift; sourceTree = "<group>"; };
+		E141B26E2297C42700577B70 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		E141B2702297C56900577B70 /* StatusMenuController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusMenuController.swift; sourceTree = "<group>"; };
 		E1682B2E22760283000DC1D2 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		E186D25F22354098000BFCED /* FlatFolderDescriptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlatFolderDescriptor.swift; sourceTree = "<group>"; };
 		E1A5523F222AB2EF00F72499 /* String+extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+extensions.swift"; sourceTree = "<group>"; };
@@ -56,6 +60,25 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		E141B26B2297B97D00577B70 /* assets */ = {
+			isa = PBXGroup;
+			children = (
+				E141B26E2297C42700577B70 /* Assets.xcassets */,
+			);
+			path = assets;
+			sourceTree = "<group>";
+		};
+		E141B2722297C57300577B70 /* ui */ = {
+			isa = PBXGroup;
+			children = (
+				E1E43AF5217CDABA000E76DF /* AppDelegate.swift */,
+				E141B2702297C56900577B70 /* StatusMenuController.swift */,
+				E1E43B62217CE16D000E76DF /* MainMenu.xib */,
+				E141B26B2297B97D00577B70 /* assets */,
+			);
+			path = ui;
+			sourceTree = "<group>";
+		};
 		E1E43AE9217CDABA000E76DF = {
 			isa = PBXGroup;
 			children = (
@@ -78,12 +101,11 @@
 		E1E43AF4217CDABA000E76DF /* PhotosSync */ = {
 			isa = PBXGroup;
 			children = (
+				E141B2722297C57300577B70 /* ui */,
 				E1E43B42217CE0A9000E76DF /* MainExporter.swift */,
-				E1E43AF5217CDABA000E76DF /* AppDelegate.swift */,
 				E1E43B16217CDB62000E76DF /* exporter */,
 				E1E43B19217CDB8C000E76DF /* util */,
 				E1E43AFC217CDABA000E76DF /* Info.plist */,
-				E1E43B62217CE16D000E76DF /* MainMenu.xib */,
 				E1E43B39217CDC73000E76DF /* PhotosSync.entitlements */,
 			);
 			path = PhotosSync;
@@ -186,6 +208,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E1E43B65217CE1A0000E76DF /* filesystem-structure.png in Resources */,
+				E141B26F2297C42700577B70 /* Assets.xcassets in Resources */,
 				E1E43B63217CE16D000E76DF /* MainMenu.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -203,6 +226,7 @@
 				E1E43B1D217CDBE9000E76DF /* SnapshotPhotosExporter.swift in Sources */,
 				E1B119262251DC8100B53693 /* Errors.swift in Sources */,
 				E1A55240222AB2EF00F72499 /* String+extensions.swift in Sources */,
+				E141B2712297C56900577B70 /* StatusMenuController.swift in Sources */,
 				E1E43AF6217CDABA000E76DF /* AppDelegate.swift in Sources */,
 				E1E43B13217CDB54000E76DF /* MediaLibUtil.swift in Sources */,
 				E186D26022354098000BFCED /* FlatFolderDescriptor.swift in Sources */,
