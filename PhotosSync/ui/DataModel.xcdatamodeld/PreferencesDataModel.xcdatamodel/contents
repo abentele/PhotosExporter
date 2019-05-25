@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14490.99" systemVersion="18E226" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="Entity" representedClassName="Entity" syncable="YES" codeGenerationType="class"/>
+    <entity name="PhotosFilter" representedClassName="PhotosFilter" syncable="YES" codeGenerationType="class"/>
+    <entity name="Plan" representedClassName="Plan" syncable="YES" codeGenerationType="class">
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="filter" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="PhotosFilter" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="Plan" positionX="-27.80859375" positionY="-296.93359375" width="128" height="88"/>
+        <element name="PhotosFilter" positionX="215.13671875" positionY="-238.98046875" width="128" height="43"/>
+        <element name="Entity" positionX="217.78515625" positionY="-165.2421875" width="128" height="43"/>
+    </elements>
+</model>

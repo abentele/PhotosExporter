@@ -10,6 +10,16 @@
 		E1321E502229A71600046C00 /* StopWatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1321E4F2229A71600046C00 /* StopWatch.swift */; };
 		E141B26F2297C42700577B70 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E141B26E2297C42700577B70 /* Assets.xcassets */; };
 		E141B2712297C56900577B70 /* StatusMenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E141B2702297C56900577B70 /* StatusMenuController.swift */; };
+		E141B27C2297D24800577B70 /* Decoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E141B27B2297D24800577B70 /* Decoder.swift */; };
+		E141B27E2297D24A00577B70 /* Encoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E141B27D2297D24A00577B70 /* Encoder.swift */; };
+		E141B2802297D24C00577B70 /* YAML.swift in Sources */ = {isa = PBXBuildFile; fileRef = E141B27F2297D24C00577B70 /* YAML.swift */; };
+		E141B2822297D34300577B70 /* Plan.swift in Sources */ = {isa = PBXBuildFile; fileRef = E141B2812297D34300577B70 /* Plan.swift */; };
+		E141B2842297D36900577B70 /* FIleSystemExportPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = E141B2832297D36900577B70 /* FIleSystemExportPlan.swift */; };
+		E141B2872297D48A00577B70 /* GooglePhotosExportPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = E141B2862297D48A00577B70 /* GooglePhotosExportPlan.swift */; };
+		E141B2892297D4D000577B70 /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = E141B2882297D4D000577B70 /* Preferences.swift */; };
+		E141B2A22299A50800577B70 /* PreferencesReaderTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E141B2A12299A50800577B70 /* PreferencesReaderTest.swift */; };
+		E141B2AA2299A89800577B70 /* PreferencesReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E141B2A92299A89800577B70 /* PreferencesReader.swift */; };
+		E141B2AC2299ADB000577B70 /* LICENSE-swift-uniyaml in Resources */ = {isa = PBXBuildFile; fileRef = E141B2AB2299ADB000577B70 /* LICENSE-swift-uniyaml */; };
 		E186D26022354098000BFCED /* FlatFolderDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E186D25F22354098000BFCED /* FlatFolderDescriptor.swift */; };
 		E1A55240222AB2EF00F72499 /* String+extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1A5523F222AB2EF00F72499 /* String+extensions.swift */; };
 		E1B119262251DC8100B53693 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1B119252251DC8100B53693 /* Errors.swift */; };
@@ -25,10 +35,32 @@
 		E1E43B65217CE1A0000E76DF /* filesystem-structure.png in Resources */ = {isa = PBXBuildFile; fileRef = E1E43B64217CE1A0000E76DF /* filesystem-structure.png */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		E141B2A42299A50800577B70 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E1E43AEA217CDABA000E76DF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E1E43AF1217CDABA000E76DF;
+			remoteInfo = PhotosSync;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		E1321E4F2229A71600046C00 /* StopWatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopWatch.swift; sourceTree = "<group>"; };
 		E141B26E2297C42700577B70 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E141B2702297C56900577B70 /* StatusMenuController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusMenuController.swift; sourceTree = "<group>"; };
+		E141B27B2297D24800577B70 /* Decoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Decoder.swift; sourceTree = "<group>"; };
+		E141B27D2297D24A00577B70 /* Encoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Encoder.swift; sourceTree = "<group>"; };
+		E141B27F2297D24C00577B70 /* YAML.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YAML.swift; sourceTree = "<group>"; };
+		E141B2812297D34300577B70 /* Plan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Plan.swift; sourceTree = "<group>"; };
+		E141B2832297D36900577B70 /* FIleSystemExportPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FIleSystemExportPlan.swift; sourceTree = "<group>"; };
+		E141B2862297D48A00577B70 /* GooglePhotosExportPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GooglePhotosExportPlan.swift; sourceTree = "<group>"; };
+		E141B2882297D4D000577B70 /* Preferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preferences.swift; sourceTree = "<group>"; };
+		E141B29F2299A50800577B70 /* PreferencesReaderTest.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PreferencesReaderTest.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		E141B2A12299A50800577B70 /* PreferencesReaderTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesReaderTest.swift; sourceTree = "<group>"; };
+		E141B2A32299A50800577B70 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E141B2A92299A89800577B70 /* PreferencesReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesReader.swift; sourceTree = "<group>"; };
+		E141B2AB2299ADB000577B70 /* LICENSE-swift-uniyaml */ = {isa = PBXFileReference; lastKnownFileType = text; path = "LICENSE-swift-uniyaml"; sourceTree = "<group>"; };
 		E1682B2E22760283000DC1D2 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		E186D25F22354098000BFCED /* FlatFolderDescriptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlatFolderDescriptor.swift; sourceTree = "<group>"; };
 		E1A5523F222AB2EF00F72499 /* String+extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+extensions.swift"; sourceTree = "<group>"; };
@@ -50,6 +82,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		E141B29C2299A50800577B70 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E1E43AEF217CDABA000E76DF /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -79,13 +118,47 @@
 			path = ui;
 			sourceTree = "<group>";
 		};
+		E141B2762297CE8700577B70 /* preferences */ = {
+			isa = PBXGroup;
+			children = (
+				E141B2852297D37500577B70 /* model */,
+				E141B2A92299A89800577B70 /* PreferencesReader.swift */,
+				E141B27B2297D24800577B70 /* Decoder.swift */,
+				E141B27D2297D24A00577B70 /* Encoder.swift */,
+				E141B27F2297D24C00577B70 /* YAML.swift */,
+			);
+			path = preferences;
+			sourceTree = "<group>";
+		};
+		E141B2852297D37500577B70 /* model */ = {
+			isa = PBXGroup;
+			children = (
+				E141B2882297D4D000577B70 /* Preferences.swift */,
+				E141B2812297D34300577B70 /* Plan.swift */,
+				E141B2832297D36900577B70 /* FIleSystemExportPlan.swift */,
+				E141B2862297D48A00577B70 /* GooglePhotosExportPlan.swift */,
+			);
+			path = model;
+			sourceTree = "<group>";
+		};
+		E141B2A02299A50800577B70 /* PreferencesReaderTest */ = {
+			isa = PBXGroup;
+			children = (
+				E141B2A12299A50800577B70 /* PreferencesReaderTest.swift */,
+				E141B2A32299A50800577B70 /* Info.plist */,
+			);
+			path = PreferencesReaderTest;
+			sourceTree = "<group>";
+		};
 		E1E43AE9217CDABA000E76DF = {
 			isa = PBXGroup;
 			children = (
+				E141B2AB2299ADB000577B70 /* LICENSE-swift-uniyaml */,
 				E1682B2E22760283000DC1D2 /* LICENSE */,
 				E1E43B05217CDB29000E76DF /* Readme.md */,
 				E1E43AF4217CDABA000E76DF /* PhotosSync */,
 				E1E43B3D217CDFED000E76DF /* doc */,
+				E141B2A02299A50800577B70 /* PreferencesReaderTest */,
 				E1E43AF3217CDABA000E76DF /* Products */,
 			);
 			sourceTree = "<group>";
@@ -94,6 +167,7 @@
 			isa = PBXGroup;
 			children = (
 				E1E43AF2217CDABA000E76DF /* PhotosSync.app */,
+				E141B29F2299A50800577B70 /* PreferencesReaderTest.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -103,6 +177,7 @@
 			children = (
 				E141B2722297C57300577B70 /* ui */,
 				E1E43B42217CE0A9000E76DF /* MainExporter.swift */,
+				E141B2762297CE8700577B70 /* preferences */,
 				E1E43B16217CDB62000E76DF /* exporter */,
 				E1E43B19217CDB8C000E76DF /* util */,
 				E1E43AFC217CDABA000E76DF /* Info.plist */,
@@ -146,6 +221,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		E141B29E2299A50800577B70 /* PreferencesReaderTest */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E141B2A62299A50800577B70 /* Build configuration list for PBXNativeTarget "PreferencesReaderTest" */;
+			buildPhases = (
+				E141B29B2299A50800577B70 /* Sources */,
+				E141B29C2299A50800577B70 /* Frameworks */,
+				E141B29D2299A50800577B70 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				E141B2A52299A50800577B70 /* PBXTargetDependency */,
+			);
+			name = PreferencesReaderTest;
+			productName = PreferencesReaderTest;
+			productReference = E141B29F2299A50800577B70 /* PreferencesReaderTest.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		E1E43AF1217CDABA000E76DF /* PhotosSync */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = E1E43B00217CDABA000E76DF /* Build configuration list for PBXNativeTarget "PhotosSync" */;
@@ -169,10 +262,14 @@
 		E1E43AEA217CDABA000E76DF /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1000;
+				LastSwiftUpdateCheck = 1020;
 				LastUpgradeCheck = 1000;
 				ORGANIZATIONNAME = "Andreas Bentele";
 				TargetAttributes = {
+					E141B29E2299A50800577B70 = {
+						CreatedOnToolsVersion = 10.2.1;
+						TestTargetID = E1E43AF1217CDABA000E76DF;
+					};
 					E1E43AF1217CDABA000E76DF = {
 						CreatedOnToolsVersion = 10.0;
 						LastSwiftMigration = 1020;
@@ -198,17 +295,26 @@
 			projectRoot = "";
 			targets = (
 				E1E43AF1217CDABA000E76DF /* PhotosSync */,
+				E141B29E2299A50800577B70 /* PreferencesReaderTest */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		E141B29D2299A50800577B70 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E1E43AF0217CDABA000E76DF /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				E1E43B65217CE1A0000E76DF /* filesystem-structure.png in Resources */,
 				E141B26F2297C42700577B70 /* Assets.xcassets in Resources */,
+				E141B2AC2299ADB000577B70 /* LICENSE-swift-uniyaml in Resources */,
 				E1E43B63217CE16D000E76DF /* MainMenu.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -216,6 +322,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		E141B29B2299A50800577B70 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E141B2A22299A50800577B70 /* PreferencesReaderTest.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E1E43AEE217CDABA000E76DF /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -226,19 +340,75 @@
 				E1E43B1D217CDBE9000E76DF /* SnapshotPhotosExporter.swift in Sources */,
 				E1B119262251DC8100B53693 /* Errors.swift in Sources */,
 				E1A55240222AB2EF00F72499 /* String+extensions.swift in Sources */,
+				E141B27E2297D24A00577B70 /* Encoder.swift in Sources */,
 				E141B2712297C56900577B70 /* StatusMenuController.swift in Sources */,
+				E141B2892297D4D000577B70 /* Preferences.swift in Sources */,
+				E141B2AA2299A89800577B70 /* PreferencesReader.swift in Sources */,
 				E1E43AF6217CDABA000E76DF /* AppDelegate.swift in Sources */,
 				E1E43B13217CDB54000E76DF /* MediaLibUtil.swift in Sources */,
 				E186D26022354098000BFCED /* FlatFolderDescriptor.swift in Sources */,
+				E141B2802297D24C00577B70 /* YAML.swift in Sources */,
 				E1E43B11217CDB54000E76DF /* IncrementalPhotosExporter.swift in Sources */,
+				E141B2872297D48A00577B70 /* GooglePhotosExportPlan.swift in Sources */,
+				E141B2822297D34300577B70 /* Plan.swift in Sources */,
+				E141B2842297D36900577B70 /* FIleSystemExportPlan.swift in Sources */,
 				E1E43B10217CDB54000E76DF /* MetadataLoader.swift in Sources */,
+				E141B27C2297D24800577B70 /* Decoder.swift in Sources */,
 				E1E43B46217CE0C8000E76DF /* Logger.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		E141B2A52299A50800577B70 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E1E43AF1217CDABA000E76DF /* PhotosSync */;
+			targetProxy = E141B2A42299A50800577B70 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		E141B2A72299A50800577B70 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = PreferencesReaderTest/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				PRODUCT_BUNDLE_IDENTIFIER = com.bentele.PreferencesReaderTest;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PhotosSync.app/Contents/MacOS/PhotosSync";
+			};
+			name = Debug;
+		};
+		E141B2A82299A50800577B70 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = PreferencesReaderTest/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				PRODUCT_BUNDLE_IDENTIFIER = com.bentele.PreferencesReaderTest;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PhotosSync.app/Contents/MacOS/PhotosSync";
+			};
+			name = Release;
+		};
 		E1E43AFE217CDABA000E76DF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -391,6 +561,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		E141B2A62299A50800577B70 /* Build configuration list for PBXNativeTarget "PreferencesReaderTest" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E141B2A72299A50800577B70 /* Debug */,
+				E141B2A82299A50800577B70 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		E1E43AED217CDABA000E76DF /* Build configuration list for PBXProject "PhotosSync" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

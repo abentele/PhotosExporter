@@ -15,18 +15,24 @@
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="PhotosSync" customModuleProvider="target"/>
         <customObject id="YLy-65-1bz" customClass="NSFontManager"/>
-        <window title="PhotosSync" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="QvC-M9-y7g">
-            <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
-            <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="335" y="390" width="480" height="360"/>
+        <window title="Preferences" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="QvC-M9-y7g" userLabel="PreferencesWindow">
+            <windowStyleMask key="styleMask" titled="YES" closable="YES" resizable="YES"/>
+            <rect key="contentRect" x="1052" y="587" width="762" height="292"/>
             <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1417"/>
             <view key="contentView" wantsLayer="YES" id="EiT-Mj-1SZ">
-                <rect key="frame" x="0.0" y="0.0" width="480" height="360"/>
+                <rect key="frame" x="0.0" y="0.0" width="762" height="292"/>
                 <autoresizingMask key="autoresizingMask"/>
             </view>
+            <point key="canvasLocation" x="280" y="113"/>
         </window>
         <menu id="BPe-uX-XBF">
             <items>
+                <menuItem title="Preferences..." id="LML-PZ-ZQ1">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="preferencesClicked:" target="CVW-nZ-F6o" id="niO-EI-oF2"/>
+                    </connections>
+                </menuItem>
                 <menuItem title="Quit" id="Bn2-sw-ukb">
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <connections>
@@ -37,6 +43,7 @@
         </menu>
         <customObject id="CVW-nZ-F6o" customClass="StatusMenuController" customModule="PhotosSync" customModuleProvider="target">
             <connections>
+                <outlet property="preferencesWindow" destination="QvC-M9-y7g" id="9KP-dS-bGJ"/>
                 <outlet property="statusMenu" destination="BPe-uX-XBF" id="Gmj-20-4bl"/>
             </connections>
         </customObject>

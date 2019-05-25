@@ -18,5 +18,13 @@ extension String {
             ($0 << 5) &+ $0 &+ Int($1)
         }
     }
+    
+    func indent(_ count: Int) -> String {
+        var result: String = "\(self)"
+        for _ in 1...count {
+            result = " \(result)"
+        }
+        return result
+    }
 
 }
