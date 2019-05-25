@@ -26,7 +26,14 @@ class PreferencesReader {
                         switch (type) {
                         case "FileSystemExport":
                             if let targetFolder = planDict["targetFolder"]?.string {
-                                plan = FileSystemExportPlan(name: name, targetFolder: targetFolder)
+                                let fileSystemExportPlan = FileSystemExportPlan(name: name, targetFolder: targetFolder)
+                                plan = fileSystemExportPlan
+                                if let exportCalculated = planDict["exportCalculated"]?.bool {
+                                    fileSystemExportPlan.exportCalculated = exportCalculated
+                                }
+                                if let exportOriginals = planDict["exportOriginals"]?.bool {
+                                    fileSystemExportPlan.exportOriginals = exportOriginals
+                                }
                             } else {
                                 logger.warn("Plan '\(name)' defined without attribute 'targetFolder'")
                             }

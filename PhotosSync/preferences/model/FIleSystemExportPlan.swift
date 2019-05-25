@@ -10,6 +10,8 @@ import Foundation
 
 class FileSystemExportPlan : Plan {
     public var targetFolder: String
+    public var exportCalculated: Bool?
+    public var exportOriginals: Bool?
     
     init(name: String, targetFolder: String) {
         self.targetFolder = targetFolder
@@ -24,6 +26,12 @@ class FileSystemExportPlan : Plan {
         var result: String = ""
         result += super.toYaml(indent: indent)
         result += "targetFolder: \(targetFolder)\n".indent(indent)
+        if let exportCalculated = exportCalculated {
+            result += "exportCalculated: \(exportCalculated)\n".indent(indent)
+        }
+        if let exportOriginals = exportOriginals {
+            result += "exportOriginals: \(exportOriginals)\n".indent(indent)
+        }
         return result
     }
 }
