@@ -9,11 +9,7 @@
 import Foundation
 
 class Plan {
-    public var name: String
-    
-    init(name: String) {
-        self.name = name
-    }
+    public var name: String?
     
     func getType() -> String {
         return String(describing: self)
@@ -22,7 +18,9 @@ class Plan {
     func toYaml(indent: Int) -> String {
         var result: String = ""
         result += "type: \(getType())\n".indent(indent)
-        result += "name: \(name)\n".indent(indent)
+        if let name = name {
+            result += "name: \(name)\n".indent(indent)
+        }
         return result
     }
     

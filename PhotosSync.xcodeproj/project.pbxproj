@@ -14,7 +14,7 @@
 		E141B27E2297D24A00577B70 /* Encoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E141B27D2297D24A00577B70 /* Encoder.swift */; };
 		E141B2802297D24C00577B70 /* YAML.swift in Sources */ = {isa = PBXBuildFile; fileRef = E141B27F2297D24C00577B70 /* YAML.swift */; };
 		E141B2822297D34300577B70 /* Plan.swift in Sources */ = {isa = PBXBuildFile; fileRef = E141B2812297D34300577B70 /* Plan.swift */; };
-		E141B2842297D36900577B70 /* FIleSystemExportPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = E141B2832297D36900577B70 /* FIleSystemExportPlan.swift */; };
+		E141B2842297D36900577B70 /* FileSystemExportPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = E141B2832297D36900577B70 /* FileSystemExportPlan.swift */; };
 		E141B2872297D48A00577B70 /* GooglePhotosExportPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = E141B2862297D48A00577B70 /* GooglePhotosExportPlan.swift */; };
 		E141B2892297D4D000577B70 /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = E141B2882297D4D000577B70 /* Preferences.swift */; };
 		E141B2A22299A50800577B70 /* PreferencesReaderTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E141B2A12299A50800577B70 /* PreferencesReaderTest.swift */; };
@@ -53,7 +53,7 @@
 		E141B27D2297D24A00577B70 /* Encoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Encoder.swift; sourceTree = "<group>"; };
 		E141B27F2297D24C00577B70 /* YAML.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YAML.swift; sourceTree = "<group>"; };
 		E141B2812297D34300577B70 /* Plan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Plan.swift; sourceTree = "<group>"; };
-		E141B2832297D36900577B70 /* FIleSystemExportPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FIleSystemExportPlan.swift; sourceTree = "<group>"; };
+		E141B2832297D36900577B70 /* FileSystemExportPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileSystemExportPlan.swift; sourceTree = "<group>"; };
 		E141B2862297D48A00577B70 /* GooglePhotosExportPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GooglePhotosExportPlan.swift; sourceTree = "<group>"; };
 		E141B2882297D4D000577B70 /* Preferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preferences.swift; sourceTree = "<group>"; };
 		E141B29F2299A50800577B70 /* PreferencesReaderTest.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PreferencesReaderTest.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -135,7 +135,7 @@
 			children = (
 				E141B2882297D4D000577B70 /* Preferences.swift */,
 				E141B2812297D34300577B70 /* Plan.swift */,
-				E141B2832297D36900577B70 /* FIleSystemExportPlan.swift */,
+				E141B2832297D36900577B70 /* FileSystemExportPlan.swift */,
 				E141B2862297D48A00577B70 /* GooglePhotosExportPlan.swift */,
 			);
 			path = model;
@@ -351,7 +351,7 @@
 				E1E43B11217CDB54000E76DF /* IncrementalPhotosExporter.swift in Sources */,
 				E141B2872297D48A00577B70 /* GooglePhotosExportPlan.swift in Sources */,
 				E141B2822297D34300577B70 /* Plan.swift in Sources */,
-				E141B2842297D36900577B70 /* FIleSystemExportPlan.swift in Sources */,
+				E141B2842297D36900577B70 /* FileSystemExportPlan.swift in Sources */,
 				E1E43B10217CDB54000E76DF /* MetadataLoader.swift in Sources */,
 				E141B27C2297D24800577B70 /* Decoder.swift in Sources */,
 				E1E43B46217CE0C8000E76DF /* Logger.swift in Sources */,

@@ -20,7 +20,7 @@ plans:
 ---
 plans:
   -
-    type: FileSystemExport
+    type: IncrementalFileSystemExport
     name: Incremental export example
     targetFolder: /Volumes/test
 """
@@ -29,7 +29,7 @@ plans:
 ---
 plans:
   -
-    type: FileSystemExport
+    type: IncrementalFileSystemExport
     name: Incremental export example
     targetFolder: /Volumes/test
   -
@@ -41,7 +41,7 @@ plans:
 ---
 plans:
   -
-    type: FileSystemExport
+    type: IncrementalFileSystemExport
     name: Incremental export example
     targetFolder: /Volumes/test
     exportCalculated: true
@@ -51,20 +51,49 @@ plans:
 ---
 plans:
   -
-    type: FileSystemExport
+    type: IncrementalFileSystemExport
     name: Incremental export example
     targetFolder: /Volumes/test
     exportOriginals: false
 """
-
-    override func setUp() {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-    }
-
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-    }
     
+    let yamlBaseExportPath = """
+---
+plans:
+  -
+    type: IncrementalFileSystemExport
+    name: Incremental export example
+    baseExportPath: /Volumes/base
+"""
+    
+    let yamlDeleteFlatPath = """
+---
+plans:
+  -
+    type: SnapshotFileSystemExport
+    name: Snapshot export example
+    deleteFlatPath: true
+"""
+    
+    let invalidYaml = """
+invalid
+"""
+
+    let yamlPlanWithoutType = """
+---
+plans:
+  -
+    name: Incremental export example
+"""
+
+    let yamlInvalidPlanType = """
+---
+plans:
+  -
+    type: invalid-type
+    name: Incremental export example
+"""
+
     /**
      * Test serialization of an empty preferences object
      */
@@ -79,10 +108,10 @@ plans:
     /**
      * Test deserialization of an empty preferences object
      */
-    func testDeserialize0() {
+    func testDeserialize0() throws {
         let preferencesReader = PreferencesReader()
         
-        let preferences = preferencesReader.preferencesFromYaml(yamlStr: yaml0)
+        let preferences = try preferencesReader.preferencesFromYaml(yamlStr: yaml0)
         
         XCTAssertEqual(0, preferences.plans.count)
     }
@@ -92,7 +121,10 @@ plans:
      */
     func testSerialize1() {
         let preferences = Preferences()
-        preferences.plans.append(FileSystemExportPlan(name: "Incremental export example", targetFolder: "/Volumes/test"))
+        let plan = IncrementalFileSystemExportPlan()
+        plan.name = "Incremental export example"
+        plan.targetFolder = "/Volumes/test"
+        preferences.plans.append(plan)
         
         let yamlStr = preferences.toYaml()
         
@@ -102,13 +134,13 @@ plans:
     /**
      * Test deserialization of a preferences object with exactly one plan
      */
-    func testDeserialize1() {
+    func testDeserialize1() throws {
         let preferencesReader = PreferencesReader()
         
-        let preferences = preferencesReader.preferencesFromYaml(yamlStr: yaml1)
+        let preferences = try preferencesReader.preferencesFromYaml(yamlStr: yaml1)
         
         XCTAssertEqual(1, preferences.plans.count)
-        XCTAssertEqual("FileSystemExport", preferences.plans[0].getType())
+        XCTAssertEqual("IncrementalFileSystemExport", preferences.plans[0].getType())
         XCTAssertEqual("Incremental export example", preferences.plans[0].name)
         XCTAssertEqual("/Volumes/test", (preferences.plans[0] as! FileSystemExportPlan).targetFolder)
         XCTAssertEqual(nil, (preferences.plans[0] as! FileSystemExportPlan).exportCalculated)
@@ -120,8 +152,15 @@ plans:
      */
     func testSerialize2() {
         let preferences = Preferences()
-        preferences.plans.append(FileSystemExportPlan(name: "Incremental export example", targetFolder: "/Volumes/test"))
-        preferences.plans.append(GooglePhotosExportPlan(name: "Google photos example"))
+        
+        let plan1 = IncrementalFileSystemExportPlan()
+        plan1.name = "Incremental export example"
+        plan1.targetFolder = "/Volumes/test"
+        preferences.plans.append(plan1)
+        
+        let plan2 = GooglePhotosExportPlan()
+        plan2.name = "Google photos example"
+        preferences.plans.append(plan2)
         
         let yamlStr = preferences.toYaml()
         
@@ -131,14 +170,14 @@ plans:
     /**
      * Test deserialization of a preferences object with two plans of different type
      */
-    func testDeserialize2() {
+    func testDeserialize2() throws {
         let preferencesReader = PreferencesReader()
         
-        let preferences = preferencesReader.preferencesFromYaml(yamlStr: yaml2)
+        let preferences = try preferencesReader.preferencesFromYaml(yamlStr: yaml2)
         
         XCTAssertEqual(2, preferences.plans.count)
         
-        XCTAssertEqual("FileSystemExport", preferences.plans[0].getType())
+        XCTAssertEqual("IncrementalFileSystemExport", preferences.plans[0].getType())
         XCTAssertEqual("Incremental export example", preferences.plans[0].name)
         XCTAssertEqual("/Volumes/test", (preferences.plans[0] as! FileSystemExportPlan).targetFolder)
         XCTAssertEqual(nil, (preferences.plans[0] as! FileSystemExportPlan).exportCalculated)
@@ -153,7 +192,9 @@ plans:
      */
     func testSerializeExportCalculated() {
         let preferences = Preferences()
-        let plan: FileSystemExportPlan = FileSystemExportPlan(name: "Incremental export example", targetFolder: "/Volumes/test")
+        let plan = IncrementalFileSystemExportPlan()
+        plan.name = "Incremental export example"
+        plan.targetFolder = "/Volumes/test"
         plan.exportCalculated = true
         preferences.plans.append(plan)
         
@@ -165,14 +206,14 @@ plans:
     /**
      * Test deserialization of the "exportCalculated" attribute
      */
-    func testDeserializeExportCalculated() {
+    func testDeserializeExportCalculated() throws {
         let preferencesReader = PreferencesReader()
         
-        let preferences = preferencesReader.preferencesFromYaml(yamlStr: yamlExportCalculated)
+        let preferences = try preferencesReader.preferencesFromYaml(yamlStr: yamlExportCalculated)
         
         XCTAssertEqual(1, preferences.plans.count)
         
-        XCTAssertEqual("FileSystemExport", preferences.plans[0].getType())
+        XCTAssertEqual("IncrementalFileSystemExport", preferences.plans[0].getType())
         XCTAssertEqual("Incremental export example", preferences.plans[0].name)
         XCTAssertEqual("/Volumes/test", (preferences.plans[0] as! FileSystemExportPlan).targetFolder)
         XCTAssertEqual(true, (preferences.plans[0] as! FileSystemExportPlan).exportCalculated)
@@ -184,7 +225,9 @@ plans:
      */
     func testSerializeExportOriginals() {
         let preferences = Preferences()
-        let plan: FileSystemExportPlan = FileSystemExportPlan(name: "Incremental export example", targetFolder: "/Volumes/test")
+        let plan = IncrementalFileSystemExportPlan()
+        plan.name = "Incremental export example"
+        plan.targetFolder = "/Volumes/test"
         plan.exportOriginals = false
         preferences.plans.append(plan)
         
@@ -196,20 +239,110 @@ plans:
     /**
      * Test deserialization of the "exportOriginals" attribute
      */
-    func testDeserializeExportOriginals() {
+    func testDeserializeExportOriginals() throws {
         let preferencesReader = PreferencesReader()
         
-        let preferences = preferencesReader.preferencesFromYaml(yamlStr: yamlExportOriginals)
+        let preferences = try preferencesReader.preferencesFromYaml(yamlStr: yamlExportOriginals)
         
         XCTAssertEqual(1, preferences.plans.count)
         
-        XCTAssertEqual("FileSystemExport", preferences.plans[0].getType())
+        XCTAssertEqual("IncrementalFileSystemExport", preferences.plans[0].getType())
         XCTAssertEqual("Incremental export example", preferences.plans[0].name)
         XCTAssertEqual("/Volumes/test", (preferences.plans[0] as! FileSystemExportPlan).targetFolder)
         XCTAssertEqual(nil, (preferences.plans[0] as! FileSystemExportPlan).exportCalculated)
         XCTAssertEqual(false, (preferences.plans[0] as! FileSystemExportPlan).exportOriginals)
     }
-
-
     
+    /**
+     * Test serialization of the "baseExportPath" attribute
+     */
+    func testSerializeBaseExportPath() {
+        let preferences = Preferences()
+        let plan = IncrementalFileSystemExportPlan()
+        plan.name = "Incremental export example"
+        plan.baseExportPath = "/Volumes/base"
+        preferences.plans.append(plan)
+        
+        let yamlStr = preferences.toYaml()
+        
+        XCTAssertEqual(yamlBaseExportPath, yamlStr, "Yaml string not as expected")
+    }
+    
+    /**
+     * Test deserialization of the "baseExportPath" attribute
+     */
+    func testDeserializeBaseExportPath() throws {
+        let preferencesReader = PreferencesReader()
+        
+        let preferences = try preferencesReader.preferencesFromYaml(yamlStr: yamlBaseExportPath)
+        
+        XCTAssertEqual(1, preferences.plans.count)
+        
+        XCTAssertEqual("IncrementalFileSystemExport", preferences.plans[0].getType())
+        XCTAssertEqual("Incremental export example", preferences.plans[0].name)
+        XCTAssertEqual("/Volumes/base", (preferences.plans[0] as! IncrementalFileSystemExportPlan).baseExportPath)
+    }
+    
+    /**
+     * Test serialization of the "deleteFlatPath" attribute
+     */
+    func testSerializeDeleteFlatPath() {
+        let preferences = Preferences()
+        let plan = SnapshotFileSystemExportPlan()
+        plan.name = "Snapshot export example"
+        plan.deleteFlatPath = true
+        preferences.plans.append(plan)
+        
+        let yamlStr = preferences.toYaml()
+        
+        XCTAssertEqual(yamlDeleteFlatPath, yamlStr, "Yaml string not as expected")
+    }
+    
+    /**
+     * Test deserialization of the "deleteFlatPath" attribute
+     */
+    func testDeserializeDeleteFlatPath() throws {
+        let preferencesReader = PreferencesReader()
+        
+        let preferences = try preferencesReader.preferencesFromYaml(yamlStr: yamlDeleteFlatPath)
+        
+        XCTAssertEqual(1, preferences.plans.count)
+        
+        XCTAssertEqual("SnapshotFileSystemExport", preferences.plans[0].getType())
+        XCTAssertEqual("Snapshot export example", preferences.plans[0].name)
+        XCTAssertEqual(true, (preferences.plans[0] as! SnapshotFileSystemExportPlan).deleteFlatPath)
+    }
+    
+    /**
+     * Test behavior of deserializing an invalid Yaml string.
+     */
+    func testDeserializeInvalidYaml() {
+        let preferencesReader = PreferencesReader()
+        
+        XCTAssertThrowsError(try preferencesReader.preferencesFromYaml(yamlStr: invalidYaml)) { error in
+            XCTAssertEqual(error as! PreferencesReaderError, PreferencesReaderError.invalidYaml)
+        }
+    }
+    
+    /**
+     * Test behavior of deserializing a plan without type.
+     */
+    func testDeserializePlanWithoutType() {
+        let preferencesReader = PreferencesReader()
+        
+        XCTAssertThrowsError(try preferencesReader.preferencesFromYaml(yamlStr: yamlPlanWithoutType)) { error in
+            XCTAssertEqual(error as! PreferencesReaderError, PreferencesReaderError.invalidOrNoPlanType)
+        }
+    }
+    
+    /**
+     * Test behavior of deserializing a plan with an invalid type.
+     */
+    func testDeserializeInvalidPlanType() {
+        let preferencesReader = PreferencesReader()
+        
+        XCTAssertThrowsError(try preferencesReader.preferencesFromYaml(yamlStr: yamlInvalidPlanType)) { error in
+            XCTAssertEqual(error as! PreferencesReaderError, PreferencesReaderError.invalidOrNoPlanType)
+        }
+    }
 }

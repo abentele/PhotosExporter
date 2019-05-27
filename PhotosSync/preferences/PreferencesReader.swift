@@ -8,55 +8,82 @@
 
 import Foundation
 
+enum PreferencesReaderError: Error {
+    case invalidYaml
+    case invalidOrNoPlanType
+}
+
 class PreferencesReader {
     
     private let logger = Logger(loggerName: "PreferencesReader", logLevel: .info)
 
-    func preferencesFromYaml(yamlStr: String) -> Preferences {
+    func preferencesFromYaml(yamlStr: String) throws -> Preferences {
         let preferences = Preferences()
 
+        var preferencesRaw: YAML
         do {
-            let obj = try UniYAML.decode(yamlStr)
-            
-            if let plansRaw = obj["plans"], let plansArray = plansRaw.array {
-                for planRaw in plansArray {
-                    let planDict = planRaw.dictionary!
-                    if let type = planDict["type"]?.string, let name = planDict["name"]?.string {
-                        var plan: Plan?
-                        switch (type) {
-                        case "FileSystemExport":
-                            if let targetFolder = planDict["targetFolder"]?.string {
-                                let fileSystemExportPlan = FileSystemExportPlan(name: name, targetFolder: targetFolder)
-                                plan = fileSystemExportPlan
-                                if let exportCalculated = planDict["exportCalculated"]?.bool {
-                                    fileSystemExportPlan.exportCalculated = exportCalculated
-                                }
-                                if let exportOriginals = planDict["exportOriginals"]?.bool {
-                                    fileSystemExportPlan.exportOriginals = exportOriginals
-                                }
-                            } else {
-                                logger.warn("Plan '\(name)' defined without attribute 'targetFolder'")
-                            }
-                            break
-                        case "GooglePhotosExport":
-                            plan = GooglePhotosExportPlan(name: name)
-                            break
-                        default:
-                            break
-                        }
-                        if let plan = plan {
-                            preferences.plans.append(plan)
-                        }
-                    } else {
-                        logger.warn("Plan defined without type or name attribute: \(String(describing: planRaw.dictionary))")
-                    }
-                }
-            }
+            preferencesRaw = try UniYAML.decode(yamlStr)
         } catch UniYAMLError.error(let detail) {
             print(detail)
+            throw PreferencesReaderError.invalidYaml
         } catch {
-            print("error")
+            print("error: \(error)")
+            throw PreferencesReaderError.invalidYaml
         }
+        
+        if let plansRaw = preferencesRaw["plans"], let plansArray = plansRaw.array {
+            for planRaw in plansArray {
+                let planDict = planRaw.dictionary!
+                if let type = planDict["type"]?.string {
+                    var plan: Plan?
+                    switch (type) {
+                    case "IncrementalFileSystemExport":
+                        plan = IncrementalFileSystemExportPlan()
+                        break
+                    case "SnapshotFileSystemExport":
+                        plan = SnapshotFileSystemExportPlan()
+                        break
+                    case "GooglePhotosExport":
+                        plan = GooglePhotosExportPlan()
+                        break
+                    default:
+                        throw PreferencesReaderError.invalidOrNoPlanType
+                    }
+
+                    if let plan = plan, let name = planDict["name"]?.string {
+                        plan.name = name
+                    }
+
+                    if let plan = plan as? FileSystemExportPlan {
+                        if let targetFolder = planDict["targetFolder"]?.string {
+                            plan.targetFolder = targetFolder
+                        }
+                        if let exportCalculated = planDict["exportCalculated"]?.bool {
+                            plan.exportCalculated = exportCalculated
+                        }
+                        plan.exportOriginals = planDict["exportOriginals"]?.bool
+                    }
+                    
+                    if let plan = plan as? IncrementalFileSystemExportPlan {
+                        plan.baseExportPath = planDict["baseExportPath"]?.string
+                    }
+
+                    if let plan = plan as? SnapshotFileSystemExportPlan {
+                        if let deleteFlatPath = planDict["deleteFlatPath"]?.bool {
+                            plan.deleteFlatPath = deleteFlatPath
+                        }
+                    }
+
+                    if let plan = plan {
+                        preferences.plans.append(plan)
+                    }
+                } else {
+                    logger.warn("Plan defined without type attribute: \(String(describing: planRaw.dictionary))")
+                    throw PreferencesReaderError.invalidOrNoPlanType
+                }
+            }
+        }
+
         
         return preferences
     }
