@@ -15,9 +15,41 @@ enum PreferencesReaderError: Error {
 
 class PreferencesReader {
     
-    private let logger = Logger(loggerName: "PreferencesReader", logLevel: .info)
+    private static let logger = Logger(loggerName: "PreferencesReader", logLevel: .info)
+    
+    static func readPreferencesFile() -> Preferences {
+        let preferencesFolderUrl = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!.appendingPathComponent("PhotosSync")
+        do {
+            let preferencesFileUrl = preferencesFolderUrl.appendingPathComponent("PhotosSync.yaml")
+            let path = preferencesFileUrl.path
+            if FileManager.default.fileExists(atPath: path) {
+                let fileContent = try String(contentsOfFile: path)
+                logger.info("Read preferences file; content:\n\(fileContent)")
+                return try preferencesFromYaml(yamlStr: fileContent)
+            } else {
+                logger.info("Preferences file not found")
+            }
+        } catch {
+            logger.error("Error reading preferences file: \(error)")
+        }
+        return Preferences()
+    }
+    
+    static func writePreferencesFile(preferences: Preferences) {
+        let preferencesFolderUrl = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!.appendingPathComponent("PhotosSync")
+        do {
+            try FileManager.default.createDirectory(at: preferencesFolderUrl, withIntermediateDirectories: true, attributes: nil)
+            let preferencesFileUrl = preferencesFolderUrl.appendingPathComponent("PhotosSync.yaml")
+            let fileContent = preferences.toYaml()
+            try fileContent.write(to: preferencesFileUrl, atomically: true, encoding: String.Encoding.utf8)
+            logger.debug("Wrote preferences file to : \(preferencesFileUrl.path)")
+        } catch {
+            logger.error("Error writing preferences file: \(error)")
+        }
+    }
 
-    func preferencesFromYaml(yamlStr: String) throws -> Preferences {
+    
+    static func preferencesFromYaml(yamlStr: String) throws -> Preferences {
         let preferences = Preferences()
 
         var preferencesYaml: YAML

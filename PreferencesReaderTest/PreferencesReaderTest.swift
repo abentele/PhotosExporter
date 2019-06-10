@@ -28,7 +28,7 @@ plans:
       keywordBlackList:
     targetFolder: /Volumes/test
 """
-
+    
     let yaml2 = """
 ---
 plans:
@@ -317,9 +317,7 @@ plans:
      * Test deserialization of an empty preferences object
      */
     func testDeserialize0() throws {
-        let preferencesReader = PreferencesReader()
-        
-        let preferences = try preferencesReader.preferencesFromYaml(yamlStr: yaml0)
+        let preferences = try PreferencesReader.preferencesFromYaml(yamlStr: yaml0)
         
         XCTAssertEqual(0, preferences.plans.count)
     }
@@ -344,9 +342,7 @@ plans:
      * Test deserialization of a preferences object with exactly one plan
      */
     func testDeserialize1() throws {
-        let preferencesReader = PreferencesReader()
-        
-        let preferences = try preferencesReader.preferencesFromYaml(yamlStr: yaml1)
+        let preferences = try PreferencesReader.preferencesFromYaml(yamlStr: yaml1)
         
         XCTAssertEqual(1, preferences.plans.count)
         XCTAssertEqual("IncrementalFileSystemExport", preferences.plans[0].getType())
@@ -383,9 +379,7 @@ plans:
      * Test deserialization of a preferences object with two plans of different type
      */
     func testDeserialize2() throws {
-        let preferencesReader = PreferencesReader()
-        
-        let preferences = try preferencesReader.preferencesFromYaml(yamlStr: yaml2)
+        let preferences = try PreferencesReader.preferencesFromYaml(yamlStr: yaml2)
         
         XCTAssertEqual(2, preferences.plans.count)
         
@@ -418,9 +412,7 @@ plans:
      * Test deserialization of the "exportCalculated" attribute
      */
     func testDeserializeEnabledFalse() throws {
-        let preferencesReader = PreferencesReader()
-        
-        let preferences = try preferencesReader.preferencesFromYaml(yamlStr: yamlEnabledFalse)
+        let preferences = try PreferencesReader.preferencesFromYaml(yamlStr: yamlEnabledFalse)
         
         XCTAssertEqual(1, preferences.plans.count)
         
@@ -448,9 +440,7 @@ plans:
      * Test deserialization of the "exportCalculated" attribute
      */
     func testDeserializeEnabledTrue() throws {
-        let preferencesReader = PreferencesReader()
-        
-        let preferences = try preferencesReader.preferencesFromYaml(yamlStr: yamlEnabledTrue)
+        let preferences = try PreferencesReader.preferencesFromYaml(yamlStr: yamlEnabledTrue)
         
         XCTAssertEqual(1, preferences.plans.count)
         
@@ -481,9 +471,7 @@ plans:
      * Test deserialization of the "exportCalculated" attribute
      */
     func testDeserializeExportCalculated() throws {
-        let preferencesReader = PreferencesReader()
-        
-        let preferences = try preferencesReader.preferencesFromYaml(yamlStr: yamlExportCalculated)
+        let preferences = try PreferencesReader.preferencesFromYaml(yamlStr: yamlExportCalculated)
         
         XCTAssertEqual(1, preferences.plans.count)
         
@@ -514,9 +502,7 @@ plans:
      * Test deserialization of the "exportOriginals" attribute
      */
     func testDeserializeExportOriginals() throws {
-        let preferencesReader = PreferencesReader()
-        
-        let preferences = try preferencesReader.preferencesFromYaml(yamlStr: yamlExportOriginals)
+        let preferences = try PreferencesReader.preferencesFromYaml(yamlStr: yamlExportOriginals)
         
         XCTAssertEqual(1, preferences.plans.count)
         
@@ -546,9 +532,7 @@ plans:
      * Test deserialization of the "baseExportPath" attribute
      */
     func testDeserializeBaseExportPath() throws {
-        let preferencesReader = PreferencesReader()
-        
-        let preferences = try preferencesReader.preferencesFromYaml(yamlStr: yamlBaseExportPath)
+        let preferences = try PreferencesReader.preferencesFromYaml(yamlStr: yamlBaseExportPath)
         
         XCTAssertEqual(1, preferences.plans.count)
         
@@ -576,9 +560,7 @@ plans:
      * Test deserialization of the "deleteFlatPath" attribute
      */
     func testDeserializeDeleteFlatPath() throws {
-        let preferencesReader = PreferencesReader()
-        
-        let preferences = try preferencesReader.preferencesFromYaml(yamlStr: yamlDeleteFlatPath)
+        let preferences = try PreferencesReader.preferencesFromYaml(yamlStr: yamlDeleteFlatPath)
         
         XCTAssertEqual(1, preferences.plans.count)
         
@@ -610,9 +592,7 @@ plans:
      * Test deserialization of the "mediaObjectFilter" attribute
      */
     func testDeserializeMediaObjectFilter() throws {
-        let preferencesReader = PreferencesReader()
-        
-        let preferences = try preferencesReader.preferencesFromYaml(yamlStr: yamlMediaObjectFilter)
+        let preferences = try PreferencesReader.preferencesFromYaml(yamlStr: yamlMediaObjectFilter)
         
         XCTAssertEqual(1, preferences.plans.count)
         
@@ -629,9 +609,7 @@ plans:
      * Test behavior of deserializing an invalid Yaml string.
      */
     func testDeserializeInvalidYaml() {
-        let preferencesReader = PreferencesReader()
-        
-        XCTAssertThrowsError(try preferencesReader.preferencesFromYaml(yamlStr: invalidYaml)) { error in
+        XCTAssertThrowsError(try PreferencesReader.preferencesFromYaml(yamlStr: invalidYaml)) { error in
             XCTAssertEqual(error as! PreferencesReaderError, PreferencesReaderError.invalidYaml)
         }
     }
@@ -640,9 +618,7 @@ plans:
      * Test behavior of deserializing a plan without type.
      */
     func testDeserializePlanWithoutType() {
-        let preferencesReader = PreferencesReader()
-        
-        XCTAssertThrowsError(try preferencesReader.preferencesFromYaml(yamlStr: yamlPlanWithoutType)) { error in
+        XCTAssertThrowsError(try PreferencesReader.preferencesFromYaml(yamlStr: yamlPlanWithoutType)) { error in
             XCTAssertEqual(error as! PreferencesReaderError, PreferencesReaderError.invalidOrNoPlanType)
         }
     }
@@ -651,9 +627,7 @@ plans:
      * Test behavior of deserializing a plan with an invalid type.
      */
     func testDeserializeInvalidPlanType() {
-        let preferencesReader = PreferencesReader()
-        
-        XCTAssertThrowsError(try preferencesReader.preferencesFromYaml(yamlStr: yamlInvalidPlanType)) { error in
+        XCTAssertThrowsError(try PreferencesReader.preferencesFromYaml(yamlStr: yamlInvalidPlanType)) { error in
             XCTAssertEqual(error as! PreferencesReaderError, PreferencesReaderError.invalidOrNoPlanType)
         }
     }

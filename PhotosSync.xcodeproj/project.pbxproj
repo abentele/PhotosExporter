@@ -24,13 +24,13 @@
 		E186D26022354098000BFCED /* FlatFolderDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E186D25F22354098000BFCED /* FlatFolderDescriptor.swift */; };
 		E1A55240222AB2EF00F72499 /* String+extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1A5523F222AB2EF00F72499 /* String+extensions.swift */; };
 		E1B119262251DC8100B53693 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1B119252251DC8100B53693 /* Errors.swift */; };
+		E1CA31E222AE724100FF15D5 /* PhotosExporterFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1CA31E122AE724100FF15D5 /* PhotosExporterFactory.swift */; };
 		E1E43AF6217CDABA000E76DF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E43AF5217CDABA000E76DF /* AppDelegate.swift */; };
 		E1E43B10217CDB54000E76DF /* MetadataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E43B08217CDB53000E76DF /* MetadataLoader.swift */; };
 		E1E43B11217CDB54000E76DF /* IncrementalPhotosExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E43B09217CDB53000E76DF /* IncrementalPhotosExporter.swift */; };
 		E1E43B13217CDB54000E76DF /* MediaLibUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E43B0B217CDB53000E76DF /* MediaLibUtil.swift */; };
 		E1E43B1C217CDBE9000E76DF /* PhotosExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E43B17217CDB6A000E76DF /* PhotosExporter.swift */; };
 		E1E43B1D217CDBE9000E76DF /* SnapshotPhotosExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E43B18217CDB6E000E76DF /* SnapshotPhotosExporter.swift */; };
-		E1E43B43217CE0A9000E76DF /* MainExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E43B42217CE0A9000E76DF /* MainExporter.swift */; };
 		E1E43B46217CE0C8000E76DF /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E43B44217CE0C8000E76DF /* Logger.swift */; };
 		E1E43B63217CE16D000E76DF /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = E1E43B62217CE16D000E76DF /* MainMenu.xib */; };
 		E1E43B65217CE1A0000E76DF /* filesystem-structure.png in Resources */ = {isa = PBXBuildFile; fileRef = E1E43B64217CE1A0000E76DF /* filesystem-structure.png */; };
@@ -67,6 +67,7 @@
 		E186D25F22354098000BFCED /* FlatFolderDescriptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlatFolderDescriptor.swift; sourceTree = "<group>"; };
 		E1A5523F222AB2EF00F72499 /* String+extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+extensions.swift"; sourceTree = "<group>"; };
 		E1B119252251DC8100B53693 /* Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
+		E1CA31E122AE724100FF15D5 /* PhotosExporterFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosExporterFactory.swift; sourceTree = "<group>"; };
 		E1E43AF2217CDABA000E76DF /* PhotosSync.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PhotosSync.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E1E43AF5217CDABA000E76DF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E1E43AFC217CDABA000E76DF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -77,7 +78,6 @@
 		E1E43B17217CDB6A000E76DF /* PhotosExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosExporter.swift; sourceTree = "<group>"; };
 		E1E43B18217CDB6E000E76DF /* SnapshotPhotosExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapshotPhotosExporter.swift; sourceTree = "<group>"; };
 		E1E43B39217CDC73000E76DF /* PhotosSync.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = PhotosSync.entitlements; sourceTree = "<group>"; };
-		E1E43B42217CE0A9000E76DF /* MainExporter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainExporter.swift; sourceTree = "<group>"; };
 		E1E43B44217CE0C8000E76DF /* Logger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		E1E43B62217CE16D000E76DF /* MainMenu.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MainMenu.xib; sourceTree = "<group>"; };
 		E1E43B64217CE1A0000E76DF /* filesystem-structure.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "filesystem-structure.png"; sourceTree = "<group>"; };
@@ -179,7 +179,6 @@
 			isa = PBXGroup;
 			children = (
 				E141B2722297C57300577B70 /* ui */,
-				E1E43B42217CE0A9000E76DF /* MainExporter.swift */,
 				E141B2762297CE8700577B70 /* preferences */,
 				E1E43B16217CDB62000E76DF /* exporter */,
 				E1E43B19217CDB8C000E76DF /* util */,
@@ -192,6 +191,7 @@
 		E1E43B16217CDB62000E76DF /* exporter */ = {
 			isa = PBXGroup;
 			children = (
+				E1CA31E122AE724100FF15D5 /* PhotosExporterFactory.swift */,
 				E1E43B17217CDB6A000E76DF /* PhotosExporter.swift */,
 				E1E43B18217CDB6E000E76DF /* SnapshotPhotosExporter.swift */,
 				E1E43B09217CDB53000E76DF /* IncrementalPhotosExporter.swift */,
@@ -337,7 +337,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E1E43B43217CE0A9000E76DF /* MainExporter.swift in Sources */,
 				E1E43B1C217CDBE9000E76DF /* PhotosExporter.swift in Sources */,
 				E1321E502229A71600046C00 /* StopWatch.swift in Sources */,
 				E1E43B1D217CDBE9000E76DF /* SnapshotPhotosExporter.swift in Sources */,
@@ -351,6 +350,7 @@
 				E1595FFD22A5978200CC97D6 /* MediaObjectFilter.swift in Sources */,
 				E1E43B13217CDB54000E76DF /* MediaLibUtil.swift in Sources */,
 				E186D26022354098000BFCED /* FlatFolderDescriptor.swift in Sources */,
+				E1CA31E222AE724100FF15D5 /* PhotosExporterFactory.swift in Sources */,
 				E141B2802297D24C00577B70 /* YAML.swift in Sources */,
 				E1E43B11217CDB54000E76DF /* IncrementalPhotosExporter.swift in Sources */,
 				E141B2872297D48A00577B70 /* GooglePhotosExportPlan.swift in Sources */,
