@@ -13,6 +13,8 @@ import Photos
 class AppDelegate: NSObject, NSApplicationDelegate {
     
     private let logger = Logger(loggerName: "AppDelegate", logLevel: .info)
+
+    @IBOutlet weak var statusMenuController: StatusMenuController!
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         PHPhotoLibrary.requestAuthorization({(status: PHAuthorizationStatus) in
@@ -39,33 +41,35 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
         logger.info("Read preferences file; content:\n\(preferences.toYaml())")
         
-        let photosMetadataReader = PhotosMetadataReader(config: preferences.config)
-        photosMetadataReader.readMetadata(completion: {(photosMetadata: PhotosMetadata) in
-            
-            photosMetadata.rootCollection.printYaml(indent: 0)
-            
-            for plan in preferences.plans {
-                // separator for multiple export jobs
-                self.logger.info("")
-                self.logger.info("=====================================================================")
-                self.logger.info("")
-
-                if plan.enabled {
-                    self.logger.info("Start export using plan:\n\(plan.toYaml(indent: 10))")
-                    do {
-                        let photosExporter = try PhotosExporterFactory.createPhotosExporter(plan: plan)
-                        photosExporter.exportPhotos(photosMetadata: photosMetadata)
-                    } catch {
-                        print("Error exporting photos for plan: \(String(describing: plan.name)); error: \(error)")
-                    }
-                } else {
-                    self.logger.info("Ignore disabled plan: \(String(describing: plan.name))")
-                }
-            }
-        });
+//        let photosMetadataReader = PhotosMetadataReader(config: preferences.config)
+//        photosMetadataReader.readMetadata(completion: {(photosMetadata: PhotosMetadata) in
+//            
+//            photosMetadata.rootCollection.printYaml(indent: 0)
+//            
+//            for plan in preferences.plans {
+//                // separator for multiple export jobs
+//                self.logger.info("")
+//                self.logger.info("=====================================================================")
+//                self.logger.info("")
+//
+//                if plan.enabled {
+//                    self.logger.info("Start export using plan:\n\(plan.toYaml(indent: 10))")
+//                    do {
+//                        let photosExporter = try PhotosExporterFactory.createPhotosExporter(plan: plan)
+//                        photosExporter.exportPhotos(photosMetadata: photosMetadata)
+//                    } catch {
+//                        print("Error exporting photos for plan: \(String(describing: plan.name)); error: \(error)")
+//                    }
+//                } else {
+//                    self.logger.info("Ignore disabled plan: \(String(describing: plan.name))")
+//                }
+//            }
+//        });
         
         
         //PreferencesReader.writePreferencesFile(preferences: preferences)
+
+        statusMenuController.updateMenu(preferences: preferences)
     }
     
     func applicationWillTerminate(_ aNotification: Notification) {
