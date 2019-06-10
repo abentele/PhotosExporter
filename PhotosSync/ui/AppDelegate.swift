@@ -15,14 +15,19 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         let preferences = PreferencesReader.readPreferencesFile()
-        
+        logger.info("Read preferences file; content:\n\(preferences.toYaml())")
+
         for plan in preferences.plans {
-            logger.info("Start export using plan:\n\(plan)")
-            do {
-                let photosExporter = try PhotosExporterFactory.createPhotosExporter(plan: plan)
-                photosExporter.exportPhotos()
-            } catch {
-                print("Photos exporter could not be instantiated from preferences: \(String(describing: plan.name))")
+            if plan.enabled {
+                logger.info("Start export using plan:\n\(plan.toYaml(indent: 10))")
+                do {
+                    let photosExporter = try PhotosExporterFactory.createPhotosExporter(plan: plan)
+                    photosExporter.exportPhotos()
+                } catch {
+                    print("Photos exporter could not be instantiated from preferences: \(String(describing: plan.name))")
+                }
+            } else {
+                logger.info("Ignore disabled plan: \(String(describing: plan.name))")
             }
         }
         

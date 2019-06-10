@@ -24,7 +24,7 @@ class PreferencesReader {
             let path = preferencesFileUrl.path
             if FileManager.default.fileExists(atPath: path) {
                 let fileContent = try String(contentsOfFile: path)
-                logger.info("Read preferences file; content:\n\(fileContent)")
+                logger.debug("Read preferences file; content:\n\(fileContent)")
                 return try preferencesFromYaml(yamlStr: fileContent)
             } else {
                 logger.info("Preferences file not found")

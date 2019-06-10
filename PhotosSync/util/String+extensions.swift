@@ -21,8 +21,10 @@ extension String {
     
     func indent(_ count: Int) -> String {
         var result: String = "\(self)"
-        for _ in 1...count {
-            result = " \(result)"
+        if (count > 0) {
+            for _ in 1...count {
+                result = " \(result)"
+            }
         }
         return result
     }
