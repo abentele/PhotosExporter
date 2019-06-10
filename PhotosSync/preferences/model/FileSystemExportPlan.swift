@@ -11,20 +11,12 @@ import Foundation
 class FileSystemExportPlan : Plan {
 
     public var targetFolder: String?
-    public var exportCalculated: Bool?
-    public var exportOriginals: Bool?
     
     override func toYaml(indent: Int) -> String {
         var result: String = ""
         result += super.toYaml(indent: indent)
         if let targetFolder = targetFolder {
             result += "targetFolder: \(targetFolder)\n".indent(indent)
-        }
-        if let exportCalculated = exportCalculated {
-            result += "exportCalculated: \(exportCalculated)\n".indent(indent)
-        }
-        if let exportOriginals = exportOriginals {
-            result += "exportOriginals: \(exportOriginals)\n".indent(indent)
         }
         return result
     }

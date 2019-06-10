@@ -22,6 +22,10 @@ plans:
   -
     type: IncrementalFileSystemExport
     name: Incremental export example
+    mediaObjectFilter:
+      mediaGroupTypeWhiteList:
+      keywordWhiteList:
+      keywordBlackList:
     targetFolder: /Volumes/test
 """
 
@@ -31,20 +35,132 @@ plans:
   -
     type: IncrementalFileSystemExport
     name: Incremental export example
+    mediaObjectFilter:
+      mediaGroupTypeWhiteList:
+        - com.apple.Photos.Album
+        - com.apple.Photos.SmartAlbum
+        - com.apple.Photos.CollectionGroup
+        - com.apple.Photos.MomentGroup
+        - com.apple.Photos.YearGroup
+        - com.apple.Photos.PlacesCountryAlbum
+        - com.apple.Photos.PlacesProvinceAlbum
+        - com.apple.Photos.PlacesCityAlbum
+        - com.apple.Photos.PlacesPointOfInterestAlbum
+        - com.apple.Photos.FacesAlbum
+        - com.apple.Photos.VideosGroup
+        - com.apple.Photos.FrontCameraGroup
+        - com.apple.Photos.PanoramasGroup
+        - com.apple.Photos.BurstGroup
+        - com.apple.Photos.ScreenshotGroup
+      keywordWhiteList:
+      keywordBlackList:
     targetFolder: /Volumes/test
   -
     type: GooglePhotosExport
     name: Google photos example
+    mediaObjectFilter:
+      mediaGroupTypeWhiteList:
+        - com.apple.Photos.Album
+        - com.apple.Photos.SmartAlbum
+        - com.apple.Photos.CollectionGroup
+        - com.apple.Photos.MomentGroup
+        - com.apple.Photos.YearGroup
+        - com.apple.Photos.PlacesCountryAlbum
+        - com.apple.Photos.PlacesProvinceAlbum
+        - com.apple.Photos.PlacesCityAlbum
+        - com.apple.Photos.PlacesPointOfInterestAlbum
+        - com.apple.Photos.FacesAlbum
+        - com.apple.Photos.VideosGroup
+        - com.apple.Photos.FrontCameraGroup
+        - com.apple.Photos.PanoramasGroup
+        - com.apple.Photos.BurstGroup
+        - com.apple.Photos.ScreenshotGroup
+      keywordWhiteList:
+      keywordBlackList:
 """
     
+    let yamlEnabledFalse = """
+---
+plans:
+  -
+    type: IncrementalFileSystemExport
+    enabled: false
+    name: Incremental export example
+    mediaObjectFilter:
+      mediaGroupTypeWhiteList:
+        - com.apple.Photos.Album
+        - com.apple.Photos.SmartAlbum
+        - com.apple.Photos.CollectionGroup
+        - com.apple.Photos.MomentGroup
+        - com.apple.Photos.YearGroup
+        - com.apple.Photos.PlacesCountryAlbum
+        - com.apple.Photos.PlacesProvinceAlbum
+        - com.apple.Photos.PlacesCityAlbum
+        - com.apple.Photos.PlacesPointOfInterestAlbum
+        - com.apple.Photos.FacesAlbum
+        - com.apple.Photos.VideosGroup
+        - com.apple.Photos.FrontCameraGroup
+        - com.apple.Photos.PanoramasGroup
+        - com.apple.Photos.BurstGroup
+        - com.apple.Photos.ScreenshotGroup
+      keywordWhiteList:
+      keywordBlackList:
+"""
+
+    let yamlEnabledTrue = """
+---
+plans:
+  -
+    type: IncrementalFileSystemExport
+    name: Incremental export example
+    mediaObjectFilter:
+      mediaGroupTypeWhiteList:
+        - com.apple.Photos.Album
+        - com.apple.Photos.SmartAlbum
+        - com.apple.Photos.CollectionGroup
+        - com.apple.Photos.MomentGroup
+        - com.apple.Photos.YearGroup
+        - com.apple.Photos.PlacesCountryAlbum
+        - com.apple.Photos.PlacesProvinceAlbum
+        - com.apple.Photos.PlacesCityAlbum
+        - com.apple.Photos.PlacesPointOfInterestAlbum
+        - com.apple.Photos.FacesAlbum
+        - com.apple.Photos.VideosGroup
+        - com.apple.Photos.FrontCameraGroup
+        - com.apple.Photos.PanoramasGroup
+        - com.apple.Photos.BurstGroup
+        - com.apple.Photos.ScreenshotGroup
+      keywordWhiteList:
+      keywordBlackList:
+"""
+
     let yamlExportCalculated = """
 ---
 plans:
   -
     type: IncrementalFileSystemExport
     name: Incremental export example
-    targetFolder: /Volumes/test
     exportCalculated: true
+    mediaObjectFilter:
+      mediaGroupTypeWhiteList:
+        - com.apple.Photos.Album
+        - com.apple.Photos.SmartAlbum
+        - com.apple.Photos.CollectionGroup
+        - com.apple.Photos.MomentGroup
+        - com.apple.Photos.YearGroup
+        - com.apple.Photos.PlacesCountryAlbum
+        - com.apple.Photos.PlacesProvinceAlbum
+        - com.apple.Photos.PlacesCityAlbum
+        - com.apple.Photos.PlacesPointOfInterestAlbum
+        - com.apple.Photos.FacesAlbum
+        - com.apple.Photos.VideosGroup
+        - com.apple.Photos.FrontCameraGroup
+        - com.apple.Photos.PanoramasGroup
+        - com.apple.Photos.BurstGroup
+        - com.apple.Photos.ScreenshotGroup
+      keywordWhiteList:
+      keywordBlackList:
+    targetFolder: /Volumes/test
 """
 
     let yamlExportOriginals = """
@@ -53,8 +169,27 @@ plans:
   -
     type: IncrementalFileSystemExport
     name: Incremental export example
-    targetFolder: /Volumes/test
     exportOriginals: false
+    mediaObjectFilter:
+      mediaGroupTypeWhiteList:
+        - com.apple.Photos.Album
+        - com.apple.Photos.SmartAlbum
+        - com.apple.Photos.CollectionGroup
+        - com.apple.Photos.MomentGroup
+        - com.apple.Photos.YearGroup
+        - com.apple.Photos.PlacesCountryAlbum
+        - com.apple.Photos.PlacesProvinceAlbum
+        - com.apple.Photos.PlacesCityAlbum
+        - com.apple.Photos.PlacesPointOfInterestAlbum
+        - com.apple.Photos.FacesAlbum
+        - com.apple.Photos.VideosGroup
+        - com.apple.Photos.FrontCameraGroup
+        - com.apple.Photos.PanoramasGroup
+        - com.apple.Photos.BurstGroup
+        - com.apple.Photos.ScreenshotGroup
+      keywordWhiteList:
+      keywordBlackList:
+    targetFolder: /Volumes/test
 """
     
     let yamlBaseExportPath = """
@@ -63,6 +198,25 @@ plans:
   -
     type: IncrementalFileSystemExport
     name: Incremental export example
+    mediaObjectFilter:
+      mediaGroupTypeWhiteList:
+        - com.apple.Photos.Album
+        - com.apple.Photos.SmartAlbum
+        - com.apple.Photos.CollectionGroup
+        - com.apple.Photos.MomentGroup
+        - com.apple.Photos.YearGroup
+        - com.apple.Photos.PlacesCountryAlbum
+        - com.apple.Photos.PlacesProvinceAlbum
+        - com.apple.Photos.PlacesCityAlbum
+        - com.apple.Photos.PlacesPointOfInterestAlbum
+        - com.apple.Photos.FacesAlbum
+        - com.apple.Photos.VideosGroup
+        - com.apple.Photos.FrontCameraGroup
+        - com.apple.Photos.PanoramasGroup
+        - com.apple.Photos.BurstGroup
+        - com.apple.Photos.ScreenshotGroup
+      keywordWhiteList:
+      keywordBlackList:
     baseExportPath: /Volumes/base
 """
     
@@ -72,8 +226,61 @@ plans:
   -
     type: SnapshotFileSystemExport
     name: Snapshot export example
+    mediaObjectFilter:
+      mediaGroupTypeWhiteList:
+        - com.apple.Photos.Album
+        - com.apple.Photos.SmartAlbum
+        - com.apple.Photos.CollectionGroup
+        - com.apple.Photos.MomentGroup
+        - com.apple.Photos.YearGroup
+        - com.apple.Photos.PlacesCountryAlbum
+        - com.apple.Photos.PlacesProvinceAlbum
+        - com.apple.Photos.PlacesCityAlbum
+        - com.apple.Photos.PlacesPointOfInterestAlbum
+        - com.apple.Photos.FacesAlbum
+        - com.apple.Photos.VideosGroup
+        - com.apple.Photos.FrontCameraGroup
+        - com.apple.Photos.PanoramasGroup
+        - com.apple.Photos.BurstGroup
+        - com.apple.Photos.ScreenshotGroup
+      keywordWhiteList:
+      keywordBlackList:
     deleteFlatPath: true
 """
+    
+let yamlMediaObjectFilter = """
+---
+plans:
+  -
+    type: IncrementalFileSystemExport
+    name: Incremental export example
+    mediaObjectFilter:
+      mediaGroupTypeWhiteList:
+        - com.apple.Photos.Album
+        - com.apple.Photos.SmartAlbum
+      keywordWhiteList:
+        - photos-for-my-dad
+        - photos-for-linda
+      keywordBlackList:
+        - dont-export
+        - private
+    targetFolder: /Volumes/test
+"""
+    
+let mediaGroupTypeWhiteList = [
+    "com.apple.Photos.Album",
+    "com.apple.Photos.SmartAlbum"
+]
+
+let keywordWhiteList = [
+    "photos-for-my-dad",
+    "photos-for-linda"
+]
+
+let keywordBlackList = [
+    "dont-export",
+    "private"
+]
     
     let invalidYaml = """
 invalid
@@ -93,6 +300,7 @@ plans:
     type: invalid-type
     name: Incremental export example
 """
+    
 
     /**
      * Test serialization of an empty preferences object
@@ -124,6 +332,7 @@ plans:
         let plan = IncrementalFileSystemExportPlan()
         plan.name = "Incremental export example"
         plan.targetFolder = "/Volumes/test"
+        plan.mediaObjectFilter.mediaGroupTypeWhiteList = []
         preferences.plans.append(plan)
         
         let yamlStr = preferences.toYaml()
@@ -143,8 +352,11 @@ plans:
         XCTAssertEqual("IncrementalFileSystemExport", preferences.plans[0].getType())
         XCTAssertEqual("Incremental export example", preferences.plans[0].name)
         XCTAssertEqual("/Volumes/test", (preferences.plans[0] as! FileSystemExportPlan).targetFolder)
-        XCTAssertEqual(nil, (preferences.plans[0] as! FileSystemExportPlan).exportCalculated)
-        XCTAssertEqual(nil, (preferences.plans[0] as! FileSystemExportPlan).exportOriginals)
+        XCTAssertEqual(nil, preferences.plans[0].exportCalculated)
+        XCTAssertEqual(nil, preferences.plans[0].exportOriginals)
+        XCTAssertEqual([], preferences.plans[0].mediaObjectFilter.mediaGroupTypeWhiteList)
+        XCTAssertEqual([], preferences.plans[0].mediaObjectFilter.keywordWhiteList)
+        XCTAssertEqual([], preferences.plans[0].mediaObjectFilter.keywordBlackList)
     }
     
     /**
@@ -180,12 +392,74 @@ plans:
         XCTAssertEqual("IncrementalFileSystemExport", preferences.plans[0].getType())
         XCTAssertEqual("Incremental export example", preferences.plans[0].name)
         XCTAssertEqual("/Volumes/test", (preferences.plans[0] as! FileSystemExportPlan).targetFolder)
-        XCTAssertEqual(nil, (preferences.plans[0] as! FileSystemExportPlan).exportCalculated)
-        XCTAssertEqual(nil, (preferences.plans[0] as! FileSystemExportPlan).exportOriginals)
+        XCTAssertEqual(nil, preferences.plans[0].exportCalculated)
+        XCTAssertEqual(nil, preferences.plans[0].exportOriginals)
         
         XCTAssertEqual("GooglePhotosExport", preferences.plans[1].getType())
         XCTAssertEqual("Google photos example", preferences.plans[1].name)
     }
+    
+    /**
+     * Test serialization of the "enabled" attribute
+     */
+    func testSerializeEnabledFalse() {
+        let preferences = Preferences()
+        let plan = IncrementalFileSystemExportPlan()
+        plan.name = "Incremental export example"
+        plan.enabled = false
+        preferences.plans.append(plan)
+        
+        let yamlStr = preferences.toYaml()
+        
+        XCTAssertEqual(yamlEnabledFalse, yamlStr, "Yaml string not as expected")
+    }
+    
+    /**
+     * Test deserialization of the "exportCalculated" attribute
+     */
+    func testDeserializeEnabledFalse() throws {
+        let preferencesReader = PreferencesReader()
+        
+        let preferences = try preferencesReader.preferencesFromYaml(yamlStr: yamlEnabledFalse)
+        
+        XCTAssertEqual(1, preferences.plans.count)
+        
+        XCTAssertEqual("IncrementalFileSystemExport", preferences.plans[0].getType())
+        XCTAssertEqual("Incremental export example", preferences.plans[0].name)
+        XCTAssertEqual(false, preferences.plans[0].enabled)
+    }
+    
+    /**
+     * Test serialization of the "enabled" attribute
+     */
+    func testSerializeEnabledTrue() {
+        let preferences = Preferences()
+        let plan = IncrementalFileSystemExportPlan()
+        plan.name = "Incremental export example"
+        plan.enabled = true
+        preferences.plans.append(plan)
+        
+        let yamlStr = preferences.toYaml()
+        
+        XCTAssertEqual(yamlEnabledTrue, yamlStr, "Yaml string not as expected")
+    }
+    
+    /**
+     * Test deserialization of the "exportCalculated" attribute
+     */
+    func testDeserializeEnabledTrue() throws {
+        let preferencesReader = PreferencesReader()
+        
+        let preferences = try preferencesReader.preferencesFromYaml(yamlStr: yamlEnabledTrue)
+        
+        XCTAssertEqual(1, preferences.plans.count)
+        
+        XCTAssertEqual("IncrementalFileSystemExport", preferences.plans[0].getType())
+        XCTAssertEqual("Incremental export example", preferences.plans[0].name)
+        XCTAssertEqual(true, preferences.plans[0].enabled)
+    }
+
+
     
     /**
      * Test serialization of the "exportCalculated" attribute
@@ -216,8 +490,8 @@ plans:
         XCTAssertEqual("IncrementalFileSystemExport", preferences.plans[0].getType())
         XCTAssertEqual("Incremental export example", preferences.plans[0].name)
         XCTAssertEqual("/Volumes/test", (preferences.plans[0] as! FileSystemExportPlan).targetFolder)
-        XCTAssertEqual(true, (preferences.plans[0] as! FileSystemExportPlan).exportCalculated)
-        XCTAssertEqual(nil, (preferences.plans[0] as! FileSystemExportPlan).exportOriginals)
+        XCTAssertEqual(true, preferences.plans[0].exportCalculated)
+        XCTAssertEqual(nil, preferences.plans[0].exportOriginals)
     }
     
     /**
@@ -249,8 +523,8 @@ plans:
         XCTAssertEqual("IncrementalFileSystemExport", preferences.plans[0].getType())
         XCTAssertEqual("Incremental export example", preferences.plans[0].name)
         XCTAssertEqual("/Volumes/test", (preferences.plans[0] as! FileSystemExportPlan).targetFolder)
-        XCTAssertEqual(nil, (preferences.plans[0] as! FileSystemExportPlan).exportCalculated)
-        XCTAssertEqual(false, (preferences.plans[0] as! FileSystemExportPlan).exportOriginals)
+        XCTAssertEqual(nil, preferences.plans[0].exportCalculated)
+        XCTAssertEqual(false, preferences.plans[0].exportOriginals)
     }
     
     /**
@@ -312,6 +586,44 @@ plans:
         XCTAssertEqual("Snapshot export example", preferences.plans[0].name)
         XCTAssertEqual(true, (preferences.plans[0] as! SnapshotFileSystemExportPlan).deleteFlatPath)
     }
+    
+    /**
+     * Test serialization of the "deleteFlatPath" attribute
+     */
+    func testSerializeMediaObjectFilter() {
+        let preferences = Preferences()
+        let plan = IncrementalFileSystemExportPlan()
+        plan.name = "Incremental export example"
+        plan.targetFolder = "/Volumes/test"
+        plan.mediaObjectFilter.mediaGroupTypeWhiteList = mediaGroupTypeWhiteList
+        plan.mediaObjectFilter.keywordWhiteList = keywordWhiteList
+        plan.mediaObjectFilter.keywordBlackList = keywordBlackList
+        preferences.plans.append(plan)
+        
+        let yamlStr = preferences.toYaml()
+        
+        XCTAssertEqual(yamlMediaObjectFilter, yamlStr, "Yaml string not as expected")
+    }
+
+    
+    /**
+     * Test deserialization of the "mediaObjectFilter" attribute
+     */
+    func testDeserializeMediaObjectFilter() throws {
+        let preferencesReader = PreferencesReader()
+        
+        let preferences = try preferencesReader.preferencesFromYaml(yamlStr: yamlMediaObjectFilter)
+        
+        XCTAssertEqual(1, preferences.plans.count)
+        
+        XCTAssertEqual("IncrementalFileSystemExport", preferences.plans[0].getType())
+        XCTAssertEqual("Incremental export example", preferences.plans[0].name)
+        XCTAssertEqual("/Volumes/test", (preferences.plans[0] as! IncrementalFileSystemExportPlan).targetFolder)
+        XCTAssertEqual(mediaGroupTypeWhiteList, preferences.plans[0].mediaObjectFilter.mediaGroupTypeWhiteList)
+        XCTAssertEqual(keywordWhiteList, preferences.plans[0].mediaObjectFilter.keywordWhiteList)
+        XCTAssertEqual(keywordBlackList, preferences.plans[0].mediaObjectFilter.keywordBlackList)
+    }
+
     
     /**
      * Test behavior of deserializing an invalid Yaml string.

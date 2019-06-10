@@ -20,9 +20,9 @@ class PreferencesReader {
     func preferencesFromYaml(yamlStr: String) throws -> Preferences {
         let preferences = Preferences()
 
-        var preferencesRaw: YAML
+        var preferencesYaml: YAML
         do {
-            preferencesRaw = try UniYAML.decode(yamlStr)
+            preferencesYaml = try UniYAML.decode(yamlStr)
         } catch UniYAMLError.error(let detail) {
             print(detail)
             throw PreferencesReaderError.invalidYaml
@@ -31,11 +31,11 @@ class PreferencesReader {
             throw PreferencesReaderError.invalidYaml
         }
         
-        if let plansRaw = preferencesRaw["plans"], let plansArray = plansRaw.array {
-            for planRaw in plansArray {
-                let planDict = planRaw.dictionary!
+        if let plansYaml = preferencesYaml["plans"], let plansArray = plansYaml.array {
+            for planYaml in plansArray {
+                let planDict = planYaml.dictionary!
                 if let type = planDict["type"]?.string {
-                    var plan: Plan?
+                    var plan: Plan
                     switch (type) {
                     case "IncrementalFileSystemExport":
                         plan = IncrementalFileSystemExportPlan()
@@ -50,18 +50,15 @@ class PreferencesReader {
                         throw PreferencesReaderError.invalidOrNoPlanType
                     }
 
-                    if let plan = plan, let name = planDict["name"]?.string {
-                        plan.name = name
+                    plan.name = planDict["name"]?.string
+                    if let enabledYaml = planDict["enabled"]?.bool {
+                        plan.enabled = enabledYaml
                     }
+                    plan.exportCalculated = planDict["exportCalculated"]?.bool
+                    plan.exportOriginals = planDict["exportOriginals"]?.bool
 
                     if let plan = plan as? FileSystemExportPlan {
-                        if let targetFolder = planDict["targetFolder"]?.string {
-                            plan.targetFolder = targetFolder
-                        }
-                        if let exportCalculated = planDict["exportCalculated"]?.bool {
-                            plan.exportCalculated = exportCalculated
-                        }
-                        plan.exportOriginals = planDict["exportOriginals"]?.bool
+                        plan.targetFolder = planDict["targetFolder"]?.string
                     }
                     
                     if let plan = plan as? IncrementalFileSystemExportPlan {
@@ -69,16 +66,41 @@ class PreferencesReader {
                     }
 
                     if let plan = plan as? SnapshotFileSystemExportPlan {
-                        if let deleteFlatPath = planDict["deleteFlatPath"]?.bool {
-                            plan.deleteFlatPath = deleteFlatPath
+                        plan.deleteFlatPath = planDict["deleteFlatPath"]?.bool
+                    }
+                    
+                    if let mediaObjectFilterYaml = planDict["mediaObjectFilter"] {
+                        let mediaObjectFilterDict = mediaObjectFilterYaml.dictionary!
+                        
+                        if let mediaGroupTypeWhiteListYaml = mediaObjectFilterDict["mediaGroupTypeWhiteList"]?.array {
+                            plan.mediaObjectFilter.mediaGroupTypeWhiteList = []
+                            for elem in mediaGroupTypeWhiteListYaml {
+                                if let str = elem.string {
+                                    plan.mediaObjectFilter.mediaGroupTypeWhiteList.append(str)
+                                }
+                            }
+                        }
+                        if let keywordWhiteListYaml = mediaObjectFilterDict["keywordWhiteList"]?.array {
+                            plan.mediaObjectFilter.keywordWhiteList = []
+                            for elem in keywordWhiteListYaml {
+                                if let str = elem.string {
+                                    plan.mediaObjectFilter.keywordWhiteList.append(str)
+                                }
+                            }
+                        }
+                        if let keywordBlackListYaml = mediaObjectFilterDict["keywordBlackList"]?.array {
+                            plan.mediaObjectFilter.keywordBlackList = []
+                            for elem in keywordBlackListYaml {
+                                if let str = elem.string {
+                                    plan.mediaObjectFilter.keywordBlackList.append(str)
+                                }
+                            }
                         }
                     }
 
-                    if let plan = plan {
-                        preferences.plans.append(plan)
-                    }
+                    preferences.plans.append(plan)
                 } else {
-                    logger.warn("Plan defined without type attribute: \(String(describing: planRaw.dictionary))")
+                    logger.warn("Plan defined without type attribute: \(String(describing: planYaml.dictionary))")
                     throw PreferencesReaderError.invalidOrNoPlanType
                 }
             }
