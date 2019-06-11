@@ -13,13 +13,14 @@ class StatusMenuController: NSObject {
     private let logger = Logger(loggerName: "StatusMenuController", logLevel: .info)
 
     @IBOutlet weak var statusMenu: NSMenu!
-    @IBOutlet weak var preferencesWindow: NSWindow!
     
     let statusBarItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
     
     @IBOutlet weak var backupPlansMenuItem: NSMenuItem!
     
     var backupPlanMenuItems: [NSMenuItem] = []
+    
+    var preferencesWindowController: PreferencesWindowController?
     
     func updateMenu(preferences: Preferences) {
         // remove previous items
@@ -70,7 +71,10 @@ class StatusMenuController: NSObject {
     }
     
     @IBAction func preferencesClicked(_ sender: Any) {
-        preferencesWindow.setIsVisible(true)
+        if preferencesWindowController == nil {
+            preferencesWindowController = PreferencesWindowController()
+        }
+        preferencesWindowController!.showWindow(nil)
     }
     
     @IBAction func quitClicked(_ sender: Any) {

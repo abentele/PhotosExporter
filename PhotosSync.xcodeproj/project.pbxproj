@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E10C150D25FD5D86002532E5 /* PlansView.xib in Resources */ = {isa = PBXBuildFile; fileRef = E10C150725FD5D85002532E5 /* PlansView.xib */; };
+		E10C150E25FD5D86002532E5 /* PlansViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E10C150825FD5D85002532E5 /* PlansViewController.swift */; };
+		E10C150F25FD5D86002532E5 /* PreferencesWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = E10C150925FD5D85002532E5 /* PreferencesWindow.xib */; };
+		E10C151025FD5D86002532E5 /* PreferencesWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E10C150A25FD5D86002532E5 /* PreferencesWindowController.swift */; };
+		E10C151125FD5D86002532E5 /* GeneralSettingsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = E10C150B25FD5D86002532E5 /* GeneralSettingsView.xib */; };
+		E10C151225FD5D86002532E5 /* GeneralSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E10C150C25FD5D86002532E5 /* GeneralSettingsViewController.swift */; };
 		E1321E502229A71600046C00 /* StopWatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1321E4F2229A71600046C00 /* StopWatch.swift */; };
 		E141B26F2297C42700577B70 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E141B26E2297C42700577B70 /* Assets.xcassets */; };
 		E141B2712297C56900577B70 /* StatusMenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E141B2702297C56900577B70 /* StatusMenuController.swift */; };
@@ -53,6 +59,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		E10C150725FD5D85002532E5 /* PlansView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = PlansView.xib; path = preferences/PlansView.xib; sourceTree = "<group>"; };
+		E10C150825FD5D85002532E5 /* PlansViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PlansViewController.swift; path = preferences/PlansViewController.swift; sourceTree = "<group>"; };
+		E10C150925FD5D85002532E5 /* PreferencesWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = PreferencesWindow.xib; path = preferences/PreferencesWindow.xib; sourceTree = "<group>"; };
+		E10C150A25FD5D86002532E5 /* PreferencesWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PreferencesWindowController.swift; path = preferences/PreferencesWindowController.swift; sourceTree = "<group>"; };
+		E10C150B25FD5D86002532E5 /* GeneralSettingsView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = GeneralSettingsView.xib; path = preferences/GeneralSettingsView.xib; sourceTree = "<group>"; };
+		E10C150C25FD5D86002532E5 /* GeneralSettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GeneralSettingsViewController.swift; path = preferences/GeneralSettingsViewController.swift; sourceTree = "<group>"; };
 		E1321E4F2229A71600046C00 /* StopWatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopWatch.swift; sourceTree = "<group>"; };
 		E141B26E2297C42700577B70 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E141B2702297C56900577B70 /* StatusMenuController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusMenuController.swift; sourceTree = "<group>"; };
@@ -124,6 +136,12 @@
 		E141B2722297C57300577B70 /* ui */ = {
 			isa = PBXGroup;
 			children = (
+				E10C150B25FD5D86002532E5 /* GeneralSettingsView.xib */,
+				E10C150C25FD5D86002532E5 /* GeneralSettingsViewController.swift */,
+				E10C150725FD5D85002532E5 /* PlansView.xib */,
+				E10C150825FD5D85002532E5 /* PlansViewController.swift */,
+				E10C150925FD5D85002532E5 /* PreferencesWindow.xib */,
+				E10C150A25FD5D86002532E5 /* PreferencesWindowController.swift */,
 				E1E43AF5217CDABA000E76DF /* AppDelegate.swift */,
 				E141B2702297C56900577B70 /* StatusMenuController.swift */,
 				E1E43B62217CE16D000E76DF /* MainMenu.xib */,
@@ -353,6 +371,9 @@
 				E141B26F2297C42700577B70 /* Assets.xcassets in Resources */,
 				E141B2AC2299ADB000577B70 /* LICENSE-swift-uniyaml in Resources */,
 				E1E43B63217CE16D000E76DF /* MainMenu.xib in Resources */,
+				E10C151125FD5D86002532E5 /* GeneralSettingsView.xib in Resources */,
+				E10C150F25FD5D86002532E5 /* PreferencesWindow.xib in Resources */,
+				E10C150D25FD5D86002532E5 /* PlansView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -383,13 +404,16 @@
 				E141B2892297D4D000577B70 /* Preferences.swift in Sources */,
 				E141B2AA2299A89800577B70 /* PreferencesReader.swift in Sources */,
 				E1BA08F3236A323D00F51E24 /* PhotoCollection.swift in Sources */,
+				E10C151025FD5D86002532E5 /* PreferencesWindowController.swift in Sources */,
 				E1E43AF6217CDABA000E76DF /* AppDelegate.swift in Sources */,
+				E10C151225FD5D86002532E5 /* GeneralSettingsViewController.swift in Sources */,
 				E1595FFD22A5978200CC97D6 /* MediaObjectFilter.swift in Sources */,
 				E1E43B13217CDB54000E76DF /* MediaLibUtil.swift in Sources */,
 				E1B51C4B23AE86AE009521B9 /* PhotosMetadata.swift in Sources */,
 				E186D26022354098000BFCED /* FlatFolderDescriptor.swift in Sources */,
 				E1BA08F9236A380000F51E24 /* PhotosMetadataReader.swift in Sources */,
 				E1B51C4923AE43B7009521B9 /* Config.swift in Sources */,
+				E10C150E25FD5D86002532E5 /* PlansViewController.swift in Sources */,
 				E1CA31E222AE724100FF15D5 /* PhotosExporterFactory.swift in Sources */,
 				E141B2802297D24C00577B70 /* YAML.swift in Sources */,
 				E1E43B11217CDB54000E76DF /* IncrementalPhotosExporter.swift in Sources */,

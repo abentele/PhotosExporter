@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.70"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="PreferencesWindowController" customModule="PhotosSync" customModuleProvider="target">
+            <connections>
+                <outlet property="generalToolbarButton" destination="51U-6r-l9i" id="bb1-3p-8uv"/>
+                <outlet property="plansToolbarButton" destination="YfR-Wk-vQY" id="g5D-0P-fL1"/>
+                <outlet property="toolBar" destination="Gcs-Pm-Tw5" id="DSP-5V-xS6"/>
+                <outlet property="window" destination="F0z-JX-Cv5" id="gIp-Ho-8D9"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <window title="Preferences" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="F0z-JX-Cv5" customClass="NSPanel">
+            <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
+            <rect key="contentRect" x="196" y="240" width="466" height="237"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1417"/>
+            <view key="contentView" id="se5-gp-TjO">
+                <rect key="frame" x="0.0" y="0.0" width="466" height="237"/>
+                <autoresizingMask key="autoresizingMask"/>
+            </view>
+            <toolbar key="toolbar" implicitIdentifier="AA1E2C64-C8B7-45B4-A428-6D4CDCF802BA" displayMode="iconAndLabel" sizeMode="small" id="Gcs-Pm-Tw5">
+                <allowedToolbarItems>
+                    <toolbarItem implicitItemIdentifier="958D2651-5CF7-46F7-905C-2F5FA4E285E2" explicitItemIdentifier="general" label="General" paletteLabel="General" tag="-1" image="NSPreferencesGeneral" selectable="YES" id="51U-6r-l9i">
+                        <size key="minSize" width="32" height="32"/>
+                        <size key="maxSize" width="32" height="32"/>
+                        <connections>
+                            <action selector="toolbarButtonGeneralClicked:" target="-2" id="VUJ-9m-Sly"/>
+                        </connections>
+                    </toolbarItem>
+                    <toolbarItem implicitItemIdentifier="89473FAD-FDCF-4DAB-81DD-A79CBDCC2DEE" explicitItemIdentifier="plans" label="Sync Plans" paletteLabel="Sync Plans" tag="-1" image="statusBarIcon" selectable="YES" id="YfR-Wk-vQY">
+                        <size key="minSize" width="18" height="18"/>
+                        <size key="maxSize" width="18" height="18"/>
+                        <connections>
+                            <action selector="toolbarButtonPlansClicked:" target="-2" id="wHg-1s-6lu"/>
+                        </connections>
+                    </toolbarItem>
+                    <toolbarItem implicitItemIdentifier="NSToolbarSpaceItem" id="vBu-D1-BA0"/>
+                    <toolbarItem implicitItemIdentifier="NSToolbarFlexibleSpaceItem" id="zKB-X2-fxl"/>
+                </allowedToolbarItems>
+                <defaultToolbarItems>
+                    <toolbarItem reference="51U-6r-l9i"/>
+                    <toolbarItem reference="YfR-Wk-vQY"/>
+                </defaultToolbarItems>
+            </toolbar>
+            <connections>
+                <outlet property="delegate" destination="-2" id="0bl-1N-AYu"/>
+            </connections>
+            <point key="canvasLocation" x="31" y="49"/>
+        </window>
+    </objects>
+    <resources>
+        <image name="NSPreferencesGeneral" width="32" height="32"/>
+        <image name="statusBarIcon" width="18" height="18"/>
+    </resources>
+</document>
