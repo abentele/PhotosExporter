@@ -18,6 +18,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         logger.info("Read preferences file; content:\n\(preferences.toYaml())")
 
         for plan in preferences.plans {
+            // separator for multiple export jobs
+            logger.info("")
+            logger.info("=====================================================================")
+            logger.info("")
+            
             if plan.enabled {
                 logger.info("Start export using plan:\n\(plan.toYaml(indent: 10))")
                 do {

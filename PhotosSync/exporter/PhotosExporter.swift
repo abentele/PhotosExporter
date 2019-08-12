@@ -116,11 +116,6 @@ class PhotosExporter {
             self.countSubFolders = Int(mediaObjects!.count / 6000)
             logger.debug("countSubFolders: \(countSubFolders)")
             
-            // separator for multiple export jobs
-            logger.info("")
-            logger.info("==================================================")
-            logger.info("")
-            
             let stopWatch = StopWatch("Export to \(targetPath)", LogLevel.debug, addFileSizes: false)
             logger.info("Start export to \(targetPath)")
             stopWatch.start()
