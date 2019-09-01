@@ -413,7 +413,12 @@ class PhotosExporter {
             
             logger.debug("link image: \(targetUrl.lastPathComponent)")
             stopWatchFileManagerLinkItem.start()
-            try fileManager.linkItem(at: linkTargetUrl, to: targetUrl)
+            do {
+                try fileManager.linkItem(at: linkTargetUrl, to: targetUrl)
+            } catch let error as NSError {
+                logger.error("\(String(describing: index)): Unable to link file: \(error)")
+                throw error
+            }
             statistics.countLinkedFiles += 1
             stopWatchFileManagerLinkItem.stop()
         } else {
