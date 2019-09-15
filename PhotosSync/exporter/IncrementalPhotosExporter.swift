@@ -21,32 +21,6 @@ class IncrementalPhotosExporter : PhotosExporter {
         try super.initExport()
     }
     
-    public var baseExportPath:String?
-    
-    public func initFlatFolderDescriptor(flatFolderPath: String) throws -> FlatFolderDescriptor {
-        var lastCountSubFolders = 0
-        
-        if fileManager.fileExists(atPath: flatFolderPath) {
-            let urls = try fileManager.contentsOfDirectory(
-                at: URL(fileURLWithPath: flatFolderPath),
-                includingPropertiesForKeys: [.isDirectoryKey],
-                options: [.skipsHiddenFiles]
-            )
-            for url in urls {
-                if let folderNumber = Int(url.lastPathComponent) {
-                    if (folderNumber >= lastCountSubFolders) {
-                        lastCountSubFolders = folderNumber+1
-                    }
-                }
-            }
-            logger.debug("lastCountSubFolders: \(lastCountSubFolders)")
-
-            return FlatFolderDescriptor(folderName: flatFolderPath, countSubFolders: lastCountSubFolders)
-        }
-        
-        throw FileNotFoundException.fileNotFound
-    }
-    
     override func exportFoldersFlat() throws {
         if exportOriginals {
             logger.info("export originals photos to \(inProgressPath)/\(originalsRelativePath)/\(flatRelativePath) folder")
@@ -86,15 +60,6 @@ class IncrementalPhotosExporter : PhotosExporter {
                 exportOriginals: false)
         }
     }
-    
-    func flatFolderIfExists(_ flatFolderPath: String) throws -> [FlatFolderDescriptor] {
-        if fileManager.fileExists(atPath: flatFolderPath) {
-            return [try initFlatFolderDescriptor(flatFolderPath: flatFolderPath)]
-        }
-
-        return []
-    }
-
     
     /**
      * Finish the filesystem structures; invariant:

@@ -11,12 +11,16 @@ import Foundation
 class FileSystemExportPlan : Plan {
 
     public var targetFolder: String?
-    
+    public var baseExportPath:String?
+
     override func toYaml(indent: Int) -> String {
         var result: String = ""
         result += super.toYaml(indent: indent)
         if let targetFolder = targetFolder {
             result += "targetFolder: \(targetFolder)\n".indent(indent)
+        }
+        if let baseExportPath = baseExportPath {
+            result += "baseExportPath: \(baseExportPath)\n".indent(indent)
         }
         return result
     }
@@ -25,8 +29,6 @@ class FileSystemExportPlan : Plan {
 
 class IncrementalFileSystemExportPlan : FileSystemExportPlan {
 
-    public var baseExportPath:String?
-
     override func getType() -> String {
         return "IncrementalFileSystemExport"
     }
@@ -34,9 +36,6 @@ class IncrementalFileSystemExportPlan : FileSystemExportPlan {
     override func toYaml(indent: Int) -> String {
         var result: String = ""
         result += super.toYaml(indent: indent)
-        if let baseExportPath = baseExportPath {
-            result += "baseExportPath: \(baseExportPath)\n".indent(indent)
-        }
         return result
     }
 

@@ -20,19 +20,38 @@ class SnapshotPhotosExporter : PhotosExporter {
     public var deleteFlatPath = true
     
     override func exportFoldersFlat() throws {
+        
         if exportOriginals {
             logger.info("export originals photos to \(inProgressPath)/\(originalsRelativePath)/\(flatRelativePath) folder")
+
+            var candidatesToLinkTo: [FlatFolderDescriptor] = []
+
+            if let baseExportPath = baseExportPath {
+                candidatesToLinkTo = try candidatesToLinkTo + flatFolderIfExists("\(baseExportPath)/\(originalsRelativePath)/\(flatRelativePath)")
+            }
+
             try exportFolderFlat(
                 flatPath: "\(inProgressPath)/\(originalsRelativePath)/\(flatRelativePath)",
-                candidatesToLinkTo: [],
+                candidatesToLinkTo: candidatesToLinkTo,
                 exportOriginals: true)
             
         }
         if exportCalculated {
             logger.info("export calculated photos to \(inProgressPath)/\(calculatedRelativePath)/\(flatRelativePath) folder")
+
+            var candidatesToLinkTo: [FlatFolderDescriptor] = []
+
+            if let baseExportPath = baseExportPath {
+                candidatesToLinkTo = try candidatesToLinkTo + flatFolderIfExists("\(baseExportPath)/\(calculatedRelativePath)/\(flatRelativePath)")
+            }
+
+            if exportOriginals {
+                candidatesToLinkTo = try candidatesToLinkTo + flatFolderIfExists("\(inProgressPath)/\(originalsRelativePath)/\(flatRelativePath)")
+            }
+
             try exportFolderFlat(
                 flatPath: "\(inProgressPath)/\(calculatedRelativePath)/\(flatRelativePath)",
-                candidatesToLinkTo: [FlatFolderDescriptor(folderName: "\(inProgressPath)/\(originalsRelativePath)/\(flatRelativePath)", countSubFolders: countSubFolders)],
+                candidatesToLinkTo: candidatesToLinkTo,
                 exportOriginals: false)
         }
     }

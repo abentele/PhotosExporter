@@ -91,12 +91,9 @@ class PreferencesReader {
 
                     if let plan = plan as? FileSystemExportPlan {
                         plan.targetFolder = planDict["targetFolder"]?.string
-                    }
-                    
-                    if let plan = plan as? IncrementalFileSystemExportPlan {
                         plan.baseExportPath = planDict["baseExportPath"]?.string
                     }
-
+                    
                     if let plan = plan as? SnapshotFileSystemExportPlan {
                         plan.deleteFlatPath = planDict["deleteFlatPath"]?.bool
                     }

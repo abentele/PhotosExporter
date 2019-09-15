@@ -55,9 +55,6 @@ class PhotosExporterFactory {
         if let plan = plan as? IncrementalFileSystemExportPlan {
             // TODO existence of targetFolder must be validated
             let incrementalPhotosExporter = IncrementalPhotosExporter(targetPath: plan.targetFolder!)
-            if let baseExportPath = plan.baseExportPath {
-                incrementalPhotosExporter.baseExportPath = baseExportPath
-            }
             photosExporter = incrementalPhotosExporter
         } else if let plan = plan as? SnapshotFileSystemExportPlan {
             // TODO existence of targetFolder must be validated
@@ -70,6 +67,11 @@ class PhotosExporterFactory {
             throw PhotosExporterFactoryError.unknownType
         }
 
+        if let plan = plan as? FileSystemExportPlan {
+            if let baseExportPath = plan.baseExportPath {
+                photosExporter.baseExportPath = baseExportPath
+            }
+        }
         photosExporter.exportMediaGroupFilter = exportMediaGroupFilter
         photosExporter.exportPhotosOfMediaGroupFilter = exportPhotosOfMediaGroupFilter
         photosExporter.exportMediaObjectFilter = exportMediaObjectFilter

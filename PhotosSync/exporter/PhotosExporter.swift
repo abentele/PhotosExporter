@@ -87,6 +87,8 @@ class PhotosExporter {
     var calculatedRelativePath = "Calculated"
     var flatRelativePath = ".flat"
     
+    public var baseExportPath:String?
+    
     private static var metadataReader: MetadataLoader?
     
     var statistics = Statistics()
@@ -487,6 +489,41 @@ class PhotosExporter {
     private func escapeFileName(_ fileName: String) -> String {
         return fileName.replacingOccurrences(of: "/", with: ", ")
     }
+    
+    func flatFolderIfExists(_ flatFolderPath: String) throws -> [FlatFolderDescriptor] {
+        if fileManager.fileExists(atPath: flatFolderPath) {
+            return [try initFlatFolderDescriptor(flatFolderPath: flatFolderPath)]
+        }
+        
+        return []
+    }
+    
+    func initFlatFolderDescriptor(flatFolderPath: String) throws -> FlatFolderDescriptor {
+        var lastCountSubFolders = 0
+        
+        if fileManager.fileExists(atPath: flatFolderPath) {
+            let urls = try fileManager.contentsOfDirectory(
+                at: URL(fileURLWithPath: flatFolderPath),
+                includingPropertiesForKeys: [.isDirectoryKey],
+                options: [.skipsHiddenFiles]
+            )
+            for url in urls {
+                if let folderNumber = Int(url.lastPathComponent) {
+                    if (folderNumber >= lastCountSubFolders) {
+                        lastCountSubFolders = folderNumber+1
+                    }
+                }
+            }
+            logger.debug("lastCountSubFolders: \(lastCountSubFolders)")
+            
+            return FlatFolderDescriptor(folderName: flatFolderPath, countSubFolders: lastCountSubFolders)
+        }
+        
+        throw FileNotFoundException.fileNotFound
+    }
+    
+
+
 
     
 }
