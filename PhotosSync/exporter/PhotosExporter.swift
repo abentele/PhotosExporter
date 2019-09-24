@@ -174,9 +174,12 @@ class PhotosExporter {
                 for (retryCounter, _) in [0...2].enumerated() {
                     do {
                         try fileManager.removeItem(atPath: inProgressPath)
-                    } catch {
+                    } catch let error as NSError {
                         if retryCounter == 2 {
+                            logger.error("Unable to remove directory \(inProgressPath): \(error) => abort")
                             throw error
+                        } else {
+                            logger.error("Unable to remove directory \(inProgressPath): \(error) => retry")
                         }
                     }
                 }
