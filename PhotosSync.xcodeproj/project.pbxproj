@@ -24,9 +24,15 @@
 		E186D26022354098000BFCED /* FlatFolderDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E186D25F22354098000BFCED /* FlatFolderDescriptor.swift */; };
 		E1A55240222AB2EF00F72499 /* String+extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1A5523F222AB2EF00F72499 /* String+extensions.swift */; };
 		E1B119262251DC8100B53693 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1B119252251DC8100B53693 /* Errors.swift */; };
+		E1B51C4623A63A7D009521B9 /* PhotosSqliteDAO.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1B51C4523A63A7D009521B9 /* PhotosSqliteDAO.swift */; };
+		E1B51C4923AE43B7009521B9 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1B51C4823AE43B7009521B9 /* Config.swift */; };
+		E1B51C4B23AE86AE009521B9 /* PhotosMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1B51C4A23AE86AE009521B9 /* PhotosMetadata.swift */; };
+		E1BA08F3236A323D00F51E24 /* PhotoCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1BA08F2236A323D00F51E24 /* PhotoCollection.swift */; };
+		E1BA08F5236A327600F51E24 /* PhotoObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1BA08F4236A327600F51E24 /* PhotoObject.swift */; };
+		E1BA08F7236A339800F51E24 /* MediaObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1BA08F6236A339800F51E24 /* MediaObject.swift */; };
+		E1BA08F9236A380000F51E24 /* PhotosMetadataReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1BA08F8236A380000F51E24 /* PhotosMetadataReader.swift */; };
 		E1CA31E222AE724100FF15D5 /* PhotosExporterFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1CA31E122AE724100FF15D5 /* PhotosExporterFactory.swift */; };
 		E1E43AF6217CDABA000E76DF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E43AF5217CDABA000E76DF /* AppDelegate.swift */; };
-		E1E43B10217CDB54000E76DF /* MetadataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E43B08217CDB53000E76DF /* MetadataLoader.swift */; };
 		E1E43B11217CDB54000E76DF /* IncrementalPhotosExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E43B09217CDB53000E76DF /* IncrementalPhotosExporter.swift */; };
 		E1E43B13217CDB54000E76DF /* MediaLibUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E43B0B217CDB53000E76DF /* MediaLibUtil.swift */; };
 		E1E43B1C217CDBE9000E76DF /* PhotosExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E43B17217CDB6A000E76DF /* PhotosExporter.swift */; };
@@ -67,12 +73,18 @@
 		E186D25F22354098000BFCED /* FlatFolderDescriptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlatFolderDescriptor.swift; sourceTree = "<group>"; };
 		E1A5523F222AB2EF00F72499 /* String+extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+extensions.swift"; sourceTree = "<group>"; };
 		E1B119252251DC8100B53693 /* Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
+		E1B51C4523A63A7D009521B9 /* PhotosSqliteDAO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosSqliteDAO.swift; sourceTree = "<group>"; };
+		E1B51C4823AE43B7009521B9 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
+		E1B51C4A23AE86AE009521B9 /* PhotosMetadata.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosMetadata.swift; sourceTree = "<group>"; };
+		E1BA08F2236A323D00F51E24 /* PhotoCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCollection.swift; sourceTree = "<group>"; };
+		E1BA08F4236A327600F51E24 /* PhotoObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoObject.swift; sourceTree = "<group>"; };
+		E1BA08F6236A339800F51E24 /* MediaObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaObject.swift; sourceTree = "<group>"; };
+		E1BA08F8236A380000F51E24 /* PhotosMetadataReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosMetadataReader.swift; sourceTree = "<group>"; };
 		E1CA31E122AE724100FF15D5 /* PhotosExporterFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosExporterFactory.swift; sourceTree = "<group>"; };
 		E1E43AF2217CDABA000E76DF /* PhotosSync.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PhotosSync.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E1E43AF5217CDABA000E76DF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E1E43AFC217CDABA000E76DF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E1E43B05217CDB29000E76DF /* Readme.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Readme.md; sourceTree = "<group>"; };
-		E1E43B08217CDB53000E76DF /* MetadataLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetadataLoader.swift; sourceTree = "<group>"; };
 		E1E43B09217CDB53000E76DF /* IncrementalPhotosExporter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IncrementalPhotosExporter.swift; sourceTree = "<group>"; };
 		E1E43B0B217CDB53000E76DF /* MediaLibUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaLibUtil.swift; sourceTree = "<group>"; };
 		E1E43B17217CDB6A000E76DF /* PhotosExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosExporter.swift; sourceTree = "<group>"; };
@@ -136,6 +148,7 @@
 			isa = PBXGroup;
 			children = (
 				E141B2882297D4D000577B70 /* Preferences.swift */,
+				E1B51C4823AE43B7009521B9 /* Config.swift */,
 				E141B2812297D34300577B70 /* Plan.swift */,
 				E141B2832297D36900577B70 /* FileSystemExportPlan.swift */,
 				E141B2862297D48A00577B70 /* GooglePhotosExportPlan.swift */,
@@ -151,6 +164,26 @@
 				E141B2A32299A50800577B70 /* Info.plist */,
 			);
 			path = PreferencesReaderTest;
+			sourceTree = "<group>";
+		};
+		E1B51C4723A64360009521B9 /* photolibrary-access */ = {
+			isa = PBXGroup;
+			children = (
+				E1BA08F8236A380000F51E24 /* PhotosMetadataReader.swift */,
+				E1B51C4523A63A7D009521B9 /* PhotosSqliteDAO.swift */,
+			);
+			path = "photolibrary-access";
+			sourceTree = "<group>";
+		};
+		E1BA08F1236A320100F51E24 /* photosmodel */ = {
+			isa = PBXGroup;
+			children = (
+				E1B51C4A23AE86AE009521B9 /* PhotosMetadata.swift */,
+				E1BA08F2236A323D00F51E24 /* PhotoCollection.swift */,
+				E1BA08F4236A327600F51E24 /* PhotoObject.swift */,
+				E1BA08F6236A339800F51E24 /* MediaObject.swift */,
+			);
+			path = photosmodel;
 			sourceTree = "<group>";
 		};
 		E1E43AE9217CDABA000E76DF = {
@@ -180,6 +213,8 @@
 			children = (
 				E141B2722297C57300577B70 /* ui */,
 				E141B2762297CE8700577B70 /* preferences */,
+				E1B51C4723A64360009521B9 /* photolibrary-access */,
+				E1BA08F1236A320100F51E24 /* photosmodel */,
 				E1E43B16217CDB62000E76DF /* exporter */,
 				E1E43B19217CDB8C000E76DF /* util */,
 				E1E43AFC217CDABA000E76DF /* Info.plist */,
@@ -196,7 +231,6 @@
 				E1E43B18217CDB6E000E76DF /* SnapshotPhotosExporter.swift */,
 				E1E43B09217CDB53000E76DF /* IncrementalPhotosExporter.swift */,
 				E1E43B0B217CDB53000E76DF /* MediaLibUtil.swift */,
-				E1E43B08217CDB53000E76DF /* MetadataLoader.swift */,
 				E186D25F22354098000BFCED /* FlatFolderDescriptor.swift */,
 			);
 			path = exporter;
@@ -339,25 +373,31 @@
 			files = (
 				E1E43B1C217CDBE9000E76DF /* PhotosExporter.swift in Sources */,
 				E1321E502229A71600046C00 /* StopWatch.swift in Sources */,
+				E1B51C4623A63A7D009521B9 /* PhotosSqliteDAO.swift in Sources */,
 				E1E43B1D217CDBE9000E76DF /* SnapshotPhotosExporter.swift in Sources */,
 				E1B119262251DC8100B53693 /* Errors.swift in Sources */,
 				E1A55240222AB2EF00F72499 /* String+extensions.swift in Sources */,
+				E1BA08F5236A327600F51E24 /* PhotoObject.swift in Sources */,
 				E141B27E2297D24A00577B70 /* Encoder.swift in Sources */,
 				E141B2712297C56900577B70 /* StatusMenuController.swift in Sources */,
 				E141B2892297D4D000577B70 /* Preferences.swift in Sources */,
 				E141B2AA2299A89800577B70 /* PreferencesReader.swift in Sources */,
+				E1BA08F3236A323D00F51E24 /* PhotoCollection.swift in Sources */,
 				E1E43AF6217CDABA000E76DF /* AppDelegate.swift in Sources */,
 				E1595FFD22A5978200CC97D6 /* MediaObjectFilter.swift in Sources */,
 				E1E43B13217CDB54000E76DF /* MediaLibUtil.swift in Sources */,
+				E1B51C4B23AE86AE009521B9 /* PhotosMetadata.swift in Sources */,
 				E186D26022354098000BFCED /* FlatFolderDescriptor.swift in Sources */,
+				E1BA08F9236A380000F51E24 /* PhotosMetadataReader.swift in Sources */,
+				E1B51C4923AE43B7009521B9 /* Config.swift in Sources */,
 				E1CA31E222AE724100FF15D5 /* PhotosExporterFactory.swift in Sources */,
 				E141B2802297D24C00577B70 /* YAML.swift in Sources */,
 				E1E43B11217CDB54000E76DF /* IncrementalPhotosExporter.swift in Sources */,
 				E141B2872297D48A00577B70 /* GooglePhotosExportPlan.swift in Sources */,
 				E141B2822297D34300577B70 /* Plan.swift in Sources */,
 				E141B2842297D36900577B70 /* FileSystemExportPlan.swift in Sources */,
-				E1E43B10217CDB54000E76DF /* MetadataLoader.swift in Sources */,
 				E141B27C2297D24800577B70 /* Decoder.swift in Sources */,
+				E1BA08F7236A339800F51E24 /* MediaObject.swift in Sources */,
 				E1E43B46217CE0C8000E76DF /* Logger.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -385,7 +425,7 @@
 					"@executable_path/../Frameworks",
 					"@loader_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				PRODUCT_BUNDLE_IDENTIFIER = com.bentele.PreferencesReaderTest;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -405,7 +445,7 @@
 					"@executable_path/../Frameworks",
 					"@loader_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				PRODUCT_BUNDLE_IDENTIFIER = com.bentele.PreferencesReaderTest;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -540,6 +580,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				PRODUCT_BUNDLE_IDENTIFIER = photossync.PhotosSync;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -558,6 +599,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				PRODUCT_BUNDLE_IDENTIFIER = photossync.PhotosSync;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;

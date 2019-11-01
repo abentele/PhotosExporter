@@ -11,13 +11,14 @@ import Foundation
 enum PreferencesReaderError: Error {
     case invalidYaml
     case invalidOrNoPlanType
+    case missingRequiredAttribute
 }
 
 class PreferencesReader {
     
     private static let logger = Logger(loggerName: "PreferencesReader", logLevel: .info)
     
-    static func readPreferencesFile() -> Preferences {
+    static func readPreferencesFile() throws -> Preferences {
         let preferencesFolderUrl = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!.appendingPathComponent("PhotosSync")
         do {
             let preferencesFileUrl = preferencesFolderUrl.appendingPathComponent("PhotosSync.yaml")
@@ -31,6 +32,7 @@ class PreferencesReader {
             }
         } catch {
             logger.error("Error reading preferences file: \(error)")
+            throw error
         }
         return Preferences()
     }
@@ -63,6 +65,12 @@ class PreferencesReader {
             throw PreferencesReaderError.invalidYaml
         }
         
+        if let configYaml = preferencesYaml["config"], let configDict = configYaml.dictionary, let photosLibraryPath = configDict["photosLibraryPath"]?.string {
+            preferences.config.photosLibraryPath = photosLibraryPath
+        } else {
+            throw PreferencesReaderError.missingRequiredAttribute
+        }
+
         if let plansYaml = preferencesYaml["plans"], let plansArray = plansYaml.array {
             for planYaml in plansArray {
                 let planDict = planYaml.dictionary!

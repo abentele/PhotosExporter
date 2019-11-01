@@ -51,15 +51,16 @@ class Statistics {
 class PhotosExporter {
     
     public let logger = Logger(loggerName: "PhotosExporter", logLevel: .info)
+    
+    let photosMetadata: PhotosMetadata
 
-    private static var rootMediaGroup: MLMediaGroup?
-    var exportMediaGroupFilter: ((MLMediaGroup) -> Bool) = { (MLMediaGroup) -> Bool in
+    var exportMediaGroupFilter: ((PhotoCollection) -> Bool) = { (PhotoCollection) -> Bool in
         return true
     }
-    var exportPhotosOfMediaGroupFilter: ((MLMediaGroup) -> Bool) = { (MLMediaGroup) -> Bool in
+    var exportPhotosOfMediaGroupFilter: ((PhotoCollection) -> Bool) = { (PhotoCollection) -> Bool in
         return true
     }
-    var exportMediaObjectFilter: ((MLMediaObject) -> Bool) = { (MLMediaObject) -> Bool in
+    var exportMediaObjectFilter: ((MediaObject) -> Bool) = { (MediaObject) -> Bool in
         return true
     }
     
@@ -75,7 +76,7 @@ class PhotosExporter {
     var exportCalculated = true
     // set to true if original photos should be exported
     var exportOriginals = true
-
+    
     let fileManager = FileManager.default
 
     // paths
@@ -89,12 +90,11 @@ class PhotosExporter {
     
     public var baseExportPath:String?
     
-    private static var metadataReader: MetadataLoader?
-    
     var statistics = Statistics()
 
-    init(targetPath: String) {
+    init(targetPath: String, photosMetadata: PhotosMetadata) {
         self.targetPath = targetPath
+        self.photosMetadata = photosMetadata
     }
     
     func exportPhotos() {
@@ -104,18 +104,12 @@ class PhotosExporter {
         }
         
         do {
-            // initialize metadata only once to static member, to be able to use multiple instances of PhotosExporter without loading the metadata multiple times
-            if PhotosExporter.rootMediaGroup == nil {
-                PhotosExporter.rootMediaGroup = MetadataLoader().loadMetadata()
-            }
-            
-            let mediaObjects = PhotosExporter.rootMediaGroup!.mediaObjects
-            if (mediaObjects == nil || mediaObjects!.count == 0) {
+            if (photosMetadata.allMediaObjects.count == 0) {
                 throw PhotosExporterError.noMediaObjects
             }
             
             // use a subfolder for max. ~6000 files
-            self.countSubFolders = Int(mediaObjects!.count / 6000)
+            self.countSubFolders = Int(photosMetadata.allMediaObjects.count / 6000)
             logger.debug("countSubFolders: \(countSubFolders)")
             
             let stopWatch = StopWatch("Export to \(targetPath)", LogLevel.debug, addFileSizes: false)
@@ -139,18 +133,18 @@ class PhotosExporter {
         if exportOriginals {
             logger.info("export originals albums folders")
             try exportFoldersRecursive(
-                mediaGroup: PhotosExporter.rootMediaGroup!,
+                photoCollection: photosMetadata.rootCollection,
                 flatPath: "\(inProgressPath)/\(originalsRelativePath)/\(flatRelativePath)",
-                targetPath: "\(inProgressPath)/\(originalsRelativePath)/\(escapeFileName(PhotosExporter.rootMediaGroup!.name!))",
+                targetPath: "\(inProgressPath)/\(originalsRelativePath)/\(escapeFileName(photosMetadata.rootCollection.name))",
                 exportOriginals: true)
             
         }
         if exportCalculated {
             logger.info("export calculated albums folders")
             try exportFoldersRecursive(
-                mediaGroup: PhotosExporter.rootMediaGroup!,
+                photoCollection: photosMetadata.rootCollection,
                 flatPath: "\(inProgressPath)/\(calculatedRelativePath)/\(flatRelativePath)",
-                targetPath: "\(inProgressPath)/\(calculatedRelativePath)/\(escapeFileName(PhotosExporter.rootMediaGroup!.name!))",
+                targetPath: "\(inProgressPath)/\(calculatedRelativePath)/\(escapeFileName(photosMetadata.rootCollection.name))",
                 exportOriginals: false)
         }
         
@@ -199,16 +193,19 @@ class PhotosExporter {
         logger.info("Finish export")
     }
     
-    private func sourceUrlOfMediaObject(mediaObject: MLMediaObject, exportOriginals: Bool) -> URL? {
+    private func sourceUrlOfMediaObject(mediaObject: MediaObject, exportOriginals: Bool) -> URL? {
         var sourceUrl: URL?
+        
         if (exportOriginals) {
-            if let originalUrl = mediaObject.originalURL {
+            if let originalUrl = mediaObject.originalUrl {
                 sourceUrl = originalUrl
-            } else if let url = mediaObject.url {
+            } else if let url = mediaObject.calculatedUrl {
                 sourceUrl = url
             }
         } else {
-            if let url = mediaObject.url {
+            if let url = mediaObject.calculatedUrl {
+                sourceUrl = url
+            } else if let url = mediaObject.originalUrl {
                 sourceUrl = url
             }
         }
@@ -217,9 +214,9 @@ class PhotosExporter {
     
     let stopWatchCheckFileSize = StopWatch("check file size", LogLevel.info, addFileSizes: false)
 
-    private func getLinkToUrl(candidatesToLinkTo: [FlatFolderDescriptor], mediaObject: MLMediaObject, sourceUrl: URL) throws -> URL? {
+    private func getLinkToUrl(candidatesToLinkTo: [FlatFolderDescriptor], mediaObject: MediaObject, sourceUrl: URL) throws -> URL? {
         for candidateToLinkTo in candidatesToLinkTo {
-            let candidateToLinkToUrl = URL.init(fileURLWithPath: getFlatPath(candidateToLinkTo, mediaObject, pathExtension: sourceUrl.pathExtension))
+            let candidateToLinkToUrl = URL(fileURLWithPath: getFlatPath(candidateToLinkTo, mediaObject, pathExtension: sourceUrl.pathExtension))
             if fileManager.fileExists(atPath: candidateToLinkToUrl.path) {
                 // only minimal file comparison by file size for performance reasons! (this is sufficient for originals, and for important changes of calculated images; may not be sufficient for changes of image and video headers, which can have static sizes)
                 stopWatchCheckFileSize.start()
@@ -246,9 +243,8 @@ class PhotosExporter {
 
     func exportFolderFlat(flatPath: String, candidatesToLinkTo: [FlatFolderDescriptor], exportOriginals: Bool) throws {
         var containsFotosToExport = false;
-        let mediaObjects = PhotosExporter.rootMediaGroup!.mediaObjects!
         stopWatchExportFolderFlatScanMediaObjects.start()
-        for mediaObject in mediaObjects {
+        for mediaObject in photosMetadata.allMediaObjects {
             if exportMediaObjectFilter(mediaObject) {
                 containsFotosToExport = true
                 break
@@ -272,7 +268,7 @@ class PhotosExporter {
             
             var index = 1
             stopWatchMediaObjectIteration.start()
-            for mediaObject in mediaObjects {
+            for mediaObject in photosMetadata.allMediaObjects {
                 stopWatchMediaObjectIteration.stop()
 
                 if exportMediaObjectFilter(mediaObject) {
@@ -283,7 +279,7 @@ class PhotosExporter {
                         let sourceUrl = sourceUrlOfMediaObject(mediaObject: mediaObject, exportOriginals: exportOriginals)
                         
                         if let sourceUrl = sourceUrl {
-                            let targetUrl = URL.init(fileURLWithPath: getFlatPath(FlatFolderDescriptor(folderName: flatPath, countSubFolders: countSubFolders), mediaObject, pathExtension: sourceUrl.pathExtension))
+                            let targetUrl = URL(fileURLWithPath: getFlatPath(FlatFolderDescriptor(folderName: flatPath, countSubFolders: countSubFolders), mediaObject, pathExtension: sourceUrl.pathExtension))
                             if !fileManager.fileExists(atPath: targetUrl.path) {
                                 let linkToUrl = try getLinkToUrl(candidatesToLinkTo: candidatesToLinkTo, mediaObject: mediaObject, sourceUrl: sourceUrl)
                                 
@@ -302,8 +298,7 @@ class PhotosExporter {
                                 } else {
                                     try copyOrLinkFileInPhotosLibrary(sourceUrl: sourceUrl, targetUrl: targetUrl)
                                     
-                                    let fotoDateAsTimerInterval = mediaObject.attributes["DateAsTimerInterval"] as! TimeInterval
-                                    let fotoDate = Date(timeIntervalSinceReferenceDate: fotoDateAsTimerInterval)
+                                    let fotoDate = mediaObject.creationDate!
                                     let attributes = [FileAttributeKey.modificationDate : fotoDate]
                                     stopWatchFileManagerSetAttributes.start()
                                     do {
@@ -315,10 +310,12 @@ class PhotosExporter {
                                     }
                                     stopWatchFileManagerSetAttributes.stop()
                                 }
+                                
+                                try setTagsOnFile(mediaObject: mediaObject, targetUrl: targetUrl)
                             }
                         }
                         else {
-                            logger.warn("mediaObject has no url")
+                            logger.warn("mediaObject has no url: \(mediaObject)")
                         }
                     }
                     
@@ -330,6 +327,13 @@ class PhotosExporter {
             
             stopWatchCopyMediaObject.stop()
         }
+    }
+    
+    func setTagsOnFile(mediaObject: MediaObject, targetUrl: URL) throws {
+        // remark: always set tags, not configurable => because the files are heavily linked with hard links, it would lead to an inconsistent state if one plan would export tags and the others not
+        // workaround: API of URL doesn't allow to set tags => use NSURL
+        let url = NSURL(fileURLWithPath: targetUrl.path)
+        try url.setResourceValues([URLResourceKey.tagNamesKey : mediaObject.keywords])
     }
     
     let stopWatchCopyOrLinkFileInPhotosLibrary = StopWatch("fileManager.copyItem", LogLevel.info, addFileSizes: true)
@@ -353,15 +357,15 @@ class PhotosExporter {
         }
     }
     
-    private func exportFoldersRecursive(mediaGroup: MLMediaGroup, flatPath: String, targetPath: String, exportOriginals: Bool) throws {
+    private func exportFoldersRecursive(photoCollection: PhotoCollection, flatPath: String, targetPath: String, exportOriginals: Bool) throws {
         let flatFolder = FlatFolderDescriptor(folderName: flatPath, countSubFolders: countSubFolders)
         
         // autorelease periodically
         try autoreleasepool {
-            if exportMediaGroupFilter(mediaGroup) {
+            if exportMediaGroupFilter(photoCollection) {
                 var containsFotosToExport = false;
-                if exportPhotosOfMediaGroupFilter(mediaGroup) {
-                    for mediaObject in mediaGroup.mediaObjects! {
+                if exportPhotosOfMediaGroupFilter(photoCollection) {
+                    for mediaObject in photoCollection.mediaObjects {
                         if exportMediaObjectFilter(mediaObject) {
                             containsFotosToExport = true
                             break
@@ -379,8 +383,8 @@ class PhotosExporter {
                         throw error
                     }
                     
-                    if exportPhotosOfMediaGroupFilter(mediaGroup) {
-                        for mediaObject in mediaGroup.mediaObjects! {
+                    if exportPhotosOfMediaGroupFilter(photoCollection) {
+                        for mediaObject in photoCollection.mediaObjects {
                             if exportMediaObjectFilter(mediaObject) {
                                 try exportFoto(mediaObject: mediaObject, flatFolder: flatFolder, targetPath: targetPath, exportOriginals: exportOriginals)
                             }
@@ -388,12 +392,13 @@ class PhotosExporter {
                     }
                 }
                 
-                for childMediaGroup in mediaGroup.childGroups! {
-                    var childTargetPath: String = "\(targetPath)/\(escapeFileName(childMediaGroup.name!))"
-                    if childMediaGroup.typeIdentifier == "com.apple.Photos.SmartAlbum" {
-                        childTargetPath = "\(childTargetPath) (Smart album)"
-                    }
-                    try exportFoldersRecursive(mediaGroup: childMediaGroup, flatPath: flatPath, targetPath: childTargetPath, exportOriginals: exportOriginals)
+                for childCollection in photoCollection.childCollections {
+                    let childTargetPath: String = "\(targetPath)/\(escapeFileName(childCollection.name))"
+                    // TODO
+//                    if childCollection.typeIdentifier == "com.apple.Photos.SmartAlbum" {
+//                        childTargetPath = "\(childTargetPath) (Smart album)"
+//                    }
+                    try exportFoldersRecursive(photoCollection: childCollection, flatPath: flatPath, targetPath: childTargetPath, exportOriginals: exportOriginals)
                 }
                 
                 
@@ -401,18 +406,18 @@ class PhotosExporter {
         }
     }
     
-    private func exportFoto(mediaObject: MLMediaObject, flatFolder: FlatFolderDescriptor, targetPath: String, exportOriginals: Bool) throws {
+    private func exportFoto(mediaObject: MediaObject, flatFolder: FlatFolderDescriptor, targetPath: String, exportOriginals: Bool) throws {
         let sourceUrl = sourceUrlOfMediaObject(mediaObject: mediaObject, exportOriginals: exportOriginals)
         if let sourceUrl = sourceUrl {
-            let linkTargetUrl = URL.init(fileURLWithPath: getFlatPath(flatFolder, mediaObject, pathExtension: sourceUrl.pathExtension))
+            let linkTargetUrl = URL(fileURLWithPath: getFlatPath(flatFolder, mediaObject, pathExtension: sourceUrl.pathExtension))
             
             // get unique target name
             let fotoName = getFotoName(mediaObject: mediaObject, sourceUrl: sourceUrl)
-            var targetUrl = URL.init(fileURLWithPath: "\(targetPath)/\(fotoName).\(sourceUrl.pathExtension)")
+            var targetUrl = URL(fileURLWithPath: "\(targetPath)/\(fotoName).\(sourceUrl.pathExtension)")
             logger.debug("Export foto: \(fotoName) to \(targetUrl)")
             var i = 1
             while fileManager.fileExists(atPath: targetUrl.path) {
-                targetUrl = URL.init(fileURLWithPath: "\(targetPath)/\(fotoName) (\(i)).\(sourceUrl.pathExtension)")
+                targetUrl = URL(fileURLWithPath: "\(targetPath)/\(fotoName) (\(i)).\(sourceUrl.pathExtension)")
                 i += 1
             }
             
@@ -427,31 +432,35 @@ class PhotosExporter {
             statistics.countLinkedFiles += 1
             stopWatchFileManagerLinkItem.stop()
         } else {
-            logger.warn("Source URL of mediaObject unknown: \(mediaObject.name!)")
+            logger.warn("Source URL of mediaObject unknown: \(mediaObject)")
         }
     }
     
-    private func getFlatPath(_ flatPath: FlatFolderDescriptor, _ mediaObject: MLMediaObject, pathExtension: String) -> String {
+    private func getFlatPath(_ flatPath: FlatFolderDescriptor, _ mediaObject: MediaObject, pathExtension: String) -> String {
         if flatPath.countSubFolders > 0 {
-            return "\(flatPath.folderName)/\(abs(mediaObject.identifier.djb2hash) % flatPath.countSubFolders)/\(mediaObject.identifier).\(pathExtension)"
+            return "\(flatPath.folderName)/\(abs(mediaObject.zuuid().djb2hash) % flatPath.countSubFolders)/\(mediaObject.zuuid()).\(pathExtension)"
         } else {
-            return "\(flatPath.folderName)/\(mediaObject.identifier).\(pathExtension)"
+            return "\(flatPath.folderName)/\(mediaObject.zuuid()).\(pathExtension)"
         }
     }
     
-    private func getFotoName(mediaObject: MLMediaObject, sourceUrl: URL) -> String {
+    private func getFotoName(mediaObject: MediaObject, sourceUrl: URL) -> String {
         let exportNoDate = hasKeyword(mediaObject: mediaObject, keyword: "export-no-date")
         
         var fotoName = ""
-        if let name = mediaObject.name {
+        if let name = mediaObject.title {
             fotoName = name
         } else if (exportNoDate) {
-            fotoName = sourceUrl.lastPathComponent
+            fotoName = mediaObject.originalFilename!
+            //fotoName = sourceUrl.lastPathComponent
         }
         
-        // remove extension if exists
-        if fotoName.hasSuffix("." + sourceUrl.pathExtension) {
-            fotoName = String(fotoName.prefix(upTo: fotoName.index(fotoName.endIndex, offsetBy: -sourceUrl.pathExtension.count-1)))
+        // remove file extension
+        let extensions: Set = [sourceUrl.pathExtension, mediaObject.originalUrl!.pathExtension, "jpg", "jpeg", "cr2", "png", "tif", "tiff", "heic", "mov"]
+        for ext in extensions {
+            if fotoName.lowercased().hasSuffix("." + ext.lowercased()) {
+                fotoName = String(fotoName.prefix(upTo: fotoName.index(fotoName.endIndex, offsetBy: -ext.count-1)))
+            }
         }
         
         // ignore filenames generated by Photos
@@ -464,8 +473,7 @@ class PhotosExporter {
         if !exportNoDate {
             
             // get date of foto
-            let fotoDateAsTimerInterval = mediaObject.attributes["DateAsTimerInterval"] as! TimeInterval
-            let fotoDate = Date(timeIntervalSinceReferenceDate: fotoDateAsTimerInterval)
+            let fotoDate = mediaObject.creationDate!
             
             let dateFormatter1 = DateFormatter()
             dateFormatter1.dateFormat = "yyyy-MM-dd_HH-mm-ss"
@@ -525,12 +533,4 @@ class PhotosExporter {
         throw FileNotFoundException.fileNotFound
     }
     
-
-
-
-    
 }
-
-
-
-

@@ -3,12 +3,125 @@
    version = "1.0">
    <ContextStates>
       <ContextState
+         contextName = "PhotosMetadataReader.fileUrlStringToURL(fileUrlString:):PhotosMetadataReader.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "url.description()">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "PhotosSqliteDAO.readPhotoDetails(mediaObject:):PhotosSqliteDAO.swift">
+      </ContextState>
+      <ContextState
+         contextName = "PhotosExporter.sourceUrlOfMediaObject(mediaObject:exportOriginals:):PhotosExporter.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "mediaObject.originalUrl">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "PhotosReader.readCollection(fetchResult:targetCollection:dispatchGroup:):PhotosReader.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "assetResource.type">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "PhotosMetadataReader.loadAdditionalDataFromSqliteDatabase(_:):PhotosMetadataReader.swift">
+      </ContextState>
+      <ContextState
+         contextName = "static PreferencesReader.preferencesFromYaml(yamlStr:):PreferencesReader.swift">
+      </ContextState>
+      <ContextState
          contextName = "PhotosExporter.recreateInProgressFolder():PhotosExporter.swift">
          <PersistentStrings>
             <PersistentString
                value = "inProgressPath">
             </PersistentString>
          </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "PhotosMetadataReader.loadKeywords(_:):PhotosMetadataReader.swift">
+      </ContextState>
+      <ContextState
+         contextName = "PhotosExporter.exportFolderFlat(flatPath:candidatesToLinkTo:exportOriginals:):PhotosExporter.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "mediaObject.name">
+            </PersistentString>
+            <PersistentString
+               value = "MLMediaObjectKeywordsKey">
+            </PersistentString>
+            <PersistentString
+               value = "mediaObject.attributes">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "closure #1 in PhotosMetadataReader.readCollection(fetchResult:targetCollection:dispatchGroup:):PhotosMetadataReader.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "contentEditingInput!.fullSizeImageURL">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "PhotosMetadataReader.getStringProperty(object:propertyName:):PhotosMetadataReader.swift">
+      </ContextState>
+      <ContextState
+         contextName = "closure #1 in PhotosExporter.exportFolderFlat(flatPath:candidatesToLinkTo:exportOriginals:):PhotosExporter.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "targetUrl.description()">
+            </PersistentString>
+            <PersistentString
+               value = "sourceUrl.description()">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "PhotosExporter.getFotoName(mediaObject:sourceUrl:):PhotosExporter.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "sourceUrl.pathExtension">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "PhotosMetadataReader.copyPhotosDatabase():PhotosMetadataReader.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "paths[0].description()">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "AppDelegate.applicationDidFinishLaunching(_:):AppDelegate.swift">
+      </ContextState>
+      <ContextState
+         contextName = "PhotosMetadataReader.readCollection(fetchResult:targetCollection:dispatchGroup:):PhotosMetadataReader.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "assetResources.count">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "PhotosSqliteDAO.readKeywords(mediaObject:):PhotosSqliteDAO.swift">
+      </ContextState>
+      <ContextState
+         contextName = "hasKeyword(mediaObject:keyword:):MediaLibUtil.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "mediaObject.attributes">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "PhotosExporter.exportFoto(mediaObject:flatFolder:targetPath:exportOriginals:):PhotosExporter.swift">
       </ContextState>
    </ContextStates>
 </VariablesViewState>

@@ -12,12 +12,7 @@ import MediaLibrary
 /**
  * Checks if a specific keyword is assigned to the mediaObject
  */
-func hasKeyword(mediaObject: MLMediaObject, keyword: String) -> Bool {
-    if let keywordAttribute = mediaObject.attributes["keywordNamesAsString"] {
-        let keywordsStr = keywordAttribute as! String
-        let keywords = keywordsStr.components(separatedBy: ",").map { word in word.trimmingCharacters(in: .whitespacesAndNewlines) }
-        return keywords.contains(keyword)
-    }
-    return false
+func hasKeyword(mediaObject: MediaObject, keyword: String) -> Bool {
+    return mediaObject.keywords.contains(keyword)
 }
 

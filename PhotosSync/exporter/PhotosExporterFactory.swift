@@ -15,20 +15,21 @@ enum PhotosExporterFactoryError: Error {
 
 
 class PhotosExporterFactory {
-    static func createPhotosExporter(plan: Plan) throws -> PhotosExporter {
+    static func createPhotosExporter(plan: Plan, photosMetadata: PhotosMetadata) throws -> PhotosExporter {
         // define which media groups should be exported
-        let exportMediaGroupFilter = { (mediaGroup: MLMediaGroup) -> Bool in
+        let exportMediaGroupFilter = { (photoCollection: PhotoCollection) -> Bool in
             // export all media groups
             return true
         }
 
-        let exportPhotosOfMediaGroupFilter = { (mediaGroup: MLMediaGroup) -> Bool in
-            return plan.mediaObjectFilter.mediaGroupTypeWhiteList.contains(mediaGroup.typeIdentifier) &&
-                !("com.apple.Photos.FacesAlbum" == mediaGroup.typeIdentifier && mediaGroup.parent?.typeIdentifier == "com.apple.Photos.AlbumsGroup") &&
-                !("com.apple.Photos.PlacesAlbum" == mediaGroup.typeIdentifier && mediaGroup.parent?.typeIdentifier == "com.apple.Photos.RootGroup")
+        let exportPhotosOfMediaGroupFilter = { (photoCollection: PhotoCollection) -> Bool in
+//            return plan.mediaObjectFilter.mediaGroupTypeWhiteList.contains(photoCollection.typeIdentifier) &&
+//                !("com.apple.Photos.FacesAlbum" == mediaGroup.typeIdentifier && mediaGroup.parent?.typeIdentifier == "com.apple.Photos.AlbumsGroup") &&
+//                !("com.apple.Photos.PlacesAlbum" == mediaGroup.typeIdentifier && mediaGroup.parent?.typeIdentifier == "com.apple.Photos.RootGroup")
+            return true
         }
         
-        let exportMediaObjectFilter: ((MLMediaObject) -> Bool) = { (mediaObject) -> Bool in
+        let exportMediaObjectFilter: ((MediaObject) -> Bool) = { (mediaObject) -> Bool in
             var result = true
             if plan.mediaObjectFilter.keywordWhiteList.count > 0 {
                 result = false
@@ -54,11 +55,11 @@ class PhotosExporterFactory {
 
         if let plan = plan as? IncrementalFileSystemExportPlan {
             // TODO existence of targetFolder must be validated
-            let incrementalPhotosExporter = IncrementalPhotosExporter(targetPath: plan.targetFolder!)
+            let incrementalPhotosExporter = IncrementalPhotosExporter(targetPath: plan.targetFolder!, photosMetadata: photosMetadata)
             photosExporter = incrementalPhotosExporter
         } else if let plan = plan as? SnapshotFileSystemExportPlan {
             // TODO existence of targetFolder must be validated
-            let snapshotPhotosExporter = SnapshotPhotosExporter(targetPath: plan.targetFolder!)
+            let snapshotPhotosExporter = SnapshotPhotosExporter(targetPath: plan.targetFolder!, photosMetadata: photosMetadata)
             if let deleteFlatPath = plan.deleteFlatPath {
                 snapshotPhotosExporter.deleteFlatPath = deleteFlatPath
             }
