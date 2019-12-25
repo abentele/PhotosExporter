@@ -12,7 +12,7 @@ class MediaObject : PhotoObject {
     var originalName: String?
     var originalFilename: String?
     var originalUrl: URL?
-    var calculatedUrl: URL?
+    var currentUrl: URL?
     var creationDate: Date?
     var title: String?
     var keywords: [String] = []
@@ -31,8 +31,8 @@ class MediaObject : PhotoObject {
         if let originalUrl = originalUrl {
             print("originalUrl: \(originalUrl)".indent(indent + 2))
         }
-        if let calculatedUrl = calculatedUrl {
-            print("calculatedUrl: \(calculatedUrl)".indent(indent + 2))
+        if let currentUrl = currentUrl {
+            print("currentUrl: \(currentUrl)".indent(indent + 2))
         }
         if let creationDate = creationDate {
             print("creationDate: \(creationDate)".indent(indent + 2))

@@ -72,8 +72,8 @@ class PhotosExporter {
      */
     var countSubFolders: Int = 0
     
-    // set to true if calculated photos should be exported
-    var exportCalculated = true
+    // set to true if current photos should be exported
+    var exportCurrent = true
     // set to true if original photos should be exported
     var exportOriginals = true
     
@@ -85,7 +85,7 @@ class PhotosExporter {
         return "\(targetPath)/InProgress"
     }
     var originalsRelativePath = "Originals"
-    var calculatedRelativePath = "Calculated"
+    var currentRelativePath = "Current"
     var flatRelativePath = ".flat"
     
     public var baseExportPath:String?
@@ -131,7 +131,7 @@ class PhotosExporter {
         try exportFoldersFlat()
         
         if exportOriginals {
-            logger.info("export originals albums folders")
+            logger.info("export albums folders - original assets")
             try exportFoldersRecursive(
                 photoCollection: photosMetadata.rootCollection,
                 flatPath: "\(inProgressPath)/\(originalsRelativePath)/\(flatRelativePath)",
@@ -139,12 +139,12 @@ class PhotosExporter {
                 exportOriginals: true)
             
         }
-        if exportCalculated {
-            logger.info("export calculated albums folders")
+        if exportCurrent {
+            logger.info("export albums folders - current assets")
             try exportFoldersRecursive(
                 photoCollection: photosMetadata.rootCollection,
-                flatPath: "\(inProgressPath)/\(calculatedRelativePath)/\(flatRelativePath)",
-                targetPath: "\(inProgressPath)/\(calculatedRelativePath)/\(escapeFileName(photosMetadata.rootCollection.name))",
+                flatPath: "\(inProgressPath)/\(currentRelativePath)/\(flatRelativePath)",
+                targetPath: "\(inProgressPath)/\(currentRelativePath)/\(escapeFileName(photosMetadata.rootCollection.name))",
                 exportOriginals: false)
         }
         
@@ -199,11 +199,11 @@ class PhotosExporter {
         if (exportOriginals) {
             if let originalUrl = mediaObject.originalUrl {
                 sourceUrl = originalUrl
-            } else if let url = mediaObject.calculatedUrl {
+            } else if let url = mediaObject.currentUrl {
                 sourceUrl = url
             }
         } else {
-            if let url = mediaObject.calculatedUrl {
+            if let url = mediaObject.currentUrl {
                 sourceUrl = url
             } else if let url = mediaObject.originalUrl {
                 sourceUrl = url
@@ -218,7 +218,7 @@ class PhotosExporter {
         for candidateToLinkTo in candidatesToLinkTo {
             let candidateToLinkToUrl = URL(fileURLWithPath: getFlatPath(candidateToLinkTo, mediaObject, pathExtension: sourceUrl.pathExtension))
             if fileManager.fileExists(atPath: candidateToLinkToUrl.path) {
-                // only minimal file comparison by file size for performance reasons! (this is sufficient for originals, and for important changes of calculated images; may not be sufficient for changes of image and video headers, which can have static sizes)
+                // only minimal file comparison by file size for performance reasons! (this is sufficient for originals, and for important changes of current images; may not be sufficient for changes of image and video headers, which can have static sizes)
                 stopWatchCheckFileSize.start()
                 let candidateToLinkToAttributes = try fileManager.attributesOfItem(atPath: candidateToLinkToUrl.path)
                 let sourceAttributes = try fileManager.attributesOfItem(atPath: sourceUrl.path)

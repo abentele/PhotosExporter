@@ -94,7 +94,7 @@ class PreferencesReader {
                     if let enabledYaml = planDict["enabled"]?.bool {
                         plan.enabled = enabledYaml
                     }
-                    plan.exportCalculated = planDict["exportCalculated"]?.bool
+                    plan.exportCurrent = planDict["exportCurrent"]?.bool
                     plan.exportOriginals = planDict["exportOriginals"]?.bool
 
                     if let plan = plan as? FileSystemExportPlan {

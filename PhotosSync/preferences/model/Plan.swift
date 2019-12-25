@@ -11,7 +11,7 @@ import Foundation
 class Plan {
     public var enabled: Bool = true
     public var name: String?
-    public var exportCalculated: Bool?
+    public var exportCurrent: Bool?
     public var exportOriginals: Bool?
     public var mediaObjectFilter = MediaObjectFilter()
 
@@ -31,8 +31,8 @@ class Plan {
         if let name = name {
             result += "name: \(name)\n".indent(indent)
         }
-        if let exportCalculated = exportCalculated {
-            result += "exportCalculated: \(exportCalculated)\n".indent(indent)
+        if let exportCurrent = exportCurrent {
+            result += "exportCurrent: \(exportCurrent)\n".indent(indent)
         }
         if let exportOriginals = exportOriginals {
             result += "exportOriginals: \(exportOriginals)\n".indent(indent)

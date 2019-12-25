@@ -39,23 +39,23 @@ class IncrementalPhotosExporter : PhotosExporter {
                 exportOriginals: true)
         }
         
-        if exportCalculated {
-            logger.info("export calculated photos to \(inProgressPath)/\(calculatedRelativePath)/\(flatRelativePath) folder")
+        if exportCurrent {
+            logger.info("export current photos to \(inProgressPath)/\(currentRelativePath)/\(flatRelativePath) folder")
 
             var candidatesToLinkTo: [FlatFolderDescriptor] = []
 
             if let baseExportPath = baseExportPath {
-                candidatesToLinkTo = try candidatesToLinkTo + flatFolderIfExists("\(baseExportPath)/\(calculatedRelativePath)/\(flatRelativePath)")
+                candidatesToLinkTo = try candidatesToLinkTo + flatFolderIfExists("\(baseExportPath)/\(currentRelativePath)/\(flatRelativePath)")
             }
             
-            candidatesToLinkTo = try candidatesToLinkTo + flatFolderIfExists("\(latestPath)/\(calculatedRelativePath)/\(flatRelativePath)")
+            candidatesToLinkTo = try candidatesToLinkTo + flatFolderIfExists("\(latestPath)/\(currentRelativePath)/\(flatRelativePath)")
 
             if exportOriginals {
                 candidatesToLinkTo = try candidatesToLinkTo + flatFolderIfExists("\(inProgressPath)/\(originalsRelativePath)/\(flatRelativePath)")
             }
             
             try exportFolderFlat(
-                flatPath: "\(inProgressPath)/\(calculatedRelativePath)/\(flatRelativePath)",
+                flatPath: "\(inProgressPath)/\(currentRelativePath)/\(flatRelativePath)",
                 candidatesToLinkTo: candidatesToLinkTo,
                 exportOriginals: false)
         }

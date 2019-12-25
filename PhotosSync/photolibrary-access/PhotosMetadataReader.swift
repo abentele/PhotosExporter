@@ -150,8 +150,8 @@ class PhotosMetadataReader {
                     case PHAssetResourceType.fullSizePhoto,
                          PHAssetResourceType.fullSizeVideo,
                          PHAssetResourceType.fullSizePairedVideo:
-                        mediaObject.calculatedUrl = URL(string: getStringProperty(object: assetResource, propertyName: "fileURL"));
-                        //                         self.logger.info("Asset calculatedUrl: \(mediaObject.calculatedUrl)")
+                        mediaObject.currentUrl = URL(string: getStringProperty(object: assetResource, propertyName: "fileURL"));
+                        //                         self.logger.info("Asset currentUrl: \(mediaObject.currentUrl)")
                         break;
                     case PHAssetResourceType.alternatePhoto:
                         // prefer to export raw image instead of jpeg

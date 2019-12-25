@@ -76,8 +76,8 @@ class PhotosExporterFactory {
         photosExporter.exportMediaGroupFilter = exportMediaGroupFilter
         photosExporter.exportPhotosOfMediaGroupFilter = exportPhotosOfMediaGroupFilter
         photosExporter.exportMediaObjectFilter = exportMediaObjectFilter
-        if let exportCalculated = plan.exportCalculated {
-            photosExporter.exportCalculated = exportCalculated
+        if let exportCurrent = plan.exportCurrent {
+            photosExporter.exportCurrent = exportCurrent
         }
         if let exportOriginals = plan.exportOriginals {
             photosExporter.exportOriginals = exportOriginals
