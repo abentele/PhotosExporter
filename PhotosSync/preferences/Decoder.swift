@@ -55,7 +55,6 @@ public struct UniYAML {
 					continue
 				}
 				var key: String?
-				var anchor: String?
 				var tag: String?
 				var value: String?
 				switch t {
@@ -145,7 +144,7 @@ public struct UniYAML {
 					case "|", ">":
 						value = try parseMultilineValue(stream, index: &index, line: &lines, indent: indent, folded: (tt == ">"))
 					default:
-						(anchor, tag, value) = parseValue(tt)
+						(tag, value) = parseValue(tt)
 					}
 					token = nil
 				default:
@@ -187,11 +186,11 @@ public struct UniYAML {
 							case "|", ">":
 								value = try parseMultilineValue(stream, index: &index, line: &lines, indent: indent, folded: (tt == ">"))
 							default:
-								(anchor, tag, value) = parseValue(tt)
+								(tag, value) = parseValue(tt)
 							}
 						}
 					} else if let f = flow.last, f == "]" {
-						(anchor, tag, value) = parseValue(t)
+						(tag, value) = parseValue(t)
 					} else if flow.isEmpty, stack.last?.type == .pending {
 						let last = stack.count - 1
 						guard indent > stack[last].indent else {
@@ -372,11 +371,10 @@ public struct UniYAML {
 		return (location.lowerBound == location.upperBound) ? nil:String(stream[location])
 	}
 
-	static private func parseValue(_ string: String?) -> (String?, String?, String?) {
-		let anchor: String? = nil // TODO
+	static private func parseValue(_ string: String?) -> (String?, String?) {
 		let tag: String? = nil // TODO
 		let value = dequote(string)
-		return (anchor, tag, value)
+		return (tag, value)
 	}
 
 	static private func parseMultilineValue(_ stream: String, index: inout String.Index, line: inout Int, indent: Int, folded: Bool) throws -> String {
