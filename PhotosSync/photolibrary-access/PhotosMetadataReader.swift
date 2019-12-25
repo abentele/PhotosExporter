@@ -51,6 +51,7 @@ class PhotosMetadataReader {
                 mediaObject.title = title
             }
             
+            // originalUrl
             if let originalFilePath = originalFilePathMap[zuuid] {
                 let absolutePath = "\(self.config.photosLibraryPath!)/originals/\(originalFilePath)"
                 
@@ -61,6 +62,17 @@ class PhotosMetadataReader {
                     // this case is no problem: if in the Library both Jpeg's and RAW photos are uploaded as "original" => PhotoKit already exposes the RAW photo
                     logger.debug("\(mediaObject.localIdentifier!): originalURL \(mediaObject.originalUrl!.path) not as expected: \(absolutePath)")
                 }
+            }
+            
+            // current URL: fallback to originalUrl
+            if mediaObject.currentUrl == nil {
+                mediaObject.currentUrl = mediaObject.originalUrl
+            }
+            
+            // derived URL
+            mediaObject.derivedUrl = getDerivedUrl(mediaObject)
+            if mediaObject.derivedUrl == nil {
+                mediaObject.derivedUrl = mediaObject.currentUrl
             }
         }
     }
@@ -177,6 +189,18 @@ class PhotosMetadataReader {
                 }
             }
         }
+    }
+    
+    // workaround to get the derived URL (didn't find any API for this)
+    func getDerivedUrl(_ mediaObject: MediaObject) -> URL? {
+        let originalPathComponents = mediaObject.originalUrl!.pathComponents
+        let subFolder = originalPathComponents[originalPathComponents.count - 2]
+        
+        let derivedPath = "\(config.photosLibraryPath!)/resources/derivatives/\(subFolder)/\(mediaObject.zuuid())_1_100_o.jpeg"
+        if FileManager.default.fileExists(atPath: derivedPath) {
+            return URL(fileURLWithPath: derivedPath)
+        }
+        return nil
     }
     
     func getStringProperty(object: AnyObject, propertyName: String) -> String {

@@ -13,6 +13,7 @@ class MediaObject : PhotoObject {
     var originalFilename: String?
     var originalUrl: URL?
     var currentUrl: URL?
+    var derivedUrl: URL?
     var creationDate: Date?
     var title: String?
     var keywords: [String] = []
@@ -33,6 +34,9 @@ class MediaObject : PhotoObject {
         }
         if let currentUrl = currentUrl {
             print("currentUrl: \(currentUrl)".indent(indent + 2))
+        }
+        if let derivedUrl = derivedUrl {
+            print("derivedUrl: \(derivedUrl)".indent(indent + 2))
         }
         if let creationDate = creationDate {
             print("creationDate: \(creationDate)".indent(indent + 2))

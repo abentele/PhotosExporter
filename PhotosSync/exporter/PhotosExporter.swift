@@ -48,6 +48,12 @@ class Statistics {
     }
 }
 
+enum PhotoVersion {
+    case derived
+    case current
+    case originals
+}
+
 class PhotosExporter {
     
     public let logger = Logger(loggerName: "PhotosExporter", logLevel: .info)
@@ -72,6 +78,8 @@ class PhotosExporter {
      */
     var countSubFolders: Int = 0
     
+    // set to true if derived resources (i.e. JPEG's instead of RAW) should be exported
+    var exportDerived = true
     // set to true if current photos should be exported
     var exportCurrent = true
     // set to true if original photos should be exported
@@ -86,6 +94,7 @@ class PhotosExporter {
     }
     var originalsRelativePath = "Originals"
     var currentRelativePath = "Current"
+    var derivedRelativePath = "Derived"
     var flatRelativePath = ".flat"
     
     public var baseExportPath:String?
@@ -136,8 +145,7 @@ class PhotosExporter {
                 photoCollection: photosMetadata.rootCollection,
                 flatPath: "\(inProgressPath)/\(originalsRelativePath)/\(flatRelativePath)",
                 targetPath: "\(inProgressPath)/\(originalsRelativePath)/\(escapeFileName(photosMetadata.rootCollection.name))",
-                exportOriginals: true)
-            
+                version: PhotoVersion.originals)
         }
         if exportCurrent {
             logger.info("export albums folders - current assets")
@@ -145,9 +153,17 @@ class PhotosExporter {
                 photoCollection: photosMetadata.rootCollection,
                 flatPath: "\(inProgressPath)/\(currentRelativePath)/\(flatRelativePath)",
                 targetPath: "\(inProgressPath)/\(currentRelativePath)/\(escapeFileName(photosMetadata.rootCollection.name))",
-                exportOriginals: false)
+                version: PhotoVersion.current)
         }
-        
+        if exportDerived {
+            logger.info("export albums folders - derived assets")
+            try exportFoldersRecursive(
+                photoCollection: photosMetadata.rootCollection,
+                flatPath: "\(inProgressPath)/\(derivedRelativePath)/\(flatRelativePath)",
+                targetPath: "\(inProgressPath)/\(derivedRelativePath)/\(escapeFileName(photosMetadata.rootCollection.name))",
+                version: PhotoVersion.derived)
+        }
+
         try finishExport()
         
         statistics.print()
@@ -193,23 +209,15 @@ class PhotosExporter {
         logger.info("Finish export")
     }
     
-    private func sourceUrlOfMediaObject(mediaObject: MediaObject, exportOriginals: Bool) -> URL? {
-        var sourceUrl: URL?
-        
-        if (exportOriginals) {
-            if let originalUrl = mediaObject.originalUrl {
-                sourceUrl = originalUrl
-            } else if let url = mediaObject.currentUrl {
-                sourceUrl = url
-            }
-        } else {
-            if let url = mediaObject.currentUrl {
-                sourceUrl = url
-            } else if let url = mediaObject.originalUrl {
-                sourceUrl = url
-            }
+    private func sourceUrlOfMediaObject(mediaObject: MediaObject, version: PhotoVersion) -> URL? {
+        switch (version) {
+        case PhotoVersion.originals:
+            return mediaObject.originalUrl
+        case PhotoVersion.current:
+            return mediaObject.currentUrl
+        case PhotoVersion.derived:
+            return mediaObject.derivedUrl
         }
-        return sourceUrl
     }
     
     let stopWatchCheckFileSize = StopWatch("check file size", LogLevel.info, addFileSizes: false)
@@ -241,7 +249,7 @@ class PhotosExporter {
     let stopWatchFileManagerSetAttributes = StopWatch("fileManager.setAttributes", LogLevel.info, addFileSizes: false)
     let stopWatchMediaObjectIteration = StopWatch("for mediaObject in mediaObjects", LogLevel.info, addFileSizes: false)
 
-    func exportFolderFlat(flatPath: String, candidatesToLinkTo: [FlatFolderDescriptor], exportOriginals: Bool) throws {
+    func exportFolderFlat(flatPath: String, candidatesToLinkTo: [FlatFolderDescriptor], version: PhotoVersion) throws {
         var containsFotosToExport = false;
         stopWatchExportFolderFlatScanMediaObjects.start()
         for mediaObject in photosMetadata.allMediaObjects {
@@ -276,7 +284,7 @@ class PhotosExporter {
 
                     // autorelease periodically
                     try autoreleasepool {
-                        let sourceUrl = sourceUrlOfMediaObject(mediaObject: mediaObject, exportOriginals: exportOriginals)
+                        let sourceUrl = sourceUrlOfMediaObject(mediaObject: mediaObject, version: version)
                         
                         if let sourceUrl = sourceUrl {
                             let targetUrl = URL(fileURLWithPath: getFlatPath(FlatFolderDescriptor(folderName: flatPath, countSubFolders: countSubFolders), mediaObject, pathExtension: sourceUrl.pathExtension))
@@ -357,7 +365,7 @@ class PhotosExporter {
         }
     }
     
-    private func exportFoldersRecursive(photoCollection: PhotoCollection, flatPath: String, targetPath: String, exportOriginals: Bool) throws {
+    private func exportFoldersRecursive(photoCollection: PhotoCollection, flatPath: String, targetPath: String, version: PhotoVersion) throws {
         let flatFolder = FlatFolderDescriptor(folderName: flatPath, countSubFolders: countSubFolders)
         
         // autorelease periodically
@@ -386,7 +394,7 @@ class PhotosExporter {
                     if exportPhotosOfMediaGroupFilter(photoCollection) {
                         for mediaObject in photoCollection.mediaObjects {
                             if exportMediaObjectFilter(mediaObject) {
-                                try exportFoto(mediaObject: mediaObject, flatFolder: flatFolder, targetPath: targetPath, exportOriginals: exportOriginals)
+                                try exportFoto(mediaObject: mediaObject, flatFolder: flatFolder, targetPath: targetPath, version: version)
                             }
                         }
                     }
@@ -398,7 +406,7 @@ class PhotosExporter {
 //                    if childCollection.typeIdentifier == "com.apple.Photos.SmartAlbum" {
 //                        childTargetPath = "\(childTargetPath) (Smart album)"
 //                    }
-                    try exportFoldersRecursive(photoCollection: childCollection, flatPath: flatPath, targetPath: childTargetPath, exportOriginals: exportOriginals)
+                    try exportFoldersRecursive(photoCollection: childCollection, flatPath: flatPath, targetPath: childTargetPath, version: version)
                 }
                 
                 
@@ -406,8 +414,8 @@ class PhotosExporter {
         }
     }
     
-    private func exportFoto(mediaObject: MediaObject, flatFolder: FlatFolderDescriptor, targetPath: String, exportOriginals: Bool) throws {
-        let sourceUrl = sourceUrlOfMediaObject(mediaObject: mediaObject, exportOriginals: exportOriginals)
+    private func exportFoto(mediaObject: MediaObject, flatFolder: FlatFolderDescriptor, targetPath: String, version: PhotoVersion) throws {
+        let sourceUrl = sourceUrlOfMediaObject(mediaObject: mediaObject, version: version)
         if let sourceUrl = sourceUrl {
             let linkTargetUrl = URL(fileURLWithPath: getFlatPath(flatFolder, mediaObject, pathExtension: sourceUrl.pathExtension))
             

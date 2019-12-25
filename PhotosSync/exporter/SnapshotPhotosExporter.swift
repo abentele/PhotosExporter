@@ -33,7 +33,7 @@ class SnapshotPhotosExporter : PhotosExporter {
             try exportFolderFlat(
                 flatPath: "\(inProgressPath)/\(originalsRelativePath)/\(flatRelativePath)",
                 candidatesToLinkTo: candidatesToLinkTo,
-                exportOriginals: true)
+                version: PhotoVersion.originals)
             
         }
         if exportCurrent {
@@ -52,7 +52,25 @@ class SnapshotPhotosExporter : PhotosExporter {
             try exportFolderFlat(
                 flatPath: "\(inProgressPath)/\(currentRelativePath)/\(flatRelativePath)",
                 candidatesToLinkTo: candidatesToLinkTo,
-                exportOriginals: false)
+                version: PhotoVersion.current)
+        }
+        if exportDerived {
+            logger.info("export derived photos to \(inProgressPath)/\(derivedRelativePath)/\(flatRelativePath) folder")
+
+            var candidatesToLinkTo: [FlatFolderDescriptor] = []
+
+            if let baseExportPath = baseExportPath {
+                candidatesToLinkTo = try candidatesToLinkTo + flatFolderIfExists("\(baseExportPath)/\(derivedRelativePath)/\(flatRelativePath)")
+            }
+
+            if exportOriginals {
+                candidatesToLinkTo = try candidatesToLinkTo + flatFolderIfExists("\(inProgressPath)/\(originalsRelativePath)/\(flatRelativePath)")
+            }
+
+            try exportFolderFlat(
+                flatPath: "\(inProgressPath)/\(derivedRelativePath)/\(flatRelativePath)",
+                candidatesToLinkTo: candidatesToLinkTo,
+                version: PhotoVersion.derived)
         }
     }
 
