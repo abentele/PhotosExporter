@@ -24,8 +24,15 @@ class PhotoObject {
     
     /** identifier used in the photos SQLite database */
     func zuuid() -> String {
-        let zuuid = String(localIdentifier![..<localIdentifier!.firstIndex(of: "/")!])
+        let zuuid = PhotoObject.zuuid(localIdentifier: localIdentifier!)
         return zuuid
     }
+    
+    /** identifier used in the photos SQLite database */
+    static func zuuid(localIdentifier: String) -> String {
+        let zuuid = String(localIdentifier[..<localIdentifier.firstIndex(of: "/")!])
+        return zuuid
+    }
+
 
 }

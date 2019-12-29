@@ -20,14 +20,9 @@ class PhotosMetadataReader {
     
     func readMetadata(completion: @escaping (PhotosMetadata) -> (Void)) {
         do {
-            let rootCollection = try self.readMetadata()
+            let photosMetadata = try self.readMetadata()
             
-            var allMediaObjects: [MediaObject] = []
-            getAllMediaObjectsRecursive(collection: rootCollection, allMediaObjects: &allMediaObjects)
-            
-            try loadAdditionalDataFromSqliteDatabase(allMediaObjects)
-            
-            let photosMetadata = PhotosMetadata(rootCollection: rootCollection, allMediaObjects: allMediaObjects)
+            try loadAdditionalDataFromSqliteDatabase(photosMetadata.allMediaObjects)
             
             completion(photosMetadata)
         } catch {
@@ -77,14 +72,7 @@ class PhotosMetadataReader {
         }
     }
     
-    func getAllMediaObjectsRecursive(collection: PhotoCollection, allMediaObjects: inout [MediaObject]) {
-        allMediaObjects += collection.mediaObjects
-        for childCollection in collection.childCollections {
-            getAllMediaObjectsRecursive(collection: childCollection, allMediaObjects: &allMediaObjects)
-        }
-    }
-    
-    fileprivate func readMetadata() throws -> PhotoCollection {
+    fileprivate func readMetadata() throws -> PhotosMetadata {
         let userCollections = PHCollectionList.fetchTopLevelUserCollections(with: nil)
 
         let rootCollection = PhotoCollection()
@@ -92,15 +80,23 @@ class PhotosMetadataReader {
         
         let dispatchGroup = DispatchGroup()
         
-        try self.readCollection(fetchResult: userCollections, targetCollection: rootCollection, dispatchGroup: dispatchGroup)
+        // map [zuuid:MediaObject]
+        var allMediaObjects: [String:MediaObject] = [:]
+        
+        try self.readCollection(fetchResult: userCollections, targetCollection: rootCollection, allMediaObjects: &allMediaObjects, dispatchGroup: dispatchGroup)
         
         dispatchGroup.wait()
         
-        return rootCollection
+        var allMediaObjectsArray: [MediaObject] = []
+        for mediaObject in allMediaObjects.values {
+            allMediaObjectsArray += [mediaObject]
+        }
+        
+        return PhotosMetadata(rootCollection: rootCollection, allMediaObjects: allMediaObjectsArray)
     }
     
     
-    func readCollection(fetchResult: PHFetchResult<PHCollection>, targetCollection: PhotoCollection, dispatchGroup: DispatchGroup) throws {
+    func readCollection(fetchResult: PHFetchResult<PHCollection>, targetCollection: PhotoCollection, allMediaObjects: inout [String:MediaObject], dispatchGroup: DispatchGroup) throws {
         if fetchResult.count > 0 {
             for i in 0...fetchResult.count-1 {
                 if let result = fetchResult.object(at: i) as? PHCollectionList {
@@ -110,7 +106,7 @@ class PhotosMetadataReader {
                     targetCollection.childCollections += [collection]
                     
                     let subFetchResult = PHCollection.fetchCollections(in: result, options: nil)
-                    try readCollection(fetchResult: subFetchResult, targetCollection: collection, dispatchGroup: dispatchGroup)
+                    try readCollection(fetchResult: subFetchResult, targetCollection: collection, allMediaObjects: &allMediaObjects, dispatchGroup: dispatchGroup)
                 } else if let result = fetchResult.object(at: i) as? PHAssetCollection {
                     let collection = PhotoCollection();
                     collection.localIdentifier = result.localIdentifier
@@ -118,7 +114,7 @@ class PhotosMetadataReader {
                     targetCollection.childCollections += [collection]
                     
                     let assets = PHAsset.fetchAssets(in: result, options: nil)
-                    try readCollection(fetchResult: assets, targetCollection: collection, dispatchGroup: dispatchGroup)
+                    try readCollection(fetchResult: assets, targetCollection: collection, allMediaObjects: &allMediaObjects, dispatchGroup: dispatchGroup)
                 } else {
                     let result = fetchResult.object(at: i)
                     print("Unknown asset collection: \(result.localizedTitle!)")
@@ -127,66 +123,74 @@ class PhotosMetadataReader {
         }
     }
     
-    func readCollection(fetchResult: PHFetchResult<PHAsset>, targetCollection: PhotoCollection, dispatchGroup: DispatchGroup) throws {
+    func readCollection(fetchResult: PHFetchResult<PHAsset>, targetCollection: PhotoCollection, allMediaObjects: inout [String:MediaObject], dispatchGroup: DispatchGroup) throws {
         if fetchResult.count > 0 {
             for i in 0...fetchResult.count-1 {
                 let asset = fetchResult.object(at: i)
+
+                let zuuid = PhotoObject.zuuid(localIdentifier: asset.localIdentifier)
                 
-                let mediaObject = MediaObject()
-                mediaObject.localIdentifier = asset.localIdentifier
-                targetCollection.mediaObjects += [mediaObject]
-                
-                mediaObject.creationDate = asset.creationDate
-                
-                let assetResources = PHAssetResource.assetResources(for: asset)
-                
-//                if mediaObject.zuuid() == "DEFDFF1A-11DD-4EC4-A72D-F13FB2B4B2ED" {
-//                    mediaObject.printYaml(indent: 0);
-//                    print("asset: \(asset)")
-//                }
-                
-                for assetResource in assetResources {
-                    switch (assetResource.type) {
-                    case PHAssetResourceType.photo,
-                         PHAssetResourceType.video,
-                         PHAssetResourceType.audio,
-                         PHAssetResourceType.pairedVideo:
-                        if mediaObject.originalUrl == nil {
-                            mediaObject.originalFilename = getStringProperty(object: assetResource, propertyName: "filename")
-                            //                            self.logger.info("Asset originalFileName: \(mediaObject.originalFilename)")
-                            let fileUrlString = getStringProperty(object: assetResource, propertyName: "fileURL")
-                            mediaObject.originalUrl = URL(string: fileUrlString);
-                            //                            self.logger.info("Asset originalUrl: \(mediaObject.originalUrl)")
+                var mediaObject: MediaObject
+                if let mo = allMediaObjects[zuuid] {
+                    mediaObject = mo
+                } else {
+                    mediaObject = MediaObject()
+                    mediaObject.localIdentifier = asset.localIdentifier
+                    allMediaObjects[zuuid] = mediaObject
+                    
+                    mediaObject.creationDate = asset.creationDate
+                    
+                    let assetResources = PHAssetResource.assetResources(for: asset)
+                    
+    //                if mediaObject.zuuid() == "DEFDFF1A-11DD-4EC4-A72D-F13FB2B4B2ED" {
+    //                    mediaObject.printYaml(indent: 0);
+    //                    print("asset: \(asset)")
+    //                }
+                    
+                    for assetResource in assetResources {
+                        switch (assetResource.type) {
+                        case PHAssetResourceType.photo,
+                             PHAssetResourceType.video,
+                             PHAssetResourceType.audio,
+                             PHAssetResourceType.pairedVideo:
+                            if mediaObject.originalUrl == nil {
+                                mediaObject.originalFilename = getStringProperty(object: assetResource, propertyName: "filename")
+                                //                            self.logger.info("Asset originalFileName: \(mediaObject.originalFilename)")
+                                let fileUrlString = getStringProperty(object: assetResource, propertyName: "fileURL")
+                                mediaObject.originalUrl = URL(string: fileUrlString);
+                                //                            self.logger.info("Asset originalUrl: \(mediaObject.originalUrl)")
+                            }
+                            break;
+                        case PHAssetResourceType.fullSizePhoto,
+                             PHAssetResourceType.fullSizeVideo,
+                             PHAssetResourceType.fullSizePairedVideo:
+                            mediaObject.currentUrl = URL(string: getStringProperty(object: assetResource, propertyName: "fileURL"));
+                            //                         self.logger.info("Asset currentUrl: \(mediaObject.currentUrl)")
+                            break;
+                        case PHAssetResourceType.alternatePhoto:
+                            // prefer to export raw image instead of jpeg
+                            let utiValue = getStringProperty(object: assetResource, propertyName: "uti")
+                            if utiValue.contains("raw-image") {
+                                mediaObject.originalFilename = getStringProperty(object: assetResource, propertyName: "filename")
+                                mediaObject.originalUrl = URL(string: getStringProperty(object: assetResource, propertyName: "fileURL"));
+                                //                            self.logger.info("Prefer raw image URL: \(mediaObject.originalUrl)")
+                            }
+                            break;
+                        case  PHAssetResourceType.adjustmentBasePhoto,
+                              PHAssetResourceType.adjustmentBaseVideo,
+                              PHAssetResourceType.adjustmentBasePairedVideo:
+                            // ignore
+                            break;
+                        case PHAssetResourceType.adjustmentData:
+                            // ignore
+                            break;
+                        @unknown default:
+                            self.logger.info("Invalid asset resource type: \(assetResource.type); asset: \(assetResource)")
+                            //fatalError()
                         }
-                        break;
-                    case PHAssetResourceType.fullSizePhoto,
-                         PHAssetResourceType.fullSizeVideo,
-                         PHAssetResourceType.fullSizePairedVideo:
-                        mediaObject.currentUrl = URL(string: getStringProperty(object: assetResource, propertyName: "fileURL"));
-                        //                         self.logger.info("Asset currentUrl: \(mediaObject.currentUrl)")
-                        break;
-                    case PHAssetResourceType.alternatePhoto:
-                        // prefer to export raw image instead of jpeg
-                        let utiValue = getStringProperty(object: assetResource, propertyName: "uti")
-                        if utiValue.contains("raw-image") {
-                            mediaObject.originalFilename = getStringProperty(object: assetResource, propertyName: "filename")
-                            mediaObject.originalUrl = URL(string: getStringProperty(object: assetResource, propertyName: "fileURL"));
-                            //                            self.logger.info("Prefer raw image URL: \(mediaObject.originalUrl)")
-                        }
-                        break;
-                    case  PHAssetResourceType.adjustmentBasePhoto,
-                          PHAssetResourceType.adjustmentBaseVideo,
-                          PHAssetResourceType.adjustmentBasePairedVideo:
-                        // ignore
-                        break;
-                    case PHAssetResourceType.adjustmentData:
-                        // ignore
-                        break;
-                    @unknown default:
-                        self.logger.info("Invalid asset resource type: \(assetResource.type); asset: \(assetResource)")
-                        //fatalError()
                     }
                 }
+                targetCollection.mediaObjects += [mediaObject]
             }
         }
     }
