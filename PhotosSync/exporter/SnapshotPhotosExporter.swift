@@ -14,7 +14,7 @@ import Foundation
 class SnapshotPhotosExporter : PhotosExporter {
     
     private var subTargetPath: String {
-        return "\(targetPath)/Current"
+        return "\(targetPath)/Snapshot"
     }
     
     public var deleteFlatPath = true
