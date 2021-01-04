@@ -38,10 +38,16 @@ This program was not my first try. I've tried out some other solutions before, t
 The final step was to re-implement everything using Apple's latest programming language [Swift](https://developer.apple.com/swift/) and the [MediaLibrary Framework](https://developer.apple.com/documentation/medialibrary). The result is a very robust, performant and maintainable solution compared to the previous solutions.
 
 
+# Compilation
+You have checkout the project, open it in Xcode and compile it. You are free to customize the code to your needs, but it's not required.
+
 # Usage
 
 Currently the program doesn't have any arguments and no user interface.
-You have checkout the project, open it in Xcode, open `MainExporter.swift` and modify the parameters, most important `targetPath`. Be sure the target path is on a file system which supports hard links. You are free to customize the code to your needs, but it's not required.
+
+It will try to read a json config file from your Application Support directory. In case the config is not available the programm will create a default config file for you and print out information about where to save a customized config file from it.
+
+Be sure the target path is on a file system which supports hard links. 
 
 Then run the program with Xcode, or compile the project and use the executable to export your photos.
 
@@ -49,22 +55,32 @@ Normally, the exporter adds the timestamp of a photo to the exported photo's fil
 
 If you move the exported folder, be sure to recreate the `Latest` link, because it would be broken after moving the folders.
 
-## Parameters of the exporter
+## Parameters in config file
 
-All parameters can be applied both to the SnapshotPhotosExporter and to IncrementalPhotosExporter.
+The configuration file contains a list of exporters to be run. Each exporter has these parameters: 
 
-* exportMediaGroupFilter: filter for the media groups (default: all media groups are exported)
-* exportPhotosOfMediaGroupFilter: filter for photos in a media group (default: all media groups are exported)
-* exportMediaObjectFilter: filter for media objects (default: all media objects are exported)
-* exportCalculated: set to false if calculated photos should not be exported (default: true)
-* exportOriginals: set to false if calculated photos should not be exported (default: true)
-* baseExportPath (only IncrementalPhotosExporter, optional parameter): the path to an already existing export folder on the same device; example: export all photos using SnapshotPhotosExporter to your local disk or SSD; create a backup using Time Machine; additionally export the photos using IncrementalPhotosExporter to the same device as your Time Machine backup. Then you would set the baseExportPath to the export folder within your Time Machine backup, to link the exported photos with the photos of your Time Machine backup to save disk space.
-* deleteFlatPath (only SnapshotPhotosExporter, optional parameter): true if the .flat folders should be deleted after the export (default:true; disable deleting if you want to use the export folder as base for an incremental export, see parameter baseExportPath)
+* `exportCalculatedPhotos`: set to false if calculated photos (edited) should not be exported (default: true)
+* `exportOriginalPhotos`: set to false if original photos (masters) should not be exported (default: true)
+* `deleteFlatPathAfterExport` (ignored by incremental exporter): true if the `.flat` folders should be deleted after the export (default:true; disable deleting if you want to use the export folder as base for an incremental export, see parameter baseExportPath)
+* `targetPath`: Directory where to put the exported folders and photos (needs to be on a volume supporting hard links)
+* `baseExportPath` (only IncrementalPhotosExporter, optional parameter): the path to an already existing export folder on the same device; example: export all photos using SnapshotPhotosExporter to your local disk or SSD; create a backup using Time Machine; additionally export the photos using IncrementalPhotosExporter to the same device as your Time Machine backup. Then you would set the baseExportPath to the export folder within your Time Machine backup, to link the exported photos with the photos of your Time Machine backup to save disk space.
+* `logLevel`: Verbosity of output. Valid levels are: debug, info, warn, error
+* `groupsToExport`: Selection of groups for which folders shall be created in the export folder. Exported photos are hard linked into these folders. Available groups are "Moments", "Collections", "Years", "Places", "Faces", "Videos", "Selfies", "Panoramas", "Screenshots", "Albums", "SmartAlbums". 
+  * Note: If "Places" is selected, subfolders for country, province, city and poi will be created.
+  * Note: If `groupsToExport` is empty only the `.flat` folder is created during export
+* `exporterType`: `snapshot` or `incremental`
+
+## Parameters hard coded
+
+In addition to the parameters read from the config file these parameters are currently hard coded:
+
+* `exportMediaGroupFilter`: filter for the media groups (default: all media groups are exported)
+* `exportMediaObjectFilter`: filter for media objects (default: all media objects are exported)
 
 # Supported platforms
 
 * macOS 10.14 "Mojave" (tested by the maintainer)
-* macOS 10.13 "High Sierra" (should work, but untested, unsupported)
+* macOS 10.13 "High Sierra", Photos 3.0, XCode 10.1, Swift 4.2 (tested by Kai Unger)
 
 # Implementation
 

@@ -12,6 +12,10 @@ import Foundation
  * backup mode, like "Time Machine", which creates one folder per date and which is a real copy of the Photos Library data.
  */
 class IncrementalPhotosExporter : PhotosExporter {
+    override init(exporterConfig: ExporterConfig) {
+        super.init(exporterConfig: exporterConfig)
+        self.baseExportPath = exporterConfig.baseExportPath
+    }
     
     private var latestPath: String {
         return "\(targetPath)/Latest"

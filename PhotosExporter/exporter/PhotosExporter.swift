@@ -9,6 +9,18 @@
 import Foundation
 import MediaLibrary
 
+func debugMediaGroups(group: MLMediaGroup, logger: Logger, depth: Int = 0)
+{
+    let message : String = String(repeating: "\t", count: depth) +
+        "\(group.typeIdentifier) " +
+        "\"\(group.name ?? "<no name>")\" " +
+        "\(group.mediaObjects?.count ?? 0) object(s)"
+    logger.debug(message)
+    
+    for childGroup in group.childGroups! {
+        debugMediaGroups(group: childGroup, logger: logger, depth: depth + 1)
+    }
+}
 
 enum PhotosExporterError: Error {
     case noMediaObjects
@@ -52,12 +64,13 @@ class PhotosExporter {
     
     public let logger = Logger(loggerName: "PhotosExporter", logLevel: .info)
 
+    private var mediaGroupFilter: MediaGroupFilter
     private static var rootMediaGroup: MLMediaGroup?
     var exportMediaGroupFilter: ((MLMediaGroup) -> Bool) = { (MLMediaGroup) -> Bool in
         return true
     }
-    var exportPhotosOfMediaGroupFilter: ((MLMediaGroup) -> Bool) = { (MLMediaGroup) -> Bool in
-        return true
+    func exportPhotosOfMediaGroupFilter(_ group: MLMediaGroup) -> Bool {
+        return self.mediaGroupFilter.matches(group)
     }
     var exportMediaObjectFilter: ((MLMediaObject) -> Bool) = { (MLMediaObject) -> Bool in
         return true
@@ -75,6 +88,8 @@ class PhotosExporter {
     var exportCalculated = true
     // set to true if original photos should be exported
     var exportOriginals = true
+    // set to true if folders for collections, moments and albums should be created
+    var exportMediaGroupsAsFolders: Bool = true
 
     let fileManager = FileManager.default
 
@@ -91,8 +106,12 @@ class PhotosExporter {
     
     var statistics = Statistics()
 
-    init(targetPath: String) {
-        self.targetPath = targetPath
+    init(exporterConfig: ExporterConfig) {
+        self.mediaGroupFilter = MediaGroupFilter(photoGroups: exporterConfig.groupsToExport)
+        self.targetPath = exporterConfig.targetPath
+        self.exportCalculated = exporterConfig.exportCalculated
+        self.exportOriginals = exporterConfig.exportOriginals
+        self.logger.logLevel = exporterConfig.logLevel
     }
     
     func exportPhotos() {
@@ -106,6 +125,8 @@ class PhotosExporter {
             if PhotosExporter.rootMediaGroup == nil {
                 PhotosExporter.rootMediaGroup = MetadataLoader().loadMetadata()
             }
+            
+            debugMediaGroups(group: PhotosExporter.rootMediaGroup!, logger: logger)
             
             let mediaObjects = PhotosExporter.rootMediaGroup!.mediaObjects
             if (mediaObjects == nil || mediaObjects!.count == 0) {
@@ -123,6 +144,9 @@ class PhotosExporter {
             
             let stopWatch = StopWatch("Export to \(targetPath)", LogLevel.debug, addFileSizes: false)
             logger.info("Start export to \(targetPath)")
+            if !mediaGroupFilter.photoGroups.isEmpty {
+                logger.info("    Including groups/albums \(mediaGroupFilter.photoGroups)")
+            }
             stopWatch.start()
 
             try doExport()
@@ -156,7 +180,6 @@ class PhotosExporter {
                 targetPath: "\(inProgressPath)/\(calculatedRelativePath)/\(escapeFileName(PhotosExporter.rootMediaGroup!.name!))",
                 exportOriginals: false)
         }
-        
         try finishExport()
         
         statistics.print()
@@ -370,6 +393,7 @@ class PhotosExporter {
                 }
 
                 if containsFotosToExport {
+                    logger.debug("Exporting folder: \(targetPath)")
                     // create folder at targetPath
                     do {
                         logger.debug("Create folder: \(targetPath)")
@@ -390,7 +414,7 @@ class PhotosExporter {
                 
                 for childMediaGroup in mediaGroup.childGroups! {
                     var childTargetPath: String = "\(targetPath)/\(escapeFileName(childMediaGroup.name!))"
-                    if childMediaGroup.typeIdentifier == "com.apple.Photos.SmartAlbum" {
+                    if childMediaGroup.typeIdentifier == MLPhotosSmartAlbumTypeIdentifier {
                         childTargetPath = "\(childTargetPath) (Smart album)"
                     }
                     try exportFoldersRecursive(mediaGroup: childMediaGroup, flatPath: flatPath, targetPath: childTargetPath, exportOriginals: exportOriginals)

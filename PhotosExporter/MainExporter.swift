@@ -7,42 +7,47 @@
 //
 
 import Foundation
-import MediaLibrary
 
 func export() {
-    // define which media groups should be exported
-    let exportMediaGroupFilter = { (mediaGroup: MLMediaGroup) -> Bool in
-        // export all media groups
-        return true
+    let appName = nameOfApp()
+    let logger = Logger(loggerName: appName, logLevel: .info)
+    let configStorage = ConfigStorage(logger: logger)
+    let configOptional = configStorage.tryToReadConfig()
+    
+    if configOptional == nil {
+        logger.warn("Seems like you're using \(appName) for the first time, "
+            + "since there is no config available in \(configStorage.configFileURL()).\n"
+            + "Creating default settings in \(configStorage.defaultConfigFileURL()).\n"
+            + "Please adapt its contents to your needs and save as \(configStorage.configFileURL())."
+        )
+        do {
+            try configStorage.createDefaultConfig()
+        } catch {
+            logger.error("Failed to create default config: \(error)\nCannot continue.")
+        }
+        return
     }
-    
-    // define for which media groups the photos should be exported
-    let exportPhotosOfMediaGroupFilter = { (mediaGroup: MLMediaGroup) -> Bool in
-        return ["com.apple.Photos.Album", "com.apple.Photos.SmartAlbum", "com.apple.Photos.CollectionGroup", "com.apple.Photos.MomentGroup", "com.apple.Photos.YearGroup", "com.apple.Photos.PlacesCountryAlbum", "com.apple.Photos.PlacesProvinceAlbum", "com.apple.Photos.PlacesCityAlbum", "com.apple.Photos.PlacesPointOfInterestAlbum", "com.apple.Photos.FacesAlbum", "com.apple.Photos.VideosGroup", "com.apple.Photos.FrontCameraGroup", "com.apple.Photos.PanoramasGroup", "com.apple.Photos.BurstGroup", "com.apple.Photos.ScreenshotGroup"].contains(mediaGroup.typeIdentifier) &&
-            !("com.apple.Photos.FacesAlbum" == mediaGroup.typeIdentifier && mediaGroup.parent?.typeIdentifier == "com.apple.Photos.AlbumsGroup") &&
-            !("com.apple.Photos.PlacesAlbum" == mediaGroup.typeIdentifier && mediaGroup.parent?.typeIdentifier == "com.apple.Photos.RootGroup")
+
+    for exporterConfig in configOptional!.exporterConfigs {
+        switch exporterConfig.exporterType
+        {
+        case ExporterConfig.ExporterType.snapshot:
+            //////////////////////////////////////////////////////////////////////////////////////
+            // Export to local disk in simple export mode (snapshot folder, with hard links
+            // to the original files to save disk space)
+            //////////////////////////////////////////////////////////////////////////////////////
+            logger.info("Exporting snapshot to \(exporterConfig.targetPath)")
+            let photosExporter = SnapshotPhotosExporter.init(exporterConfig: exporterConfig)
+            photosExporter.exportPhotos()
+            
+        case ExporterConfig.ExporterType.incremental:
+            //////////////////////////////////////////////////////////////////////////////////////
+            // Export to external disk in "time machine" mode (one folder for each export date)
+            //////////////////////////////////////////////////////////////////////////////////////
+            logger.info("Exporting increment to \(exporterConfig.targetPath)")
+            let photosExporter = IncrementalPhotosExporter.init(exporterConfig: exporterConfig)
+            photosExporter.exportPhotos()
+        }
     }
-    
-    //////////////////////////////////////////////////////////////////////////////////////
-    // Export to local disk in simple export mode (snapshot folder, with hard links
-    // to the original files to save disk space)
-    //////////////////////////////////////////////////////////////////////////////////////
-    
-    // define the target path (this is the root path for your backups)
-    let localPhotosExporter = SnapshotPhotosExporter.init(targetPath: "/Users/andreas/Pictures/Fotos Library export")
-    localPhotosExporter.exportMediaGroupFilter = exportMediaGroupFilter
-    localPhotosExporter.exportPhotosOfMediaGroupFilter = exportPhotosOfMediaGroupFilter
-    localPhotosExporter.exportPhotos()
-    
-    
-    //////////////////////////////////////////////////////////////////////////////////////
-    // Export to external disk in "time machine" mode (one folder for each export date)
-    //////////////////////////////////////////////////////////////////////////////////////
-    
-    // define the target path (this is the root path for your backups)
-    let externalDiskPhotosExporter = IncrementalPhotosExporter.init(targetPath: "/Volumes/WD-4TB/Fotos Library export")
-    externalDiskPhotosExporter.exportMediaGroupFilter = exportMediaGroupFilter
-    externalDiskPhotosExporter.exportPhotosOfMediaGroupFilter = exportPhotosOfMediaGroupFilter
-    externalDiskPhotosExporter.exportPhotos()
 }
 

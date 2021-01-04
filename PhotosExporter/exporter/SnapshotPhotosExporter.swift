@@ -12,12 +12,16 @@ import Foundation
  * simple export mode which creates one snapshot folder, with hard links to the original files to save disk space (only if the target directory is in the same file system as the Photos Library)
  */
 class SnapshotPhotosExporter : PhotosExporter {
+    override init(exporterConfig: ExporterConfig) {
+        super.init(exporterConfig: exporterConfig)
+        deleteFlatPathAfterExport = exporterConfig.deleteFlatPathAfterExport
+    }
     
     private var subTargetPath: String {
         return "\(targetPath)/Current"
     }
     
-    public var deleteFlatPath = true
+    public var deleteFlatPathAfterExport = true
     
     override func exportFoldersFlat() throws {
         if exportOriginals {
@@ -79,7 +83,7 @@ class SnapshotPhotosExporter : PhotosExporter {
         try super.finishExport()
         
         // remove the ".flat" folders
-        if (deleteFlatPath) {
+        if (deleteFlatPathAfterExport) {
             try deleteFolderIfExists(atPath: "\(inProgressPath)/\(originalsRelativePath)/\(flatRelativePath)")
             try deleteFolderIfExists(atPath: "\(inProgressPath)/\(calculatedRelativePath)/\(flatRelativePath)")
         }

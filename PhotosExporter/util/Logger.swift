@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum LogLevel: String {
+enum LogLevel: String, Codable {
     case debug
     case info
     case warn

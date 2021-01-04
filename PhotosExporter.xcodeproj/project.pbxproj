@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2A33E6EB25A0F76F00A1A5BF /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A33E6E925A0F76F00A1A5BF /* Config.swift */; };
+		2A33E6EC25A0F76F00A1A5BF /* MediaGroupFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A33E6EA25A0F76F00A1A5BF /* MediaGroupFilter.swift */; };
 		E1321E502229A71600046C00 /* StopWatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1321E4F2229A71600046C00 /* StopWatch.swift */; };
 		E186D26022354098000BFCED /* FlatFolderDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E186D25F22354098000BFCED /* FlatFolderDescriptor.swift */; };
 		E1A55240222AB2EF00F72499 /* String+extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1A5523F222AB2EF00F72499 /* String+extensions.swift */; };
@@ -24,6 +26,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2A33E6E925A0F76F00A1A5BF /* Config.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
+		2A33E6EA25A0F76F00A1A5BF /* MediaGroupFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaGroupFilter.swift; sourceTree = "<group>"; };
 		E1321E4F2229A71600046C00 /* StopWatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopWatch.swift; sourceTree = "<group>"; };
 		E186D25F22354098000BFCED /* FlatFolderDescriptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlatFolderDescriptor.swift; sourceTree = "<group>"; };
 		E1A5523F222AB2EF00F72499 /* String+extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+extensions.swift"; sourceTree = "<group>"; };
@@ -90,6 +94,8 @@
 		E1E43B16217CDB62000E76DF /* exporter */ = {
 			isa = PBXGroup;
 			children = (
+				2A33E6E925A0F76F00A1A5BF /* Config.swift */,
+				2A33E6EA25A0F76F00A1A5BF /* MediaGroupFilter.swift */,
 				E1E43B17217CDB6A000E76DF /* PhotosExporter.swift */,
 				E1E43B18217CDB6E000E76DF /* SnapshotPhotosExporter.swift */,
 				E1E43B09217CDB53000E76DF /* IncrementalPhotosExporter.swift */,
@@ -201,6 +207,8 @@
 				E1E43B1D217CDBE9000E76DF /* SnapshotPhotosExporter.swift in Sources */,
 				E1B119262251DC8100B53693 /* Errors.swift in Sources */,
 				E1A55240222AB2EF00F72499 /* String+extensions.swift in Sources */,
+				2A33E6EC25A0F76F00A1A5BF /* MediaGroupFilter.swift in Sources */,
+				2A33E6EB25A0F76F00A1A5BF /* Config.swift in Sources */,
 				E1E43AF6217CDABA000E76DF /* AppDelegate.swift in Sources */,
 				E1E43B13217CDB54000E76DF /* MediaLibUtil.swift in Sources */,
 				E186D26022354098000BFCED /* FlatFolderDescriptor.swift in Sources */,
@@ -341,7 +349,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.bentele.PhotosExporter;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
 		};
@@ -358,7 +366,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.bentele.PhotosExporter;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Release;
 		};
