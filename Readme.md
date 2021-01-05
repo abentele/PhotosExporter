@@ -1,5 +1,10 @@
 March 2018, Andreas Bentele
 
+# !!! Currently not maintained !!!
+
+Maintaining this project is currently interrupted, because of unresolved API issues (see discussion in https://github.com/abentele/PhotosExporter/issues/6).
+There is a fork of this project (https://github.com/photossync/PhotosSync), which was used to evaluate things, but is not production ready.
+
 # PhotosExporter
 
 This is a headless program (with command line interface) to export all photos of the macOS Photos library to a filesystem folder. Like Apple's Time Machine, it backup's the data in folders containing full backups, while using hard links to minimize disk usage.
