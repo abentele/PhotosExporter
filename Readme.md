@@ -4,6 +4,7 @@ March 2018, Andreas Bentele
 
 Maintaining this project is currently interrupted, because of unresolved API issues since macOS 10.15 (see discussion in https://github.com/abentele/PhotosExporter/issues/6).
 There is a fork of this project (https://github.com/photossync/PhotosSync), which was used to evaluate things, but is not production ready.
+You might like [osxphotos](https://github.com/RhetTbull/osxphotos) also.
 
 # PhotosExporter
 
