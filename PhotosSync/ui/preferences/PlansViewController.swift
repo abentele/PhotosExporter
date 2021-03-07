@@ -8,7 +8,7 @@
 
 import Cocoa
 
-class PlansViewController: NSViewController {
+class PlansViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSource {
 
     convenience init() {
         self.init(nibName: "PlansView", bundle: nil);

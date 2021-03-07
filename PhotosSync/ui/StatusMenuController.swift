@@ -56,6 +56,8 @@ class StatusMenuController: NSObject {
             // for dark mode, automatically invert the image
             button.image?.isTemplate = true
         }
+        
+        preferencesClicked(self)
     }
     
     @objc func runExportTask(sender: AnyObject?) {
