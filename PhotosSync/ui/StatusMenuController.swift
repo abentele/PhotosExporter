@@ -22,7 +22,11 @@ class StatusMenuController: NSObject {
     
     var preferencesWindowController: PreferencesWindowController?
     
+    var preferences: Preferences?
+    
     func updateMenu(preferences: Preferences) {
+        self.preferences = preferences
+        
         // remove previous items
         for menuItem in backupPlanMenuItems {
             statusMenu.removeItem(menuItem)
@@ -63,12 +67,16 @@ class StatusMenuController: NSObject {
     @objc func runExportTask(sender: AnyObject?) {
         if let menuItem = sender as? NSMenuItem, let plan = menuItem.representedObject as? Plan {
             logger.info("Start export using plan:\n\(plan.toYaml(indent: 10))")
-            do {
-                let photosExporter = try PhotosExporterFactory.createPhotosExporter(plan: plan)
-                photosExporter.exportPhotos()
-            } catch {
-                print("Photos exporter could not be instantiated from preferences: \(String(describing: plan.name))")
-            }
+            
+            let photosMetadataReader = PhotosMetadataReader(config: preferences!.config)
+            photosMetadataReader.readMetadata(completion: {(photosMetadata: PhotosMetadata) in
+                do {
+                    let photosExporter = try PhotosExporterFactory.createPhotosExporter(plan: plan)
+                    photosExporter.exportPhotos(photosMetadata: photosMetadata)
+                } catch {
+                    print("Photos exporter could not be instantiated from preferences: \(String(describing: plan.name))")
+                }
+            });
         }
     }
     

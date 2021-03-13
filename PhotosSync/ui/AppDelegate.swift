@@ -17,21 +17,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet weak var statusMenuController: StatusMenuController!
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
-        PHPhotoLibrary.requestAuthorization({(status: PHAuthorizationStatus) in
-            if (status != PHAuthorizationStatus.authorized) {
-                self.logger.warn("Not authorized to access the photo library. Abort.")
-                return;
-            }
-            
-            self.executeAllPlans()
-            
-            DispatchQueue.main.sync {
-                NSApp.terminate(self)
-            }
-        });
-    }
-    
-    func executeAllPlans() {
         var preferences: Preferences
         do {
             preferences = try PreferencesReader.readPreferencesFile()
@@ -40,12 +25,33 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             return;
         }
         logger.info("Read preferences file; content:\n\(preferences.toYaml())")
+
+        PHPhotoLibrary.requestAuthorization({(status: PHAuthorizationStatus) in
+            if (status != PHAuthorizationStatus.authorized) {
+                self.logger.warn("Not authorized to access the photo library. Abort.")
+                return;
+            }
+            
+//            self.executeAllPlans(preferences: preferences)
+            
+            self.statusMenuController.updateMenu(preferences: preferences)
+            
+            //PreferencesReader.writePreferencesFile(preferences: preferences)
+
+
+//            DispatchQueue.main.sync {
+//                NSApp.terminate(self)
+//            }
+        });
+    }
+    
+    func executeAllPlans(preferences: Preferences) {
         
         let photosMetadataReader = PhotosMetadataReader(config: preferences.config)
         photosMetadataReader.readMetadata(completion: {(photosMetadata: PhotosMetadata) in
-            
+
             photosMetadata.rootCollection.printYaml(indent: 0)
-            
+
             for plan in preferences.plans {
                 // separator for multiple export jobs
                 self.logger.info("")
@@ -65,11 +71,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 }
             }
         });
-        
-        
-        //PreferencesReader.writePreferencesFile(preferences: preferences)
-
-//        statusMenuController.updateMenu(preferences: preferences)
     }
     
     func applicationWillTerminate(_ aNotification: Notification) {
