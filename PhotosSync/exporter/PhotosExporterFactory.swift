@@ -41,7 +41,7 @@ class PhotosExporterFactory {
                 }
             }
             if plan.mediaObjectFilter.keywordBlackList.count > 0 {
-                for keyword in plan.mediaObjectFilter.keywordWhiteList {
+                for keyword in plan.mediaObjectFilter.keywordBlackList {
                     if (hasKeyword(mediaObject: mediaObject, keyword: keyword)) {
                         result = false
                         break
