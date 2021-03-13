@@ -58,8 +58,6 @@ class PhotosExporter {
     
     public let logger = Logger(loggerName: "PhotosExporter", logLevel: .info)
     
-    let photosMetadata: PhotosMetadata
-
     var exportMediaGroupFilter: ((PhotoCollection) -> Bool) = { (PhotoCollection) -> Bool in
         return true
     }
@@ -101,12 +99,11 @@ class PhotosExporter {
     
     var statistics = Statistics()
 
-    init(targetPath: String, photosMetadata: PhotosMetadata) {
+    init(targetPath: String) {
         self.targetPath = targetPath
-        self.photosMetadata = photosMetadata
     }
     
-    func exportPhotos() {
+    func exportPhotos(photosMetadata: PhotosMetadata) {
         if !fileManager.fileExists(atPath: targetPath) {
             logger.error("The folder at targetPath=\(targetPath) doesn't exist. Create it before running the PhotosExporter.")
             return
@@ -125,7 +122,7 @@ class PhotosExporter {
             logger.info("Start export to \(targetPath)")
             stopWatch.start()
 
-            try doExport()
+            try doExport(photosMetadata: photosMetadata)
 
             stopWatch.stop()
             logger.info("Finished export to \(targetPath)")
@@ -134,10 +131,10 @@ class PhotosExporter {
         }
     }
     
-    private func doExport() throws {
+    private func doExport(photosMetadata: PhotosMetadata) throws {
         try initExport()
 
-        try exportFoldersFlat()
+        try exportFoldersFlat(photosMetadata: photosMetadata)
         
         if exportOriginals {
             logger.info("export albums folders - original assets")
@@ -173,7 +170,7 @@ class PhotosExporter {
         try recreateInProgressFolder()
     }
     
-    func exportFoldersFlat() throws {
+    func exportFoldersFlat(photosMetadata: PhotosMetadata) throws {
         // override function
     }
     
@@ -249,7 +246,7 @@ class PhotosExporter {
     let stopWatchFileManagerSetAttributes = StopWatch("fileManager.setAttributes", LogLevel.info, addFileSizes: false)
     let stopWatchMediaObjectIteration = StopWatch("for mediaObject in mediaObjects", LogLevel.info, addFileSizes: false)
 
-    func exportFolderFlat(flatPath: String, candidatesToLinkTo: [FlatFolderDescriptor], version: PhotoVersion) throws {
+    func exportFolderFlat(photosMetadata: PhotosMetadata, flatPath: String, candidatesToLinkTo: [FlatFolderDescriptor], version: PhotoVersion) throws {
         var containsFotosToExport = false;
         stopWatchExportFolderFlatScanMediaObjects.start()
         for mediaObject in photosMetadata.allMediaObjects {

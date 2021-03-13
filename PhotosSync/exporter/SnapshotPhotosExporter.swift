@@ -19,7 +19,7 @@ class SnapshotPhotosExporter : PhotosExporter {
     
     public var deleteFlatPath = true
     
-    override func exportFoldersFlat() throws {
+    override func exportFoldersFlat(photosMetadata: PhotosMetadata) throws {
         
         if exportOriginals {
             logger.info("export originals photos to \(inProgressPath)/\(originalsRelativePath)/\(flatRelativePath) folder")
@@ -31,6 +31,7 @@ class SnapshotPhotosExporter : PhotosExporter {
             }
 
             try exportFolderFlat(
+                photosMetadata: photosMetadata,
                 flatPath: "\(inProgressPath)/\(originalsRelativePath)/\(flatRelativePath)",
                 candidatesToLinkTo: candidatesToLinkTo,
                 version: PhotoVersion.originals)
@@ -50,6 +51,7 @@ class SnapshotPhotosExporter : PhotosExporter {
             }
 
             try exportFolderFlat(
+                photosMetadata: photosMetadata,
                 flatPath: "\(inProgressPath)/\(currentRelativePath)/\(flatRelativePath)",
                 candidatesToLinkTo: candidatesToLinkTo,
                 version: PhotoVersion.current)
@@ -68,6 +70,7 @@ class SnapshotPhotosExporter : PhotosExporter {
             }
 
             try exportFolderFlat(
+                photosMetadata: photosMetadata,
                 flatPath: "\(inProgressPath)/\(derivedRelativePath)/\(flatRelativePath)",
                 candidatesToLinkTo: candidatesToLinkTo,
                 version: PhotoVersion.derived)

@@ -15,7 +15,7 @@ enum PhotosExporterFactoryError: Error {
 
 
 class PhotosExporterFactory {
-    static func createPhotosExporter(plan: Plan, photosMetadata: PhotosMetadata) throws -> PhotosExporter {
+    static func createPhotosExporter(plan: Plan) throws -> PhotosExporter {
         // define which media groups should be exported
         let exportMediaGroupFilter = { (photoCollection: PhotoCollection) -> Bool in
             // export all media groups
@@ -55,11 +55,11 @@ class PhotosExporterFactory {
 
         if let plan = plan as? IncrementalFileSystemExportPlan {
             // TODO existence of targetFolder must be validated
-            let incrementalPhotosExporter = IncrementalPhotosExporter(targetPath: plan.targetFolder!, photosMetadata: photosMetadata)
+            let incrementalPhotosExporter = IncrementalPhotosExporter(targetPath: plan.targetFolder!)
             photosExporter = incrementalPhotosExporter
         } else if let plan = plan as? SnapshotFileSystemExportPlan {
             // TODO existence of targetFolder must be validated
-            let snapshotPhotosExporter = SnapshotPhotosExporter(targetPath: plan.targetFolder!, photosMetadata: photosMetadata)
+            let snapshotPhotosExporter = SnapshotPhotosExporter(targetPath: plan.targetFolder!)
             if let deleteFlatPath = plan.deleteFlatPath {
                 snapshotPhotosExporter.deleteFlatPath = deleteFlatPath
             }

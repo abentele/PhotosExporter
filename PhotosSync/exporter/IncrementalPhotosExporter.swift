@@ -21,7 +21,7 @@ class IncrementalPhotosExporter : PhotosExporter {
         try super.initExport()
     }
     
-    override func exportFoldersFlat() throws {
+    override func exportFoldersFlat(photosMetadata: PhotosMetadata) throws {
         if exportOriginals {
             logger.info("export originals photos to \(inProgressPath)/\(originalsRelativePath)/\(flatRelativePath) folder")
             
@@ -34,6 +34,7 @@ class IncrementalPhotosExporter : PhotosExporter {
             candidatesToLinkTo = try candidatesToLinkTo + flatFolderIfExists("\(latestPath)/\(originalsRelativePath)/\(flatRelativePath)")
 
             try exportFolderFlat(
+                photosMetadata: photosMetadata,
                 flatPath: "\(inProgressPath)/\(originalsRelativePath)/\(flatRelativePath)",
                 candidatesToLinkTo: candidatesToLinkTo,
                 version: PhotoVersion.originals)
@@ -55,6 +56,7 @@ class IncrementalPhotosExporter : PhotosExporter {
             }
             
             try exportFolderFlat(
+                photosMetadata: photosMetadata,
                 flatPath: "\(inProgressPath)/\(currentRelativePath)/\(flatRelativePath)",
                 candidatesToLinkTo: candidatesToLinkTo,
                 version: PhotoVersion.current)
@@ -75,6 +77,7 @@ class IncrementalPhotosExporter : PhotosExporter {
             }
             
             try exportFolderFlat(
+                photosMetadata: photosMetadata,
                 flatPath: "\(inProgressPath)/\(derivedRelativePath)/\(flatRelativePath)",
                 candidatesToLinkTo: candidatesToLinkTo,
                 version: PhotoVersion.derived)

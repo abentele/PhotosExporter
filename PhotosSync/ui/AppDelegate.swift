@@ -53,8 +53,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 if plan.enabled {
                     self.logger.info("Start export using plan:\n\(plan.toYaml(indent: 10))")
                     do {
-                        let photosExporter = try PhotosExporterFactory.createPhotosExporter(plan: plan, photosMetadata: photosMetadata)
-                        photosExporter.exportPhotos()
+                        let photosExporter = try PhotosExporterFactory.createPhotosExporter(plan: plan)
+                        photosExporter.exportPhotos(photosMetadata: photosMetadata)
                     } catch {
                         print("Error exporting photos for plan: \(String(describing: plan.name)); error: \(error)")
                     }
