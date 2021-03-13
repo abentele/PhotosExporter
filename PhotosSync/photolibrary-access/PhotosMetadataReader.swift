@@ -185,7 +185,7 @@ class PhotosMetadataReader {
                             // ignore
                             break;
                         @unknown default:
-                            self.logger.info("Invalid asset resource type: \(assetResource.type); asset: \(assetResource)")
+                            self.logger.warn("Invalid asset resource type: \(assetResource.type.rawValue); asset: \(assetResource)")
                             //fatalError()
                         }
                     }

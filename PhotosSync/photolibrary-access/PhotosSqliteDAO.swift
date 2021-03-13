@@ -54,8 +54,11 @@ class PhotosSqliteDAO {
     func readOriginalFilePath() throws -> [String:String] {
 
         let stmt = try prepareStatement(sql:
-            "select zgenericasset.ZUUID, ZGENERICASSET.ZDIRECTORY || '/' || ZGENERICASSET.ZFILENAME " +
-            "from ZGENERICASSET")
+            """
+            select ZASSET.ZUUID, ZASSET.ZDIRECTORY || '/' || ZASSET.ZFILENAME
+            from ZASSET
+            """
+        )
             
         defer {
           sqlite3_finalize(stmt)
@@ -80,11 +83,14 @@ class PhotosSqliteDAO {
     func readKeywords() throws -> [String:[String]] {
 
         let stmt = try prepareStatement(sql:
-            "select ZGENERICASSET.ZUUID, ZKEYWORD.ZTITLE " +
-            "from ZGENERICASSET " +
-            "join Z_1KEYWORDS on Z_1KEYWORDS.Z_1ASSETATTRIBUTES = ZGENERICASSET.ZADDITIONALATTRIBUTES " +
-            "join ZKEYWORD on ZKEYWORD.Z_PK = Z_1KEYWORDS.Z_37KEYWORDS " +
-            "order by ZGENERICASSET.ZUUID, ZKEYWORD.ZTITLE")
+            """
+            SELECT ZASSET.zuuid, zkeyword.ZTITLE
+            FROM Z_1KEYWORDS
+            join zkeyword on zkeyword.Z_PK = z_1keywords.z_36keywords
+            join ZADDITIONALASSETATTRIBUTES on ZADDITIONALASSETATTRIBUTES.z_pk = Z_1ASSETATTRIBUTES
+            join ZASSET on ZASSET.ZADDITIONALATTRIBUTES = ZADDITIONALASSETATTRIBUTES.Z_PK
+            """
+        )
             
         defer {
           sqlite3_finalize(stmt)
@@ -119,12 +125,15 @@ class PhotosSqliteDAO {
     func readTitles() throws -> [String:String] {
 
             let stmt = try prepareStatement(sql:
-                "select " +
-                "  ZGENERICASSET.ZUUID, " +
-                "  ZADDITIONALASSETATTRIBUTES.ZTITLE " +
-                "from ZGENERICASSET " +
-                "join ZADDITIONALASSETATTRIBUTES on ZGENERICASSET.ZADDITIONALATTRIBUTES = ZADDITIONALASSETATTRIBUTES.Z_PK " +
-                "where not ZADDITIONALASSETATTRIBUTES.ZTITLE is null and ZADDITIONALASSETATTRIBUTES.ZTITLE <> ''")
+                """
+                select
+                  ZASSET.ZUUID,
+                  ZADDITIONALASSETATTRIBUTES.ZTITLE
+                from ZASSET
+                join ZADDITIONALASSETATTRIBUTES on ZASSET.ZADDITIONALATTRIBUTES = ZADDITIONALASSETATTRIBUTES.Z_PK
+                where not ZADDITIONALASSETATTRIBUTES.ZTITLE is null and ZADDITIONALASSETATTRIBUTES.ZTITLE <> ''
+                """
+            )
                 
             defer {
               sqlite3_finalize(stmt)

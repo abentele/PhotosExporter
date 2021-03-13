@@ -42,14 +42,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let photosMetadataReader = PhotosMetadataReader(config: preferences.config)
         photosMetadataReader.readMetadata(completion: {(photosMetadata: PhotosMetadata) in
             
-            //photosMetadata.rootCollection.printYaml(indent: 0)
+            photosMetadata.rootCollection.printYaml(indent: 0)
             
             for plan in preferences.plans {
                 // separator for multiple export jobs
                 self.logger.info("")
                 self.logger.info("=====================================================================")
                 self.logger.info("")
-                
+
                 if plan.enabled {
                     self.logger.info("Start export using plan:\n\(plan.toYaml(indent: 10))")
                     do {
