@@ -3,7 +3,7 @@
 //  PhotosExporter
 //
 //  Created by Andreas Bentele on 21.10.18.
-//  Copyright © 2018 Andreas Bentele. All rights reserved.
+//  Copyright © 2021 Andreas Bentele. All rights reserved.
 //
 
 import Cocoa

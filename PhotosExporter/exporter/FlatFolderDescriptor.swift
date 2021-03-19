@@ -3,7 +3,7 @@
 //  PhotosExporter
 //
 //  Created by Andreas Bentele on 10.03.19.
-//  Copyright © 2019 Andreas Bentele. All rights reserved.
+//  Copyright © 2021 Andreas Bentele. All rights reserved.
 //
 
 import Foundation
