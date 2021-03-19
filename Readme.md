@@ -94,7 +94,7 @@ All settings can be applied both to the SnapshotPhotosExporter and to Incrementa
 
 # Implementation
 
-The program starts with reading all metadata of the [System Photos Library](https://support.apple.com/en-us/HT204414). This is implemented in [PhotosMetadataReader.swift](PhotosExporter/photoslibrary-access/PhotosMetadataReader.swift) using [PhotoKit](https://developer.apple.com/documentation/photokit) and SQL.
+The program starts with reading all metadata of the [System Photos Library](https://support.apple.com/en-us/HT204414). This is implemented in [PhotosMetadataReader.swift](PhotosExporter/photolibrary-access/PhotosMetadataReader.swift) using [PhotoKit](https://developer.apple.com/documentation/photokit) and SQL.
 
 The rest is implemented in [PhotosExporter.swift](PhotosExporter/exporter/PhotosExporter.swift) and inherited classes [SnapshotPhotosExporter.swift](PhotosExporter/exporter/SnapshotPhotosExporter.swift) and [IncrementalPhotosExporter.swift](PhotosExporter/exporter/IncrementalPhotosExporter.swift).
 
