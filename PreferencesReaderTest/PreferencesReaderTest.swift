@@ -7,7 +7,7 @@
 //
 
 import XCTest
-@testable import PhotosSync
+@testable import PhotosExporter
 
 class PreferencesReaderTest: XCTestCase {
     

@@ -1,4 +1,4 @@
-# PhotosSync - Short project description
+# PhotosExporter - Short project description
 
 Started project in April 2019.
 
