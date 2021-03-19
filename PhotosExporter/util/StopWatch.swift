@@ -103,7 +103,11 @@ class StopWatch {
                 logger.debug("\(description): \(diffMillisAsStr)ms; accumulated: \(accumulatedAsStr); count: \(count); avg time: \(avgAsStr)ms; \(mbPerSecondAccumulatedAsStr) MB/s")
             }
             else {
-                logger.debug("\(description): \(diffMillisAsStr)ms; accumulated: \(accumulatedAsStr); count: \(count); avg time: \(avgAsStr)ms")
+                if (count == 1) {
+                    logger.debug("\(description): \(diffMillisAsStr)ms; accumulated: \(accumulatedAsStr); count: \(count); avg time: \(avgAsStr)ms")
+                } else {
+                    logger.debug("\(description): \(diffMillisAsStr)ms")
+                }
             }
 
         }

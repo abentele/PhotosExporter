@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.70"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="NSApplication">
+            <connections>
+                <outlet property="delegate" destination="Voe-Tx-rLC" id="GzC-gU-4Uq"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="PhotosSync" customModuleProvider="target">
+            <connections>
+                <outlet property="statusMenuController" destination="CVW-nZ-F6o" id="Cg2-ZA-J4o"/>
+            </connections>
+        </customObject>
+        <customObject id="YLy-65-1bz" customClass="NSFontManager"/>
+        <menu id="BPe-uX-XBF">
+            <items>
+                <menuItem title="Run backup plan..." id="tEQ-3s-cPa">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                </menuItem>
+                <menuItem isSeparatorItem="YES" id="1Gn-gN-S9o"/>
+                <menuItem title="Preferences..." id="LML-PZ-ZQ1">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="preferencesClicked:" target="CVW-nZ-F6o" id="niO-EI-oF2"/>
+                    </connections>
+                </menuItem>
+                <menuItem isSeparatorItem="YES" id="UQQ-z2-MpX"/>
+                <menuItem title="Quit" id="Bn2-sw-ukb">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="quitClicked:" target="CVW-nZ-F6o" id="oTg-LJ-PQm"/>
+                    </connections>
+                </menuItem>
+            </items>
+            <point key="canvasLocation" x="-175" y="-157"/>
+        </menu>
+        <customObject id="CVW-nZ-F6o" customClass="StatusMenuController" customModule="PhotosSync" customModuleProvider="target">
+            <connections>
+                <outlet property="backupPlansMenuItem" destination="tEQ-3s-cPa" id="E3O-73-Hwq"/>
+                <outlet property="statusMenu" destination="BPe-uX-XBF" id="Gmj-20-4bl"/>
+            </connections>
+        </customObject>
+    </objects>
+</document>

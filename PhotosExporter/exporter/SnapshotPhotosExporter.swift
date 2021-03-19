@@ -14,26 +14,66 @@ import Foundation
 class SnapshotPhotosExporter : PhotosExporter {
     
     private var subTargetPath: String {
-        return "\(targetPath)/Current"
+        return "\(targetPath)/Snapshot"
     }
     
     public var deleteFlatPath = true
     
-    override func exportFoldersFlat() throws {
+    override func exportFoldersFlat(photosMetadata: PhotosMetadata) throws {
+        
         if exportOriginals {
             logger.info("export originals photos to \(inProgressPath)/\(originalsRelativePath)/\(flatRelativePath) folder")
+
+            var candidatesToLinkTo: [FlatFolderDescriptor] = []
+
+            if let baseExportPath = baseExportPath {
+                candidatesToLinkTo = try candidatesToLinkTo + flatFolderIfExists("\(baseExportPath)/\(originalsRelativePath)/\(flatRelativePath)")
+            }
+
             try exportFolderFlat(
+                photosMetadata: photosMetadata,
                 flatPath: "\(inProgressPath)/\(originalsRelativePath)/\(flatRelativePath)",
-                candidatesToLinkTo: [],
-                exportOriginals: true)
+                candidatesToLinkTo: candidatesToLinkTo,
+                version: PhotoVersion.originals)
             
         }
-        if exportCalculated {
-            logger.info("export calculated photos to \(inProgressPath)/\(calculatedRelativePath)/\(flatRelativePath) folder")
+        if exportCurrent {
+            logger.info("export current photos to \(inProgressPath)/\(currentRelativePath)/\(flatRelativePath) folder")
+
+            var candidatesToLinkTo: [FlatFolderDescriptor] = []
+
+            if let baseExportPath = baseExportPath {
+                candidatesToLinkTo = try candidatesToLinkTo + flatFolderIfExists("\(baseExportPath)/\(currentRelativePath)/\(flatRelativePath)")
+            }
+
+            if exportOriginals {
+                candidatesToLinkTo = try candidatesToLinkTo + flatFolderIfExists("\(inProgressPath)/\(originalsRelativePath)/\(flatRelativePath)")
+            }
+
             try exportFolderFlat(
-                flatPath: "\(inProgressPath)/\(calculatedRelativePath)/\(flatRelativePath)",
-                candidatesToLinkTo: [FlatFolderDescriptor(folderName: "\(inProgressPath)/\(originalsRelativePath)/\(flatRelativePath)", countSubFolders: countSubFolders)],
-                exportOriginals: false)
+                photosMetadata: photosMetadata,
+                flatPath: "\(inProgressPath)/\(currentRelativePath)/\(flatRelativePath)",
+                candidatesToLinkTo: candidatesToLinkTo,
+                version: PhotoVersion.current)
+        }
+        if exportDerived {
+            logger.info("export derived photos to \(inProgressPath)/\(derivedRelativePath)/\(flatRelativePath) folder")
+
+            var candidatesToLinkTo: [FlatFolderDescriptor] = []
+
+            if let baseExportPath = baseExportPath {
+                candidatesToLinkTo = try candidatesToLinkTo + flatFolderIfExists("\(baseExportPath)/\(derivedRelativePath)/\(flatRelativePath)")
+            }
+
+            if exportOriginals {
+                candidatesToLinkTo = try candidatesToLinkTo + flatFolderIfExists("\(inProgressPath)/\(originalsRelativePath)/\(flatRelativePath)")
+            }
+
+            try exportFolderFlat(
+                photosMetadata: photosMetadata,
+                flatPath: "\(inProgressPath)/\(derivedRelativePath)/\(flatRelativePath)",
+                candidatesToLinkTo: candidatesToLinkTo,
+                version: PhotoVersion.derived)
         }
     }
 
@@ -81,7 +121,7 @@ class SnapshotPhotosExporter : PhotosExporter {
         // remove the ".flat" folders
         if (deleteFlatPath) {
             try deleteFolderIfExists(atPath: "\(inProgressPath)/\(originalsRelativePath)/\(flatRelativePath)")
-            try deleteFolderIfExists(atPath: "\(inProgressPath)/\(calculatedRelativePath)/\(flatRelativePath)")
+            try deleteFolderIfExists(atPath: "\(inProgressPath)/\(currentRelativePath)/\(flatRelativePath)")
         }
         
         // remove the "Current" folder
