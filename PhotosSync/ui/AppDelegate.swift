@@ -32,16 +32,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 return;
             }
             
-//            self.executeAllPlans(preferences: preferences)
+            self.executeAllPlans(preferences: preferences)
             
-            self.statusMenuController.updateMenu(preferences: preferences)
+//            self.statusMenuController.updateMenu(preferences: preferences)
             
             //PreferencesReader.writePreferencesFile(preferences: preferences)
 
 
-//            DispatchQueue.main.sync {
-//                NSApp.terminate(self)
-//            }
+            DispatchQueue.main.sync {
+                NSApp.terminate(self)
+            }
         });
     }
     
