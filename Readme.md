@@ -46,6 +46,8 @@ Currently the program doesn't have any arguments and no user interface (I've sta
 
 It reads photos from the System Photos Library, not any other Photos Library.
 
+Currently only photos from albums are exported. Photos which are not assigned to albums are not exported. See issue #12.
+
 To use it:
 * create a YAML file ~/Library/Application Support/PhotosExporter/PhotosExporter.yaml and edit the content, e.g.:
 ```
