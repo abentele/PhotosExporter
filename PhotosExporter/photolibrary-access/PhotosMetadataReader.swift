@@ -12,17 +12,15 @@ import Photos
 class PhotosMetadataReader {
     public let logger = Logger(loggerName: "PhotosReader", logLevel: .info)
     
-    fileprivate let config: Config
-    
-    init(config: Config) {
-        self.config = config
+    init() {
     }
     
     func readMetadata(completion: @escaping (PhotosMetadata) -> (Void)) {
         do {
+            let photosLibraryPath = try PhotoLibraryUtil.getSystemPhotosLibraryPath()
             let photosMetadata = try self.readMetadata()
             
-            try loadAdditionalDataFromSqliteDatabase(photosMetadata.allMediaObjects)
+            try loadAdditionalDataFromSqliteDatabase(photosLibraryPath: photosLibraryPath, allMediaObjects: photosMetadata.allMediaObjects)
             
             completion(photosMetadata)
         } catch {
@@ -30,8 +28,8 @@ class PhotosMetadataReader {
         }
     }
     
-    func loadAdditionalDataFromSqliteDatabase(_ allMediaObjects: [MediaObject]) throws {
-        let photosSqliteDAO = try PhotosSqliteDAO(config: self.config)
+    func loadAdditionalDataFromSqliteDatabase(photosLibraryPath: String, allMediaObjects: [MediaObject]) throws {
+        let photosSqliteDAO = try PhotosSqliteDAO(photosLibraryPath: photosLibraryPath)
         let keywordsMap = try photosSqliteDAO.readKeywords()
         let titleMap = try photosSqliteDAO.readTitles()
         let originalFilePathMap = try photosSqliteDAO.readOriginalFilePath()
@@ -48,7 +46,7 @@ class PhotosMetadataReader {
             
             // originalUrl
             if let originalFilePath = originalFilePathMap[zuuid] {
-                let absolutePath = "\(self.config.photosLibraryPath!)/originals/\(originalFilePath)"
+                let absolutePath = "\(photosLibraryPath)/originals/\(originalFilePath)"
                 
                 // workaround: Apple doesn't expose the URL via PhotoKit API (PHAssetResource) for some PDF's in the PhotoLibrary => get it from SQLite database
                 if mediaObject.originalUrl == nil {
@@ -65,7 +63,7 @@ class PhotosMetadataReader {
             }
             
             // derived URL
-            mediaObject.derivedUrl = getDerivedUrl(mediaObject)
+            mediaObject.derivedUrl = getDerivedUrl(photosLibraryPath: photosLibraryPath, mediaObject: mediaObject)
             if mediaObject.derivedUrl == nil {
                 mediaObject.derivedUrl = mediaObject.currentUrl
             }
@@ -196,11 +194,11 @@ class PhotosMetadataReader {
     }
     
     // workaround to get the derived URL (didn't find any API for this)
-    func getDerivedUrl(_ mediaObject: MediaObject) -> URL? {
+    func getDerivedUrl(photosLibraryPath: String, mediaObject: MediaObject) -> URL? {
         let originalPathComponents = mediaObject.originalUrl!.pathComponents
         let subFolder = originalPathComponents[originalPathComponents.count - 2]
         
-        let derivedPath = "\(config.photosLibraryPath!)/resources/derivatives/\(subFolder)/\(mediaObject.zuuid())_1_100_o.jpeg"
+        let derivedPath = "\(photosLibraryPath)/resources/derivatives/\(subFolder)/\(mediaObject.zuuid())_1_100_o.jpeg"
         if FileManager.default.fileExists(atPath: derivedPath) {
             return URL(fileURLWithPath: derivedPath)
         }

@@ -20,8 +20,8 @@ class PhotosSqliteDAO {
     
     fileprivate var dbPointer: OpaquePointer?
     
-    init(config: Config) throws {
-        try openDatabase(path: config.photosLibraryPath! + "/database/Photos.sqlite")
+    init(photosLibraryPath: String) throws {
+        try openDatabase(path: photosLibraryPath + "/database/Photos.sqlite")
     }
     
     func openDatabase(path: String) throws {

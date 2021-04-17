@@ -65,12 +65,6 @@ class PreferencesReader {
             throw PreferencesReaderError.invalidYaml
         }
         
-        if let configYaml = preferencesYaml["config"], let configDict = configYaml.dictionary, let photosLibraryPath = configDict["photosLibraryPath"]?.string {
-            preferences.config.photosLibraryPath = photosLibraryPath
-        } else {
-            throw PreferencesReaderError.missingRequiredAttribute
-        }
-
         if let plansYaml = preferencesYaml["plans"], let plansArray = plansYaml.array {
             for planYaml in plansArray {
                 let planDict = planYaml.dictionary!

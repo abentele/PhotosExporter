@@ -44,12 +44,12 @@ Starting with macOS Catalina the MediaLibrary Framework had a bug which causes k
 
 Currently the program doesn't have any arguments and no user interface (I've started to work on it, but it's far from being usable).
 
+It reads photos from the System Photos Library, not any other Photos Library.
+
 To use it:
 * create a YAML file ~/Library/Application Support/PhotosExporter/PhotosExporter.yaml and edit the content, e.g.:
 ```
 ---
-config:
-  photosLibraryPath: /Users/<username>/Pictures/Fotos Library.photoslibrary
 plans:
   -
     type: SnapshotFileSystemExport
@@ -74,7 +74,6 @@ If you move the exported folder, be sure to recreate the `Latest` link, because 
 
 All settings can be applied both to the SnapshotPhotosExporter and to IncrementalPhotosExporter.
 
-* photosLibraryPath: the path to your photos library
 * plans: each plan is a configuration to export your photos. You can add one or multiple plans to export
 * type: either `SnapshotFileSystemExport` or `IncrementalFileSystemExport`
 * enabled: `true` or `false` - can be used to disable export configuration

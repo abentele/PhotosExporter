@@ -9,13 +9,10 @@
 import Foundation
 
 class Preferences {
-    public var config = Config()
     public var plans: [Plan] = []
     
     func toYaml() -> String {
         var result = "---\n"
-        result += "config:\n"
-        result += config.toYaml(indent: 2)
         result += "plans:\n"
         for plan in plans {
             result += "-\n".indent(2)
