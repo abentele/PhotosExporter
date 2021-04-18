@@ -103,6 +103,8 @@ class PhotosMetadataReader {
     }
     
     fileprivate func addAssetsNotInAnyCollection(allMediaObjects: [MediaObject], rootCollection: PhotoCollection) {
+        // TODO this whole method takes rather long for > 50000 picture => performance improvement needed
+        
         let assetsInCollections = getAssetsFlatCollection(collection: rootCollection)
         
         for mediaObject in allMediaObjects {
