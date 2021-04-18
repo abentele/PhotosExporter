@@ -44,10 +44,6 @@ Starting with macOS Catalina the MediaLibrary Framework had a bug which causes k
 
 Currently the program doesn't have any arguments and no user interface (I've started to work on it, but it's far from being usable).
 
-It reads photos from the System Photos Library, not any other Photos Library.
-
-Currently only photos from albums are exported. Photos which are not assigned to albums are not exported. See issue #12.
-
 To use it:
 * create a YAML file ~/Library/Application Support/PhotosExporter/PhotosExporter.yaml and edit the content, e.g.:
 ```
@@ -92,6 +88,12 @@ All settings can be applied both to the SnapshotPhotosExporter and to Incrementa
 # Supported platforms
 
 * macOS 11 "Big Sur" (tested by the maintainer)
+
+# Limitations
+
+* only photos from the System Photos Library can be exported, not from any other Photos Library. This is due to restrictions of the PhotoKit API.
+* only photos that are part of the users photos library are exported. Assets that originate from an iCloud shared album are ignored.
+* smart albums are not exported. 
 
 # Implementation
 

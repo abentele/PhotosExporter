@@ -8,7 +8,7 @@
 
 import Foundation
 
-class PhotoObject {
+class PhotoObject : Equatable {
     
     var localIdentifier: String?
     
@@ -32,6 +32,11 @@ class PhotoObject {
     static func zuuid(localIdentifier: String) -> String {
         let zuuid = String(localIdentifier[..<localIdentifier.firstIndex(of: "/")!])
         return zuuid
+    }
+    
+    // protocol Equatable
+    static func == (lhs: PhotoObject, rhs: PhotoObject) -> Bool {
+        return lhs.localIdentifier == rhs.localIdentifier
     }
 
 
