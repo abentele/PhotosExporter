@@ -96,32 +96,30 @@ class PhotosMetadataReader {
             allMediaObjectsArray += [mediaObject]
         }
         
-        // add a collection with assets that are not in any collection
         addAssetsNotInAnyCollection(allMediaObjects: allMediaObjectsArray, rootCollection: rootCollection)
         
         return PhotosMetadata(rootCollection: rootCollection, allMediaObjects: allMediaObjectsArray)
     }
     
     fileprivate func addAssetsNotInAnyCollection(allMediaObjects: [MediaObject], rootCollection: PhotoCollection) {
-        // TODO this whole method takes rather long for > 50000 picture => performance improvement needed
-        
-        let assetsInCollections = getAssetsFlatCollection(collection: rootCollection)
+        var assetsInCollections: Set<String> = []
+        insertAllAssetsOfCollectionRecursive(collection: rootCollection, result: &assetsInCollections)
         
         for mediaObject in allMediaObjects {
-            if !assetsInCollections.contains(mediaObject) {
+            if !assetsInCollections.contains(mediaObject.zuuid()) {
                 // add the photos to the root collection
                 rootCollection.mediaObjects += [mediaObject]
             }
         }
     }
     
-    fileprivate func getAssetsFlatCollection(collection: PhotoCollection) -> [MediaObject] {
-        var result: [MediaObject] = []
-        result += collection.mediaObjects
-        for childCollection in collection.childCollections {
-            result += getAssetsFlatCollection(collection: childCollection)
+    fileprivate func insertAllAssetsOfCollectionRecursive(collection: PhotoCollection, result: inout Set<String>) {
+        for mediaObject in collection.mediaObjects {
+            result.insert(mediaObject.zuuid())
         }
-        return result
+        for childCollection in collection.childCollections {
+            insertAllAssetsOfCollectionRecursive(collection: childCollection, result: &result)
+        }
     }
     
     // returns map [zuuid:MediaObject]
