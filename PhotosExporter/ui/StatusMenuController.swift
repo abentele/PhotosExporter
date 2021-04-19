@@ -61,7 +61,7 @@ class StatusMenuController: NSObject {
             button.image?.isTemplate = true
         }
         
-        preferencesClicked(self)
+        //preferencesClicked(self)
     }
     
     @objc func runExportTask(sender: AnyObject?) {
