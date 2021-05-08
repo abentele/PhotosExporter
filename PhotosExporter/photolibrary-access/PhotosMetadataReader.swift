@@ -242,6 +242,9 @@ class PhotosMetadataReader {
     // workaround to get the derived URL (didn't find any API for this)
     func getDerivedUrl(photosLibraryPath: String, mediaObject: MediaObject) -> URL? {
         let originalPathComponents = mediaObject.originalUrl!.pathComponents
+        if originalPathComponents.count < 2 {
+            return nil
+        }
         let subFolder = originalPathComponents[originalPathComponents.count - 2]
         
         let derivedPath = "\(photosLibraryPath)/resources/derivatives/\(subFolder)/\(mediaObject.zuuid())_1_100_o.jpeg"
