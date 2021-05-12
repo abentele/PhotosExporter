@@ -283,7 +283,7 @@ class PhotosExporter {
                     try autoreleasepool {
                         let sourceUrl = sourceUrlOfMediaObject(mediaObject: mediaObject, version: version)
                         
-                        if let sourceUrl = sourceUrl {
+                        if sourceUrl?.absoluteString != "(null)", let sourceUrl = sourceUrl {
                             let targetUrl = URL(fileURLWithPath: getFlatPath(FlatFolderDescriptor(folderName: flatPath, countSubFolders: countSubFolders), mediaObject, pathExtension: sourceUrl.pathExtension))
                             if !fileManager.fileExists(atPath: targetUrl.path) {
                                 let linkToUrl = try getLinkToUrl(candidatesToLinkTo: candidatesToLinkTo, mediaObject: mediaObject, sourceUrl: sourceUrl)
@@ -413,7 +413,7 @@ class PhotosExporter {
     
     private func exportFoto(mediaObject: MediaObject, flatFolder: FlatFolderDescriptor, targetPath: String, version: PhotoVersion) throws {
         let sourceUrl = sourceUrlOfMediaObject(mediaObject: mediaObject, version: version)
-        if let sourceUrl = sourceUrl {
+        if sourceUrl?.absoluteString != "(null)", let sourceUrl = sourceUrl {
             let linkTargetUrl = URL(fileURLWithPath: getFlatPath(flatFolder, mediaObject, pathExtension: sourceUrl.pathExtension))
             
             // get unique target name
