@@ -41,7 +41,11 @@ class PhotoLibraryUtil {
             let fileUrl = URL(fileURLWithPath: "Containers/com.apple.photolibraryd/Data/Library/Preferences/com.apple.photolibraryd.plist", relativeTo: libraryDirectoryUrl)
             print("fileUrl: \(fileUrl)")
             if let dictionary = NSDictionary(contentsOfFile: fileUrl.path) {
-                return dictionary["SystemLibraryPath"] as? String
+                guard let libs = dictionary["PLLibraryBookmarkManagerBookmarksByPath"] as? [String:Data] else {
+                    return nil
+                }
+                let result = libs.keys.first
+                return result
             }
         }
         
