@@ -151,8 +151,7 @@ class PhotosMetadataReader {
                 switch (assetResource.type) {
                 case PHAssetResourceType.photo,
                      PHAssetResourceType.video,
-                     PHAssetResourceType.audio,
-                     PHAssetResourceType.pairedVideo:
+                     PHAssetResourceType.audio:
                     if mediaObject.originalUrl == nil {
                         mediaObject.originalFilename = getStringProperty(object: assetResource, propertyName: "filename")
                         //                            self.logger.info("Asset originalFileName: \(mediaObject.originalFilename)")
@@ -162,11 +161,18 @@ class PhotosMetadataReader {
                     }
                     break;
                 case PHAssetResourceType.fullSizePhoto,
-                     PHAssetResourceType.fullSizeVideo,
-                     PHAssetResourceType.fullSizePairedVideo:
+                     PHAssetResourceType.fullSizeVideo:
                     mediaObject.currentUrl = URL(string: getStringProperty(object: assetResource, propertyName: "fileURL"));
                     //                         self.logger.info("Asset currentUrl: \(mediaObject.currentUrl)")
                     break;
+                case PHAssetResourceType.pairedVideo:
+                    let fileUrlString = getStringProperty(object: assetResource, propertyName: "fileURL")
+                    mediaObject.originalLiveUrl = URL(string: fileUrlString);
+                    break
+                case PHAssetResourceType.fullSizePairedVideo:
+                    let fileUrlString = getStringProperty(object: assetResource, propertyName: "fileURL")
+                    mediaObject.currentLiveUrl = URL(string: fileUrlString);
+                    break
                 case PHAssetResourceType.alternatePhoto:
                     // prefer to export raw image instead of jpeg
                     let utiValue = getStringProperty(object: assetResource, propertyName: "uti")
