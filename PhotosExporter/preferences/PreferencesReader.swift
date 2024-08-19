@@ -90,6 +90,7 @@ class PreferencesReader {
                     }
                     plan.exportCurrent = planDict["exportCurrent"]?.bool
                     plan.exportOriginals = planDict["exportOriginals"]?.bool
+                    plan.exportDerived = planDict["exportDerived"]?.bool
 
                     if let plan = plan as? FileSystemExportPlan {
                         plan.targetFolder = planDict["targetFolder"]?.string
