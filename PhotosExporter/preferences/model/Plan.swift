@@ -21,6 +21,9 @@ class Plan {
     // exports the original assets
     public var exportOriginals: Bool?
     
+    // convert heic to jpg
+    public var convertHeic2Jpg: Bool?
+    
     
     public var mediaObjectFilter = MediaObjectFilter()
 
@@ -48,6 +51,9 @@ class Plan {
         }
         if let exportOriginals = exportOriginals {
             result += "exportOriginals: \(exportOriginals)\n".indent(indent)
+        }
+        if let convertHeic2Jpg = convertHeic2Jpg {
+            result += "convertHeic2Jpg: \(convertHeic2Jpg)\n".indent(indent)
         }
         result += mediaObjectFilter.toYaml(indent: indent)
         
