@@ -217,6 +217,17 @@ class PhotosExporter {
         }
     }
     
+    private func sourceLiveUrlOfMediaObject(mediaObject: MediaObject, version: PhotoVersion) -> URL? {
+        switch (version) {
+        case PhotoVersion.originals:
+            return mediaObject.originalLiveUrl
+        case PhotoVersion.current:
+            return mediaObject.currentLiveUrl ?? mediaObject.originalLiveUrl
+        case PhotoVersion.derived:
+            return mediaObject.currentLiveUrl ?? mediaObject.originalLiveUrl
+        }
+    }
+    
     let stopWatchCheckFileSize = StopWatch("check file size", LogLevel.info, addFileSizes: false)
 
     private func getLinkToUrl(candidatesToLinkTo: [FlatFolderDescriptor], mediaObject: MediaObject, sourceUrl: URL) throws -> URL? {
@@ -282,45 +293,11 @@ class PhotosExporter {
                     // autorelease periodically
                     try autoreleasepool {
                         let sourceUrl = sourceUrlOfMediaObject(mediaObject: mediaObject, version: version)
+                        try writeFlatFile(mediaObject: mediaObject, flatPath: flatPath, candidatesToLinkTo: candidatesToLinkTo, sourceUrl: sourceUrl)
                         
-                        if sourceUrl?.absoluteString != "(null)", let sourceUrl = sourceUrl {
-                            let targetUrl = URL(fileURLWithPath: getFlatPath(FlatFolderDescriptor(folderName: flatPath, countSubFolders: countSubFolders), mediaObject, pathExtension: sourceUrl.pathExtension))
-                            if !fileManager.fileExists(atPath: targetUrl.path) {
-                                let linkToUrl = try getLinkToUrl(candidatesToLinkTo: candidatesToLinkTo, mediaObject: mediaObject, sourceUrl: sourceUrl)
-                                
-                                if let linkToUrl = linkToUrl {
-                                    logger.debug("\(index): link unchanged image: \(sourceUrl); link to: \(linkToUrl)")
-                                    do {
-                                        stopWatchFileManagerLinkItem.start()
-                                        try fileManager.linkItem(at: linkToUrl, to: targetUrl)
-                                        statistics.countLinkedFiles += 1
-                                        stopWatchFileManagerLinkItem.stop()
-                                    }
-                                    catch let error as NSError {
-                                        logger.error("\(index): Unable to link file: \(error)")
-                                        throw error
-                                    }
-                                } else {
-                                    try copyOrLinkFileInPhotosLibrary(sourceUrl: sourceUrl, targetUrl: targetUrl)
-                                    
-                                    let fotoDate = mediaObject.creationDate!
-                                    let attributes = [FileAttributeKey.modificationDate : fotoDate]
-                                    stopWatchFileManagerSetAttributes.start()
-                                    do {
-                                        try fileManager.setAttributes(attributes, ofItemAtPath: targetUrl.path)
-                                    }
-                                    catch let error as NSError {
-                                        logger.error("\(index): Unable to set attributes on file: \(error)")
-                                        throw error
-                                    }
-                                    stopWatchFileManagerSetAttributes.stop()
-                                }
-                                
-                                try setTagsOnFile(mediaObject: mediaObject, targetUrl: targetUrl)
-                            }
-                        }
-                        else {
-                            logger.warn("mediaObject has no url: \(mediaObject)")
+                        let sourceLiveUrl = sourceLiveUrlOfMediaObject(mediaObject: mediaObject, version: version)
+                        if sourceLiveUrl != nil {
+                            try writeFlatFile(mediaObject: mediaObject, flatPath: flatPath, candidatesToLinkTo: candidatesToLinkTo, sourceUrl: sourceLiveUrl)
                         }
                     }
                     
@@ -331,6 +308,50 @@ class PhotosExporter {
             }
             
             stopWatchCopyMediaObject.stop()
+        }
+    }
+    
+    func writeFlatFile(mediaObject: MediaObject, flatPath: String, candidatesToLinkTo: [FlatFolderDescriptor], sourceUrl: URL?) throws {
+        if sourceUrl?.absoluteString != "(null)", let sourceUrl = sourceUrl {
+            let targetUrl = URL(fileURLWithPath: getFlatPath(FlatFolderDescriptor(folderName: flatPath, countSubFolders: countSubFolders), mediaObject, pathExtension: sourceUrl.pathExtension))
+            if !fileManager.fileExists(atPath: targetUrl.path) {
+                let linkToUrl = try getLinkToUrl(candidatesToLinkTo: candidatesToLinkTo, mediaObject: mediaObject, sourceUrl: sourceUrl)
+                
+                if let linkToUrl = linkToUrl {
+                    logger.debug("\(index): link unchanged image: \(sourceUrl); link to: \(linkToUrl)")
+                    do {
+                        stopWatchFileManagerLinkItem.start()
+                        try fileManager.linkItem(at: linkToUrl, to: targetUrl)
+                        statistics.countLinkedFiles += 1
+                        stopWatchFileManagerLinkItem.stop()
+                    }
+                    catch let error as NSError {
+                        logger.error("\(index): Unable to link file: \(error)")
+                        throw error
+                    }
+                } else {
+                    try copyOrLinkFileInPhotosLibrary(sourceUrl: sourceUrl, targetUrl: targetUrl)
+                    
+                    let fotoDate = mediaObject.creationDate
+                    let attributes = [FileAttributeKey.modificationDate : fotoDate]
+                    stopWatchFileManagerSetAttributes.start()
+                    do {
+                        try fileManager.setAttributes(attributes, ofItemAtPath: targetUrl.path)
+                    }
+                    catch let error as NSError {
+                        logger.error("\(index): Unable to set attributes on file: \(error)")
+                        throw error
+                    }
+                    stopWatchFileManagerSetAttributes.stop()
+                }
+                
+                try setTagsOnFile(mediaObject: mediaObject, targetUrl: targetUrl)
+            } else {
+                logger.warn("mediaObject already present to url: \(mediaObject)")
+            }
+        }
+        else {
+            logger.warn("mediaObject has no url: \(mediaObject)")
         }
     }
     
@@ -413,6 +434,15 @@ class PhotosExporter {
     
     private func exportFoto(mediaObject: MediaObject, flatFolder: FlatFolderDescriptor, targetPath: String, version: PhotoVersion) throws {
         let sourceUrl = sourceUrlOfMediaObject(mediaObject: mediaObject, version: version)
+        try writeFoto(sourceUrl: sourceUrl, mediaObject: mediaObject, flatFolder: flatFolder, targetPath: targetPath)
+        
+        let sourceLiveUrl = sourceLiveUrlOfMediaObject(mediaObject: mediaObject, version: version)
+        if sourceLiveUrl != nil {
+            try writeFoto(sourceUrl: sourceLiveUrl, mediaObject: mediaObject, flatFolder: flatFolder, targetPath: targetPath)
+        }
+    }
+    
+    private func writeFoto(sourceUrl: URL?, mediaObject: MediaObject, flatFolder: FlatFolderDescriptor, targetPath: String) throws {
         if sourceUrl?.absoluteString != "(null)", let sourceUrl = sourceUrl {
             let linkTargetUrl = URL(fileURLWithPath: getFlatPath(flatFolder, mediaObject, pathExtension: sourceUrl.pathExtension))
             
