@@ -85,6 +85,9 @@ class PhotosExporterFactory {
         if let exportOriginals = plan.exportOriginals {
             photosExporter.exportOriginals = exportOriginals
         }
+        if let convertHeic2Jpg = plan.convertHeic2Jpg {
+            photosExporter.convertHeic2Jpg = convertHeic2Jpg
+        }
         
         return photosExporter
     }

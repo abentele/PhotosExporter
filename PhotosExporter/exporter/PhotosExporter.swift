@@ -8,6 +8,9 @@
 
 import Foundation
 import MediaLibrary
+import CoreImage
+import AppKit
+import Photos
 
 
 enum PhotosExporterError: Error {
@@ -82,6 +85,8 @@ class PhotosExporter {
     var exportCurrent = true
     // set to true if original photos should be exported
     var exportOriginals = true
+    // set to true if HEIC photos should be converted to JPG
+    var convertHeic2Jpg = false
     
     let fileManager = FileManager.default
 
@@ -436,6 +441,36 @@ class PhotosExporter {
             }
             statistics.countLinkedFiles += 1
             stopWatchFileManagerLinkItem.stop()
+
+            if sourceUrl.pathExtension.lowercased() == "heic" && convertHeic2Jpg {
+                
+                if let image = CIImage(contentsOf: sourceUrl) {
+                    let context = CIContext()
+                    let data = context.jpegRepresentation(of: image, colorSpace: CGColorSpaceCreateDeviceRGB(), options: [kCGImageDestinationLossyCompressionQuality as CIImageRepresentationOption:0.8])
+                    var targetJPEGUrl = URL.init(fileURLWithPath: "\(targetPath)/\(fotoName).jpg")
+                    logger.debug("Convert HEIC foto: \(fotoName) to \(targetJPEGUrl)")
+                    var i = 1
+                    while fileManager.fileExists(atPath: targetJPEGUrl.path) {
+                        targetJPEGUrl = URL(fileURLWithPath: "\(targetJPEGUrl)/\(fotoName) (\(i)).jpg")
+                        i += 1
+                    }
+                    logger.debug("convert jpg image: \(targetJPEGUrl.lastPathComponent)")
+                    do {
+                        try data?.write(to: targetJPEGUrl)
+                    } catch {
+                        logger.error("\(String(describing: index)): Unable to convert heic to jpg : \(fotoName) to \(targetJPEGUrl). Error: \(error)")
+                    }
+                    
+                    do {
+                        if let creationDate = try fileManager.attributesOfItem(atPath: sourceUrl.path)[FileAttributeKey.creationDate] as? Date {
+                            try fileManager.setAttributes([FileAttributeKey.creationDate:creationDate], ofItemAtPath: targetJPEGUrl.path)
+                        }
+                    } catch {
+                        logger.error("\(String(describing: index)): Unable to set creationDate to jpg : \(fotoName) to \(targetJPEGUrl). Error: \(error)")
+                    }
+                }
+            }
+            
         } else {
             logger.warn("Source URL of mediaObject unknown: \(mediaObject)")
         }
