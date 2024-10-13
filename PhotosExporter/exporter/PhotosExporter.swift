@@ -434,25 +434,25 @@ class PhotosExporter {
     
     private func exportFoto(mediaObject: MediaObject, flatFolder: FlatFolderDescriptor, targetPath: String, version: PhotoVersion) throws {
         let sourceUrl = sourceUrlOfMediaObject(mediaObject: mediaObject, version: version)
-        try writeFoto(sourceUrl: sourceUrl, mediaObject: mediaObject, flatFolder: flatFolder, targetPath: targetPath)
+        try writeFoto(sourceUrl: sourceUrl, mediaObject: mediaObject, flatFolder: flatFolder, targetPath: targetPath, fileNameSuffix: "")
         
         let sourceLiveUrl = sourceLiveUrlOfMediaObject(mediaObject: mediaObject, version: version)
         if sourceLiveUrl != nil {
-            try writeFoto(sourceUrl: sourceLiveUrl, mediaObject: mediaObject, flatFolder: flatFolder, targetPath: targetPath)
+            try writeFoto(sourceUrl: sourceLiveUrl, mediaObject: mediaObject, flatFolder: flatFolder, targetPath: targetPath, fileNameSuffix: "-live")
         }
     }
     
-    private func writeFoto(sourceUrl: URL?, mediaObject: MediaObject, flatFolder: FlatFolderDescriptor, targetPath: String) throws {
+    private func writeFoto(sourceUrl: URL?, mediaObject: MediaObject, flatFolder: FlatFolderDescriptor, targetPath: String, fileNameSuffix: String) throws {
         if sourceUrl?.absoluteString != "(null)", let sourceUrl = sourceUrl {
             let linkTargetUrl = URL(fileURLWithPath: getFlatPath(flatFolder, mediaObject, pathExtension: sourceUrl.pathExtension))
             
             // get unique target name
             let fotoName = getFotoName(mediaObject: mediaObject, sourceUrl: sourceUrl)
-            var targetUrl = URL(fileURLWithPath: "\(targetPath)/\(fotoName).\(sourceUrl.pathExtension)")
+            var targetUrl = URL(fileURLWithPath: "\(targetPath)/\(fotoName)\(fileNameSuffix).\(sourceUrl.pathExtension)")
             logger.debug("Export foto: \(fotoName) to \(targetUrl)")
             var i = 1
             while fileManager.fileExists(atPath: targetUrl.path) {
-                targetUrl = URL(fileURLWithPath: "\(targetPath)/\(fotoName) (\(i)).\(sourceUrl.pathExtension)")
+                targetUrl = URL(fileURLWithPath: "\(targetPath)/\(fotoName)\(fileNameSuffix) (\(i)).\(sourceUrl.pathExtension)")
                 i += 1
             }
             
