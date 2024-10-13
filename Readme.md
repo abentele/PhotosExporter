@@ -1,4 +1,4 @@
-March 2021, Andreas Bentele
+October 2024, Andreas Bentele
 
 # PhotosExporter
 

@@ -184,6 +184,9 @@ class PhotosMetadataReader {
                 case PHAssetResourceType.adjustmentData:
                     // ignore
                     break;
+                case .photoProxy: // undocumented!?
+                    // ignore
+                    break;
                 @unknown default:
                     // ignore assetResource type 16 = original_adjustment
                     if (assetResource.type.rawValue != 16) {
