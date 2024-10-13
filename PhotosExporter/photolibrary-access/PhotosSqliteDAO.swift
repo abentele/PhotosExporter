@@ -86,7 +86,7 @@ class PhotosSqliteDAO {
             """
             SELECT ZASSET.zuuid, zkeyword.ZTITLE
             FROM Z_1KEYWORDS
-            join zkeyword on zkeyword.Z_PK = z_1keywords.z_41keywords
+            join zkeyword on zkeyword.Z_PK = z_1keywords.z_47keywords
             join ZADDITIONALASSETATTRIBUTES on ZADDITIONALASSETATTRIBUTES.z_pk = Z_1ASSETATTRIBUTES
             join ZASSET on ZASSET.ZADDITIONALATTRIBUTES = ZADDITIONALASSETATTRIBUTES.Z_PK
             """
