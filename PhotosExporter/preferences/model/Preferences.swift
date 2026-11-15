@@ -10,9 +10,14 @@ import Foundation
 
 class Preferences {
     public var plans: [Plan] = []
+    public var photosLibraryPath: String?
     
     func toYaml() -> String {
         var result = "---\n"
+        if let photosLibraryPath = photosLibraryPath {
+            result += "config:\n"
+            result += "  photosLibraryPath: \(UniYAML.quote(photosLibraryPath))\n"
+        }
         result += "plans:\n"
         for plan in plans {
             result += "-\n".indent(2)

@@ -64,13 +64,22 @@ plans:
 For settings attributes see the description below.
 * checkout the github project, open it in Xcode. Then build and run the application.
 
+Set the System Photo Library's absolute path in the optional `config` section before `plans`:
+
+```yaml
+config:
+  photosLibraryPath: "/Users/<username>/Pictures/Photos Library.photoslibrary"
+```
+
+The path must refer to the System Photo Library selected in Photos > Settings > General, because PhotoKit always reads that library. PhotosExporter needs read access to it. When omitted, the existing automatic path detection is used.
+
 Normally, the exporter adds the timestamp of a photo to the exported photo's filename. Use the keyword "export-no-date" in Photos to omit the timestamp in the filename.
 
 If you move the exported folder, be sure to recreate the `Latest` link, because it would be broken after moving the folders.
 
 ## Settings of the exporter
 
-All settings can be applied both to the SnapshotPhotosExporter and to IncrementalPhotosExporter.
+All settings below can be applied both to the SnapshotPhotosExporter and to IncrementalPhotosExporter.
 
 * plans: each plan is a configuration to export your photos. You can add one or multiple plans to export
 * type: either `SnapshotFileSystemExport` or `IncrementalFileSystemExport`
@@ -97,7 +106,7 @@ All settings can be applied both to the SnapshotPhotosExporter and to Incrementa
 
 # Implementation
 
-The program starts with reading all metadata of the [System Photos Library](https://support.apple.com/en-us/HT204414). This is implemented in [PhotosMetadataReader.swift](PhotosExporter/photolibrary-access/PhotosMetadataReader.swift) using [PhotoKit](https://developer.apple.com/documentation/photokit) and SQL.
+The program starts with reading all metadata of the [System Photos Library](https://support.apple.com/en-us/HT204414). This is implemented in [PhotosMetadataReader.swift](PhotosExporter/photolibrary-access/PhotosMetadataReader.swift) using [PhotoKit](https://developer.apple.com/documentation/photokit) and SQL. The SQLite database is opened read-only; the keyword relationship column is detected from its schema because Core Data entity numbers change between Photos versions.
 
 The rest is implemented in [PhotosExporter.swift](PhotosExporter/exporter/PhotosExporter.swift) and inherited classes [SnapshotPhotosExporter.swift](PhotosExporter/exporter/SnapshotPhotosExporter.swift) and [IncrementalPhotosExporter.swift](PhotosExporter/exporter/IncrementalPhotosExporter.swift).
 

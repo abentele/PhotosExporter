@@ -69,7 +69,7 @@ class StatusMenuController: NSObject {
             logger.info("Start export using plan:\n\(plan.toYaml(indent: 10))")
             
             let photosMetadataReader = PhotosMetadataReader()
-            photosMetadataReader.readMetadata(completion: {(photosMetadata: PhotosMetadata) in
+            photosMetadataReader.readMetadata(photosLibraryPath: preferences?.photosLibraryPath, completion: {(photosMetadata: PhotosMetadata) in
                 do {
                     let photosExporter = try PhotosExporterFactory.createPhotosExporter(plan: plan)
                     photosExporter.exportPhotos(photosMetadata: photosMetadata)

@@ -48,7 +48,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func executeAllPlans(preferences: Preferences) {
         
         let photosMetadataReader = PhotosMetadataReader()
-        photosMetadataReader.readMetadata(completion: {(photosMetadata: PhotosMetadata) in
+        photosMetadataReader.readMetadata(photosLibraryPath: preferences.photosLibraryPath, completion: {(photosMetadata: PhotosMetadata) in
 
             photosMetadata.rootCollection.printYaml(indent: 0)
 

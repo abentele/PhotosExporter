@@ -26,7 +26,7 @@ class PhotosSqliteDAO {
     
     func openDatabase(path: String) throws {
       var db: OpaquePointer? = nil
-      if sqlite3_open(path, &db) == SQLITE_OK {
+      if sqlite3_open_v2(path, &db, SQLITE_OPEN_READONLY, nil) == SQLITE_OK {
         
         dbPointer = db
 
@@ -82,11 +82,12 @@ class PhotosSqliteDAO {
     
     func readKeywords() throws -> [String:[String]] {
 
+        let keywordColumn = try keywordColumnName()
         let stmt = try prepareStatement(sql:
             """
             SELECT ZASSET.zuuid, zkeyword.ZTITLE
             FROM Z_1KEYWORDS
-            join zkeyword on zkeyword.Z_PK = z_1keywords.z_47keywords
+            join zkeyword on zkeyword.Z_PK = Z_1KEYWORDS."\(keywordColumn)"
             join ZADDITIONALASSETATTRIBUTES on ZADDITIONALASSETATTRIBUTES.z_pk = Z_1ASSETATTRIBUTES
             join ZASSET on ZASSET.ZADDITIONALATTRIBUTES = ZADDITIONALASSETATTRIBUTES.Z_PK
             """
@@ -120,6 +121,31 @@ class PhotosSqliteDAO {
             }
         }
         return result
+    }
+
+    private func keywordColumnName() throws -> String {
+        let statement = try prepareStatement(sql: "PRAGMA table_info('Z_1KEYWORDS')")
+        defer { sqlite3_finalize(statement) }
+
+        var columns: [String] = []
+        var status = sqlite3_step(statement)
+        while status == SQLITE_ROW {
+            if let name = sqlite3_column_text(statement, 1) {
+                let column = String(cString: name)
+                // Core Data's entity number in this relationship column changes between Photos versions.
+                if column.range(of: "^Z_[0-9]+KEYWORDS$", options: [.regularExpression, .caseInsensitive]) != nil {
+                    columns.append(column)
+                }
+            }
+            status = sqlite3_step(statement)
+        }
+        guard status == SQLITE_DONE else {
+            throw SQLiteError.Step(message: String(cString: sqlite3_errmsg(dbPointer)))
+        }
+        guard columns.count == 1 else {
+            throw SQLiteError.Prepare(message: "Expected one keyword relationship column in Z_1KEYWORDS, found \(columns)")
+        }
+        return columns[0]
     }
     
     func readTitles() throws -> [String:String] {
@@ -159,7 +185,7 @@ class PhotosSqliteDAO {
     func prepareStatement(sql: String) throws -> OpaquePointer? {
       var statement: OpaquePointer? = nil
       guard sqlite3_prepare_v2(dbPointer, sql, -1, &statement, nil) == SQLITE_OK else {
-        throw SQLiteError.Prepare(message: "Could not prepare statement")
+        throw SQLiteError.Prepare(message: String(cString: sqlite3_errmsg(dbPointer)))
       }
 
       return statement

@@ -202,20 +202,21 @@ public struct YAML {
 	public init?(_ dictionary: [String: Any]) {
 		var obj = [String: YAML]()
 		for (k, v) in dictionary {
+			let yaml: YAML
 			if let s = v as? String {
-				obj[k] = YAML(s)
+				yaml = YAML(s)
 			} else if let i = v as? Int {
-				obj[k] = YAML(i)
+				yaml = YAML(i)
 			} else if let u = v as? UInt {
-				obj[k] = YAML(u)
+				yaml = YAML(u)
 			} else if let d = v as? Double {
-				obj[k] = YAML(d)
+				yaml = YAML(d)
 			} else if let y = v as? YAML {
-				obj[k] = y
+				yaml = y
 			} else {
 				return nil
 			}
-			obj[k]!.key = k
+			obj[k] = YAML(indent: yaml.indent, type: yaml.type, key: k, tag: yaml.tag, value: yaml.value)
 		}
 		indent = 0
 		type = .dictionary

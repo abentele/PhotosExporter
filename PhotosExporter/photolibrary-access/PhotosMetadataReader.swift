@@ -15,9 +15,9 @@ class PhotosMetadataReader {
     init() {
     }
     
-    func readMetadata(completion: @escaping (PhotosMetadata) -> (Void)) {
+    func readMetadata(photosLibraryPath: String? = nil, completion: @escaping (PhotosMetadata) -> (Void)) {
         do {
-            let photosLibraryPath = try PhotoLibraryUtil.getSystemPhotosLibraryPath()
+            let photosLibraryPath = try photosLibraryPath ?? PhotoLibraryUtil.getSystemPhotosLibraryPath()
             let photosMetadata = try self.readMetadata()
             
             try loadAdditionalDataFromSqliteDatabase(photosLibraryPath: photosLibraryPath, allMediaObjects: photosMetadata.allMediaObjects)

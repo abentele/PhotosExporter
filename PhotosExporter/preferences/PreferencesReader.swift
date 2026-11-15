@@ -12,6 +12,7 @@ enum PreferencesReaderError: Error {
     case invalidYaml
     case invalidOrNoPlanType
     case missingRequiredAttribute
+    case invalidPhotosLibraryPath
 }
 
 class PreferencesReader {
@@ -65,6 +66,18 @@ class PreferencesReader {
             throw PreferencesReaderError.invalidYaml
         }
         
+        if let configYaml = preferencesYaml["config"] {
+            guard let config = configYaml.dictionary else {
+                throw PreferencesReaderError.invalidYaml
+            }
+            if let pathYaml = config["photosLibraryPath"] {
+                guard let path = pathYaml.string, path.hasPrefix("/") else {
+                    throw PreferencesReaderError.invalidPhotosLibraryPath
+                }
+                preferences.photosLibraryPath = path
+            }
+        }
+
         if let plansYaml = preferencesYaml["plans"], let plansArray = plansYaml.array {
             for planYaml in plansArray {
                 let planDict = planYaml.dictionary!

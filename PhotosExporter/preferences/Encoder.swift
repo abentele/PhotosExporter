@@ -47,6 +47,10 @@ extension UniYAML {
 		return input.replacingOccurrences(of: "\\", with: "\\\\").replacingOccurrences(of: "\"", with: "\\\"").replacingOccurrences(of: "\t", with: "\\t").replacingOccurrences(of: "\n", with: "\\n").replacingOccurrences(of: "\r", with: "\\r")
 	}
 
+	static func quote(_ input: String) -> String {
+		return "\"" + escape(input) + "\""
+	}
+
 	static private func escapeYamlString(_ input: String, isKey: Bool=false) -> String {
 		var forbiddenChars = "[]{}<>-:=&\n%,@?*#|!\"'`"
 		if isKey {

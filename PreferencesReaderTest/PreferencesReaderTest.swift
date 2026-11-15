@@ -7,6 +7,7 @@
 //
 
 import XCTest
+import SQLite3
 @testable import PhotosExporter
 
 class PreferencesReaderTest: XCTestCase {
@@ -312,7 +313,7 @@ plans:
         
         XCTAssertEqual(yaml0, yamlStr, "Yaml string not as expected")
     }
-    
+
     /**
      * Test deserialization of an empty preferences object
      */
@@ -630,5 +631,82 @@ plans:
         XCTAssertThrowsError(try PreferencesReader.preferencesFromYaml(yamlStr: yamlInvalidPlanType)) { error in
             XCTAssertEqual(error as! PreferencesReaderError, PreferencesReaderError.invalidOrNoPlanType)
         }
+    }
+
+    func testConfiguredLibraryPathRoundTrip() throws {
+        let preferences = Preferences()
+        preferences.photosLibraryPath = "/Users/example/Pictures/A # \"B\".photoslibrary"
+
+        let decoded = try PreferencesReader.preferencesFromYaml(yamlStr: preferences.toYaml())
+        XCTAssertEqual(decoded.photosLibraryPath, preferences.photosLibraryPath)
+    }
+
+    func testReadsLibraryPathFromConfig() throws {
+        let preferences = try PreferencesReader.preferencesFromYaml(yamlStr: """
+        ---
+        config:
+          photosLibraryPath: /Users/example/Pictures/Fotos Library.photoslibrary
+        plans:
+        """)
+        XCTAssertEqual(preferences.photosLibraryPath, "/Users/example/Pictures/Fotos Library.photoslibrary")
+        XCTAssertNil(try PreferencesReader.preferencesFromYaml(yamlStr: yaml0).photosLibraryPath)
+    }
+
+    func testRejectsInvalidLibraryPath() {
+        XCTAssertThrowsError(try PreferencesReader.preferencesFromYaml(yamlStr: "config:\n  photosLibraryPath: \"\"\nplans:\n"))
+        XCTAssertThrowsError(try PreferencesReader.preferencesFromYaml(yamlStr: "config:\n  photosLibraryPath: relative.photoslibrary\nplans:\n"))
+        XCTAssertThrowsError(try PreferencesReader.preferencesFromYaml(yamlStr: "config: invalid\nplans:\n"))
+    }
+}
+
+class PhotosSqliteDAOTest: XCTestCase {
+    func testReadsKeywordsWithDifferentCoreDataEntityNumbers() throws {
+        for column in ["Z_47KEYWORDS", "Z_77KEYWORDS"] {
+            let library = try createLibrary(keywordColumn: column)
+            defer { try? FileManager.default.removeItem(at: library) }
+            let dao = try PhotosSqliteDAO(photosLibraryPath: library.path)
+
+            XCTAssertEqual(try dao.readKeywords(), ["asset-uuid": ["first", "second"]])
+            XCTAssertEqual(try dao.readTitles(), ["asset-uuid": "Photo title"])
+            XCTAssertEqual(try dao.readOriginalFilePath(), ["asset-uuid": "A/original.heic"])
+        }
+    }
+
+    func testRejectsUnsupportedKeywordSchema() throws {
+        let library = try createLibrary(keywordColumn: "UNSUPPORTED")
+        defer { try? FileManager.default.removeItem(at: library) }
+        let dao = try PhotosSqliteDAO(photosLibraryPath: library.path)
+
+        XCTAssertThrowsError(try dao.readKeywords()) { error in
+            guard case SQLiteError.Prepare(let message) = error else {
+                return XCTFail("Unexpected error: \(error)")
+            }
+            XCTAssertTrue(message.contains("keyword relationship column"))
+        }
+    }
+
+    private func createLibrary(keywordColumn: String) throws -> URL {
+        let library = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        let databaseDirectory = library.appendingPathComponent("database")
+        try FileManager.default.createDirectory(at: databaseDirectory, withIntermediateDirectories: true)
+        var database: OpaquePointer?
+        defer { sqlite3_close(database) }
+        guard sqlite3_open(databaseDirectory.appendingPathComponent("Photos.sqlite").path, &database) == SQLITE_OK else {
+            throw SQLiteError.OpenDatabase(message: "Cannot create test database")
+        }
+        let sql = """
+        CREATE TABLE ZASSET (Z_PK INTEGER PRIMARY KEY, ZUUID TEXT, ZADDITIONALATTRIBUTES INTEGER, ZDIRECTORY TEXT, ZFILENAME TEXT);
+        CREATE TABLE ZADDITIONALASSETATTRIBUTES (Z_PK INTEGER PRIMARY KEY, ZTITLE TEXT);
+        CREATE TABLE ZKEYWORD (Z_PK INTEGER PRIMARY KEY, ZTITLE TEXT);
+        CREATE TABLE Z_1KEYWORDS (Z_1ASSETATTRIBUTES INTEGER, "\(keywordColumn)" INTEGER);
+        INSERT INTO ZASSET VALUES (1, 'asset-uuid', 10, 'A', 'original.heic');
+        INSERT INTO ZADDITIONALASSETATTRIBUTES VALUES (10, 'Photo title');
+        INSERT INTO ZKEYWORD VALUES (20, 'first'), (21, 'second');
+        INSERT INTO Z_1KEYWORDS VALUES (10, 20), (10, 21);
+        """
+        guard sqlite3_exec(database, sql, nil, nil, nil) == SQLITE_OK else {
+            throw SQLiteError.Prepare(message: String(cString: sqlite3_errmsg(database)))
+        }
+        return library
     }
 }
